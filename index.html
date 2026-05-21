@@ -29,6 +29,15 @@
     },
   };
 </script>
+<script>
+  // リロード時に常にページ最上部から表示する
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.addEventListener('load', function () {
+    window.scrollTo(0, 0);
+  });
+</script>
 <style>
   html { scroll-behavior: smooth; }
   body { font-family: 'Noto Sans JP', sans-serif; color: #434343; }
