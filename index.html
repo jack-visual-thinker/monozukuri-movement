@@ -313,54 +313,62 @@
 
 <!-- 8. イベント -->
 <section class="bg-white py-20 sm:py-24">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">ウェビナーシリーズ</h2>
 
-    <article class="mt-12 bg-brand-cream rounded-2xl shadow-sm hover:shadow-lg transition p-8 sm:p-10">
-      <div class="flex flex-wrap items-center gap-3">
-        <span class="bg-brand-beige text-white text-xs font-bold px-3 py-1 rounded-full">第1回 終了</span>
-        <span class="text-sm text-brand-dark/70">ZOOM Live</span>
+    <article class="mt-12 grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+      <!-- 左：グラフィックレコーディング画像 -->
+      <div class="rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition">
+        <img src="./images/webinar-graphic-recording.png" alt="第1回ウェビナー グラフィックレコーディング" class="w-full h-auto object-cover" />
       </div>
-      <h3 class="mt-4 text-xl sm:text-2xl font-bold text-brand-dark">
-        ものづくりムーブメント 第1回ウェビナー
-      </h3>
-      <p class="mt-2 text-brand-green font-bold">
-        2026年4月20日（月） 18:30〜20:00
-      </p>
 
-      <ol class="mt-6 space-y-3 text-sm sm:text-base text-brand-dark/85">
-        <li class="flex gap-3">
-          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">1</span>
-          <div>
-            <span class="font-bold">オープニング</span> — コミュニティの目的・趣旨説明
-          </div>
-        </li>
-        <li class="flex gap-3">
-          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">2</span>
-          <div>
-            <span class="font-bold">発起人対談（30分）</span> — 竹林 一 × 山本 光世 / なぜいま「ものづくりムーブメント」なのか
-          </div>
-        </li>
-        <li class="flex gap-3">
-          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">3</span>
-          <div>
-            <span class="font-bold">ディスカッション（50分）</span> — ゲストを交え「未来のものづくりガイドライン」をベースに議論
-          </div>
-        </li>
-        <li class="flex gap-3">
-          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">4</span>
-          <div>
-            <span class="font-bold">エンディング・クロージング</span>
-          </div>
-        </li>
-      </ol>
+      <!-- 右：イベント情報 -->
+      <div class="bg-brand-cream rounded-2xl shadow-sm hover:shadow-lg transition p-8 sm:p-10">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="bg-brand-beige text-white text-xs font-bold px-3 py-1 rounded-full">第1回 終了</span>
+          <span class="text-sm text-brand-dark/70">ZOOM Live</span>
+        </div>
+        <h3 class="mt-4 text-xl sm:text-2xl font-bold text-brand-dark">
+          ものづくりムーブメント 第1回ウェビナー
+        </h3>
+        <p class="mt-2 text-brand-green font-bold">
+          2026年4月20日（月） 18:30〜20:00
+        </p>
 
-      <a href="https://mirainomonodukuri.peatix.com/view"
-         target="_blank" rel="noopener"
-         class="mt-8 inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-full transition shadow-sm">
-        イベントページを見る
-        <span aria-hidden="true">→</span>
-      </a>
+        <ol class="mt-6 space-y-3 text-sm sm:text-base text-brand-dark/85">
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">1</span>
+            <div>
+              <span class="font-bold">オープニング</span> — コミュニティの目的・趣旨説明
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">2</span>
+            <div>
+              <span class="font-bold">発起人対談（30分）</span> — 竹林 一 × 山本 光世 / なぜいま「ものづくりムーブメント」なのか
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">3</span>
+            <div>
+              <span class="font-bold">ディスカッション（50分）</span> — ゲストを交え「未来のものづくりガイドライン」をベースに議論
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">4</span>
+            <div>
+              <span class="font-bold">エンディング・クロージング</span>
+            </div>
+          </li>
+        </ol>
+
+        <a href="https://mirainomonodukuri.peatix.com/view"
+           target="_blank" rel="noopener"
+           class="mt-8 inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-full transition shadow-sm">
+          イベントページを見る
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </article>
 
     <p class="mt-8 text-center text-brand-dark/70 text-sm sm:text-base">
