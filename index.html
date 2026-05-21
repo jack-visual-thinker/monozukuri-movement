@@ -68,17 +68,34 @@
 </header>
 
 <!-- 2. Hero -->
-<section id="top" class="relative bg-cover bg-center text-white py-32 sm:py-48">
-  <img src="./images/hero-visual.png" alt="未来をつくる ものづくり ムーブメント" class="absolute inset-0 w-full h-full object-cover -z-10" />
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <div class="mt-auto flex flex-col sm:flex-row gap-4 justify-center">
+<section id="top" class="bg-brand-green text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <!-- 左：テキスト -->
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-bold leading-tight text-balance">
+          未来をつくる<br class="sm:hidden" />ものづくり<br class="sm:hidden" />ムーブメント
+        </h1>
+        <p class="mt-4 text-lg sm:text-xl text-brand-cream/90">
+          〜モノとコトが 織りなす 世界〜
+        </p>
+      </div>
+
+      <!-- 右：ビジュアル -->
+      <div class="rounded-3xl overflow-hidden shadow-lg">
+        <img src="./images/hero-visual.png" alt="未来をつくる ものづくり ムーブメント" class="w-full h-auto object-cover" />
+      </div>
+    </div>
+
+    <!-- ボタン -->
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-start">
       <a href="https://www.facebook.com/groups/1723416302397626/"
          target="_blank" rel="noopener"
-         class="bg-brand-orange hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-full transition shadow-lg">
+         class="bg-brand-orange hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-full transition shadow-lg text-center">
         コミュニティに参加する
       </a>
       <a href="#activities"
-         class="border-2 border-white text-white hover:bg-white hover:text-brand-green font-bold px-8 py-3.5 rounded-full transition">
+         class="border-2 border-white text-white hover:bg-white hover:text-brand-green font-bold px-8 py-3.5 rounded-full transition text-center">
         活動を見る
       </a>
     </div>
