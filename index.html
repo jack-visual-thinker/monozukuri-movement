@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>未来をつくる ものづくり ムーブメント</title>
+<meta name="description" content="「未来をつくる ものづくり ムーブメント」コミュニティ公式LP。"つくること"は"生きること"。哲学(縦糸)と技術(横糸)を交差させ、新しい社会を共創する実践の場。" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            green: '#2D7B6E',
+            orange: '#E8821E',
+            beige: '#C4A882',
+            cream: '#F7F2EA',
+            dark: '#2C2C2C',
+          },
+        },
+        fontFamily: {
+          jp: ['"Noto Sans JP"', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Noto Sans JP', sans-serif; color: #2C2C2C; }
+  .text-balance { text-wrap: balance; }
+  .bean {
+    width: 120px;
+    height: 80px;
+    border-radius: 50%;
+    transform: rotate(-15deg);
+    display: inline-block;
+    box-shadow: inset -8px -10px 0 rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .bean::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), transparent 50%);
+  }
+</style>
+</head>
+<body class="font-jp bg-white text-brand-dark antialiased">
+
+<!-- 1. Navigation -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-brand-cream">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="#top" class="text-brand-green font-bold text-lg sm:text-xl tracking-tight">
+      ものづくり ムーブメント
+    </a>
+    <a href="https://www.facebook.com/groups/1723416302397626/"
+       target="_blank" rel="noopener"
+       class="bg-brand-orange hover:bg-orange-600 text-white text-sm sm:text-base font-bold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full transition shadow-sm">
+      コミュニティに参加する
+    </a>
+  </nav>
+</header>
+
+<!-- 2. Hero -->
+<section id="top" class="bg-brand-green text-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-balance">
+      未来をつくる<br class="sm:hidden" /> ものづくり ムーブメント
+    </h1>
+    <p class="mt-6 text-lg sm:text-xl text-brand-cream/90">
+      〜モノとコトが 織りなす 世界〜
+    </p>
+    <p class="mt-8 text-base sm:text-lg md:text-xl text-white/90 text-balance leading-relaxed">
+      「つくること」は「生きること」。<br class="sm:hidden" />そんな問いを育てるコミュニティ。
+    </p>
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="https://www.facebook.com/groups/1723416302397626/"
+         target="_blank" rel="noopener"
+         class="bg-brand-orange hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-full transition shadow-lg">
+        コミュニティに参加する
+      </a>
+      <a href="#activities"
+         class="border-2 border-white text-white hover:bg-white hover:text-brand-green font-bold px-8 py-3.5 rounded-full transition">
+        活動を見る
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 課題 -->
+<section class="bg-brand-cream py-20 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark text-balance">
+      いま、ものづくりが本来の問いを失っている
+    </h2>
+    <div class="mt-12 grid md:grid-cols-3 gap-6 md:gap-8">
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-8">
+        <div class="text-brand-orange text-5xl font-bold">問</div>
+        <h3 class="mt-4 text-xl font-bold text-brand-green">目的の喪失</h3>
+        <p class="mt-3 text-brand-dark/80 leading-relaxed">
+          「どう作るか」という効率化が目的化し、「何のために作るのか」という本質的な問いを見失っている。
+        </p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-8">
+        <div class="text-brand-orange text-5xl font-bold">転</div>
+        <h3 class="mt-4 text-xl font-bold text-brand-green">時代の転換</h3>
+        <p class="mt-3 text-brand-dark/80 leading-relaxed">
+          AI台頭・資源の枯渇。「何が売れるか」より「私たちは何を実現したいのか」という哲学が求められる時代へ。
+        </p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-8">
+        <div class="text-brand-orange text-5xl font-bold">機</div>
+        <h3 class="mt-4 text-xl font-bold text-brand-green">変革の機会</h3>
+        <p class="mt-3 text-brand-dark/80 leading-relaxed">
+          ものづくりは世界を物質的に豊かにするだけでなく、一人ひとりが「新しい社会の在り方」をデザイン・実装する力を持っている。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 哲学 -->
+<section class="bg-white py-20 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark text-balance">
+      「コト」が「モノ」を生み、「モノ」が「社会」を変える
+    </h2>
+    <div class="mt-12 grid md:grid-cols-3 gap-6 md:gap-8">
+      <div class="rounded-2xl shadow-md hover:shadow-xl transition p-8 bg-brand-orange text-white">
+        <div class="text-sm font-bold opacity-90">縦糸 / 知的創造</div>
+        <h3 class="mt-2 text-3xl font-bold">コト</h3>
+        <p class="mt-4 leading-relaxed">
+          「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。
+        </p>
+      </div>
+      <div class="rounded-2xl shadow-md hover:shadow-xl transition p-8 bg-brand-green text-white">
+        <div class="text-sm font-bold opacity-90">横糸 / 物的創造</div>
+        <h3 class="mt-2 text-3xl font-bold">モノ</h3>
+        <p class="mt-4 leading-relaxed">
+          テクノロジーを用いて社会へ届けるための実装と共創の営み。
+        </p>
+      </div>
+      <div class="rounded-2xl shadow-md hover:shadow-xl transition p-8 bg-brand-beige text-white">
+        <div class="text-sm font-bold opacity-90">布地 / 自由な未来</div>
+        <h3 class="mt-2 text-3xl font-bold">社会</h3>
+        <p class="mt-4 leading-relaxed">
+          つくる（Doing）が新しい生き方（Being）として織りなされた世界。
+        </p>
+      </div>
+    </div>
+    <p class="mt-12 text-center text-base sm:text-lg text-brand-dark/80 max-w-3xl mx-auto leading-relaxed text-balance">
+      この3つの循環を通じて、不確実な時代のものづくりのあり方を共に探求します。
+    </p>
+  </div>
+</section>
+
+<!-- 5. 活動内容 -->
+<section id="activities" class="bg-brand-green text-white py-20 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-balance">
+      単なる勉強会ではない「実践の場」を創る
+    </h2>
+    <div class="mt-12 grid sm:grid-cols-2 gap-6 md:gap-8">
+      <div class="bg-white/10 backdrop-blur rounded-2xl p-8 hover:bg-white/15 transition">
+        <div class="text-brand-orange text-sm font-bold tracking-widest">DIALOGUE</div>
+        <h3 class="mt-2 text-2xl font-bold">対話 — 業界・立場を超えた対話</h3>
+        <p class="mt-3 text-white/90 leading-relaxed">
+          企業経営者、研究者、技術者、クリエーターが垣根を越えて本質的な議論を交わします。
+        </p>
+      </div>
+      <div class="bg-white/10 backdrop-blur rounded-2xl p-8 hover:bg-white/15 transition">
+        <div class="text-brand-orange text-sm font-bold tracking-widest">INQUIRY</div>
+        <h3 class="mt-2 text-2xl font-bold">探求 — 自分の「縦糸」を探求</h3>
+        <p class="mt-3 text-white/90 leading-relaxed">
+          日々の業務では見出しにくい自分自身の軸・哲学を言語化し、深める場を提供します。
+        </p>
+      </div>
+      <div class="bg-white/10 backdrop-blur rounded-2xl p-8 hover:bg-white/15 transition">
+        <div class="text-brand-orange text-sm font-bold tracking-widest">PRACTICE</div>
+        <h3 class="mt-2 text-2xl font-bold">実践 — 哲学×テクノロジー</h3>
+        <p class="mt-3 text-white/90 leading-relaxed">
+          人間が持つ哲学とテクノロジーを掛け合わせ、自らの手で社会をアップデートします。
+        </p>
+      </div>
+      <div class="bg-white/10 backdrop-blur rounded-2xl p-8 hover:bg-white/15 transition">
+        <div class="text-brand-orange text-sm font-bold tracking-widest">CO-CREATION</div>
+        <h3 class="mt-2 text-2xl font-bold">共創 — 共創による新活動の創出</h3>
+        <p class="mt-3 text-white/90 leading-relaxed">
+          継続的なコミュニティ運営を通じて、共創による新たなムーブメントを生み出します。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 発起人 -->
+<section class="bg-white py-20 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">発起人</h2>
+    <div class="mt-12 grid md:grid-cols-2 gap-8">
+
+      <!-- 竹林 一 氏 -->
+      <article class="bg-brand-cream rounded-2xl shadow-sm hover:shadow-lg transition p-8">
+        <div class="flex items-center gap-5">
+          <!-- TODO: 竹林氏の写真 -->
+          <div class="w-24 h-24 rounded-full bg-brand-beige/40 flex items-center justify-center text-brand-green font-bold text-xs text-center" aria-label="竹林一氏 写真プレースホルダー">
+            写真<br />準備中
+          </div>
+          <div>
+            <div class="text-xs text-brand-orange font-bold tracking-widest">FOUNDER 01</div>
+            <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">竹林 一</h3>
+            <p class="text-sm text-brand-dark/70">たけばやし はじめ</p>
+          </div>
+        </div>
+        <div class="mt-6 border-l-4 border-brand-green pl-4 space-y-1 text-sm text-brand-dark/80">
+          <p>麗澤大学 特任教授</p>
+          <p>横浜市立大学大学院 客員教授</p>
+          <p>大阪大学フォーサイト（株） エバンジェリスト</p>
+          <p>元オムロン株式会社 イノベーション推進本部 シニアアドバイザー</p>
+        </div>
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
+          「機械にできることは機械に任せ、人間はより創造的な分野での活動を楽しむべきである」というオムロン創業者・立石一真の理念に感動し入社。新規事業開発・グループ会社代表を歴任後、現在は大学での教育と「エコシステムデザイナー」として活動。著書に『たった1人からはじめるイノベーション入門』など。
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1">イノベーション</span>
+          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1">エコシステム</span>
+          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1">新規事業</span>
+        </div>
+      </article>
+
+      <!-- 山本 光世 氏 -->
+      <article class="bg-brand-cream rounded-2xl shadow-sm hover:shadow-lg transition p-8">
+        <div class="flex items-center gap-5">
+          <!-- TODO: 山本氏の写真 -->
+          <div class="w-24 h-24 rounded-full bg-brand-beige/40 flex items-center justify-center text-brand-orange font-bold text-xs text-center" aria-label="山本光世氏 写真プレースホルダー">
+            写真<br />準備中
+          </div>
+          <div>
+            <div class="text-xs text-brand-orange font-bold tracking-widest">FOUNDER 02</div>
+            <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">山本 光世</h3>
+            <p class="text-sm text-brand-dark/70">やまもと みつよ</p>
+          </div>
+        </div>
+        <div class="mt-6 border-l-4 border-brand-orange pl-4 space-y-1 text-sm text-brand-dark/80">
+          <p>JOHNAN株式会社 代表取締役社長執行役員</p>
+          <p>京都大学経営管理大学院 特命教授</p>
+          <p>ミシガン大学ビジネススクール MBA / 自然資源環境大学院 MS</p>
+        </div>
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
+          同志社大学神学部卒。ベンチャー支援会社での経営コンサルティングを経て、JOHNAN株式会社へ。国内外との資本提携・新規事業投資・組織文化改革に従事し、2010年より代表取締役社長に就任。ODM・EMS型ビジネスモデルから「ものづくりプラットフォーム」型への変革を牽引している。
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1">ものづくり変革</span>
+          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1">経営戦略</span>
+          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1">プラットフォーム</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- 7. メディア -->
+<section class="bg-brand-cream py-20 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">メディア・コンテンツ</h2>
+    <div class="mt-12 grid md:grid-cols-2 gap-6 md:gap-8">
+
+      <!-- Podcast -->
+      <article class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-8 flex flex-col">
+        <div class="flex items-start gap-5">
+          <div class="shrink-0 w-24 h-24 rounded-xl bg-brand-green flex items-center justify-center relative overflow-hidden" aria-hidden="true">
+            <div class="bean" style="background:#E8821E; width:60px; height:42px;"></div>
+            <div class="bean absolute" style="background:#C4A882; width:50px; height:36px; right:8px; bottom:8px; transform:rotate(20deg);"></div>
+          </div>
+          <div class="flex-1">
+            <div class="text-xs text-brand-orange font-bold tracking-widest">PODCAST</div>
+            <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">Talk Beans Talk</h3>
+            <p class="mt-1 text-sm text-brand-dark/70">「つくることは生きること？」そんな問いを育てるラジオ</p>
+          </div>
+        </div>
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
+          ものづくりの哲学・現場の声・未来への問いを対話形式で届けるPodcastです。
+        </p>
+        <a href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh"
+           target="_blank" rel="noopener"
+           class="mt-6 inline-flex self-start items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition">
+          Spotifyで聴く
+          <span aria-hidden="true">→</span>
+        </a>
+      </article>
+
+      <!-- Note -->
+      <article class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-8 flex flex-col">
+        <div class="flex items-start gap-5">
+          <div class="shrink-0 w-24 h-24 rounded-xl bg-brand-cream border-2 border-brand-beige/50 flex items-center justify-center text-brand-green text-3xl font-bold" aria-hidden="true">
+            note
+          </div>
+          <div class="flex-1">
+            <div class="text-xs text-brand-orange font-bold tracking-widest">NOTE</div>
+            <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">活動レポート・コラム</h3>
+            <p class="mt-1 text-sm text-brand-dark/70">Noteで発信</p>
+          </div>
+        </div>
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
+          ウェビナーのレポート、メンバーの気づき、思想的コラムをNoteで発信します。
+        </p>
+        <span class="mt-6 inline-flex self-start items-center bg-gray-200 text-gray-600 font-bold px-5 py-2.5 rounded-full text-sm">
+          準備中
+        </span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- 8. イベント -->
+<section class="bg-white py-20 sm:py-24">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">ウェビナーシリーズ</h2>
+
+    <article class="mt-12 bg-brand-cream rounded-2xl shadow-sm hover:shadow-lg transition p-8 sm:p-10">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="bg-brand-beige text-white text-xs font-bold px-3 py-1 rounded-full">第1回 終了</span>
+        <span class="text-sm text-brand-dark/70">ZOOM Live</span>
+      </div>
+      <h3 class="mt-4 text-xl sm:text-2xl font-bold text-brand-dark">
+        ものづくりムーブメント 第1回ウェビナー
+      </h3>
+      <p class="mt-2 text-brand-green font-bold">
+        2026年4月20日（月） 18:30〜20:00
+      </p>
+
+      <ol class="mt-6 space-y-3 text-sm sm:text-base text-brand-dark/85">
+        <li class="flex gap-3">
+          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">1</span>
+          <div>
+            <span class="font-bold">オープニング</span> — コミュニティの目的・趣旨説明
+          </div>
+        </li>
+        <li class="flex gap-3">
+          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">2</span>
+          <div>
+            <span class="font-bold">発起人対談（30分）</span> — 竹林 一 × 山本 光世 / なぜいま「ものづくりムーブメント」なのか
+          </div>
+        </li>
+        <li class="flex gap-3">
+          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">3</span>
+          <div>
+            <span class="font-bold">ディスカッション（50分）</span> — ゲストを交え「未来のものづくりガイドライン」をベースに議論
+          </div>
+        </li>
+        <li class="flex gap-3">
+          <span class="shrink-0 w-7 h-7 rounded-full bg-brand-green text-white text-xs font-bold flex items-center justify-center">4</span>
+          <div>
+            <span class="font-bold">エンディング・クロージング</span>
+          </div>
+        </li>
+      </ol>
+
+      <a href="https://peatix.com/group/16548303"
+         target="_blank" rel="noopener"
+         class="mt-8 inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-full transition shadow-sm">
+        イベントページを見る
+        <span aria-hidden="true">→</span>
+      </a>
+    </article>
+
+    <p class="mt-8 text-center text-brand-dark/70 text-sm sm:text-base">
+      次回イベントはFacebookグループで告知します。
+    </p>
+  </div>
+</section>
+
+<!-- 9. CTA -->
+<section class="bg-brand-green text-white py-20 sm:py-28">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-balance leading-snug">
+      次世代のものづくりを牽引するコミュニティメンバー求む。
+    </h2>
+    <p class="mt-6 text-white/90 leading-relaxed text-base sm:text-lg text-balance">
+      企業や個人の哲学（縦糸）と技術（横糸）を交差させ、新しい社会（布地）を自らの手でデザインする実践の場です。ぜひ一緒に「モノ・コト・社会」が循環するエコシステムを創りませんか。
+    </p>
+    <a href="https://www.facebook.com/groups/1723416302397626/"
+       target="_blank" rel="noopener"
+       class="mt-10 inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-full transition shadow-lg text-base sm:text-lg">
+      Facebookグループに参加する
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- 10. Footer -->
+<footer class="bg-brand-dark text-white/80 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <p class="text-white font-bold text-lg">未来をつくる ものづくり ムーブメント</p>
+        <p class="mt-2 text-sm">Powered by JOHNAN株式会社</p>
+      </div>
+      <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm">
+        <a href="https://www.facebook.com/groups/1723416302397626/" target="_blank" rel="noopener" class="hover:text-brand-orange transition">Facebook</a>
+        <a href="https://peatix.com/group/16548303" target="_blank" rel="noopener" class="hover:text-brand-orange transition">Peatix</a>
+        <a href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener" class="hover:text-brand-orange transition">Spotify</a>
+      </nav>
+    </div>
+    <p class="mt-8 text-xs text-white/50">&copy; 2026 ものづくり ムーブメント.</p>
+  </div>
+</footer>
+
+</body>
+</html>
