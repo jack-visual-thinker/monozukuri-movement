@@ -34,9 +34,19 @@
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
-  window.addEventListener('load', function () {
+  function scrollToTop() {
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+  // 複数イベントで最上部へ（モバイルSafari対策）
+  window.addEventListener('pageshow', scrollToTop);
+  window.addEventListener('load', function () {
+    scrollToTop();
+    setTimeout(scrollToTop, 0);
+    setTimeout(scrollToTop, 100);
   });
+  window.addEventListener('beforeunload', scrollToTop);
 </script>
 <style>
   html { scroll-behavior: smooth; }
