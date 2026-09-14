@@ -35,6 +35,8 @@
     history.scrollRestoration = 'manual';
   }
   function scrollToTop() {
+    // 「〜/#news」など見出し指定で来たときは戻さない
+    if (location.hash) return;
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -50,6 +52,28 @@
 </script>
 <style>
   html { scroll-behavior: smooth; }
+  /* 固定ヘッダーの高さ（スマホは2段目のメニュー込み） */
+  :root { --header-h: 106px; }
+  @media (min-width: 640px) { :root { --header-h: 138px; } }
+  @media (min-width: 1024px) { :root { --header-h: 97px; } }
+  section[id] { scroll-margin-top: calc(var(--header-h) - 24px); }
+  /* ヘッダーメニュー：いま読んでいる項目にオレンジの下線 */
+  .nav-link { position: relative; color: rgba(67, 67, 67, 0.75); transition: color .2s; }
+  .nav-link:hover { color: #338A75; }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: var(--ul-x, 0);
+    right: var(--ul-x, 0);
+    bottom: var(--ul-bottom, -8px);
+    height: 3px;
+    border-radius: 2px;
+    background: #E78014;
+    transform: scaleX(0);
+    transition: transform .25s;
+  }
+  .nav-link.is-active { color: #434343; }
+  .nav-link.is-active::after { transform: scaleX(1); }
   body { font-family: 'Noto Sans JP', sans-serif; color: #434343; }
   .text-balance { text-wrap: balance; }
   .bean {
@@ -74,19 +98,37 @@
 
 <!-- 1. Navigation -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-brand-cream">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-24 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-24 flex items-center justify-between">
     <a href="#top" class="relative shrink-0 font-bold text-sm sm:text-xl tracking-wide whitespace-nowrap leading-none">
       <span class="absolute left-[0.98em] top-1/2 -translate-y-1/2 rotate-[2.42deg] h-[2em] w-[7.63em] bg-brand-cream/50 rounded" aria-hidden="true"></span>
       <span class="relative text-brand-green/70">ものづくり ムーブメント</span>
       <img src="./images/logo-moment.png" alt="もーメント" aria-hidden="true"
            class="absolute left-[0.53em] top-1/2 -translate-y-1/2 mt-[-0.30em] h-[3.63em] w-auto max-w-none" />
     </a>
-    <a href="https://www.facebook.com/groups/1723416302397626/"
-       target="_blank" rel="noopener"
-       class="bg-brand-orange hover:bg-orange-600 text-white text-xs sm:text-base font-bold px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition shadow-sm whitespace-nowrap">
-      <span class="sm:hidden">参加する</span>
-      <span class="hidden sm:inline">コミュニティに参加する</span>
-    </a>
+    <div class="flex items-center gap-10">
+      <!-- PC：ページ内メニュー -->
+      <nav aria-label="ページ内メニュー" class="hidden lg:block">
+        <ul class="flex items-center gap-8 text-[15px] font-bold whitespace-nowrap">
+          <li><a href="#about" data-nav="about" class="nav-link">ムーブメントとは</a></li>
+          <li><a href="#events" data-nav="events" class="nav-link">イベント</a></li>
+          <li><a href="#news" data-nav="news" class="nav-link">お知らせ</a></li>
+        </ul>
+      </nav>
+      <a href="https://www.facebook.com/groups/1723416302397626/"
+         target="_blank" rel="noopener"
+         class="bg-brand-orange hover:bg-orange-600 text-white text-xs sm:text-base font-bold px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition shadow-sm whitespace-nowrap">
+        <span class="sm:hidden">参加する</span>
+        <span class="hidden sm:inline">コミュニティに参加する</span>
+      </a>
+    </div>
+  </div>
+  <!-- スマホ・タブレット：2段目に常時表示 -->
+  <nav aria-label="ページ内メニュー" class="lg:hidden border-t border-brand-cream">
+    <ul class="grid grid-cols-3 h-10 text-xs sm:text-sm font-bold whitespace-nowrap">
+      <li><a href="#about" data-nav="about" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:18%]">ムーブメントとは</a></li>
+      <li><a href="#events" data-nav="events" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:24%]">イベント</a></li>
+      <li><a href="#news" data-nav="news" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:24%]">お知らせ</a></li>
+    </ul>
   </nav>
 </header>
 
@@ -127,8 +169,8 @@
   </div>
 </section>
 
-<!-- 3. 課題 -->
-<section class="bg-brand-green py-20 sm:py-24">
+<!-- 3. 課題（ここから発起人までが「ムーブメントとは」） -->
+<section id="about" class="bg-brand-green py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white text-balance leading-loose">
       いま、ものづくりが<span class="relative inline-block align-middle mx-2 top-[-0.182em]">
@@ -348,8 +390,8 @@
   </div>
 </section>
 
-<!-- 7. イベント -->
-<section class="bg-white py-20 sm:py-24">
+<!-- 7. イベント（ここからメディアまでが「イベント」） -->
+<section id="events" class="bg-white py-20 sm:py-24">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">ウェビナーシリーズ</h2>
 
@@ -489,64 +531,7 @@
   </div>
 </section>
 
-<!-- 8. お知らせ・メディア掲載 -->
-<section id="news" class="bg-brand-cream py-20 sm:py-24">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">お知らせ・メディア掲載</h2>
-    <p class="mt-4 text-center text-brand-dark/70 text-sm sm:text-base">
-      活動の告知と、メディアに取り上げられた記事をまとめています。
-    </p>
-
-    <ul class="mt-12 bg-white rounded-2xl shadow-sm divide-y divide-brand-cream overflow-hidden">
-      <li>
-        <a href="https://www.krp.co.jp/goconc-event/detail/5626.html" target="_blank" rel="noopener"
-           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
-          <span class="shrink-0 flex items-center gap-3 sm:w-44">
-            <time class="text-sm font-bold text-brand-dark/60">2026.08.24</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green">掲載</span>
-          </span>
-          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">京都リサーチパーク「GOCONC」に第2回イベント情報が掲載されました</span>
-          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://news.livedoor.com/pr_topics/detail/32032096/" target="_blank" rel="noopener"
-           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
-          <span class="shrink-0 flex items-center gap-3 sm:w-44">
-            <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green">掲載</span>
-          </span>
-          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">ライブドアニュースに第2回開催のリリースが掲載されました</span>
-          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://prtimes.jp/main/html/rd/p/000000037.000036632.html" target="_blank" rel="noopener"
-           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
-          <span class="shrink-0 flex items-center gap-3 sm:w-44">
-            <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange">お知らせ</span>
-          </span>
-          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">【PR TIMES】第2回「未来をつくる ものづくりムーブメント」を開催！</span>
-          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://prtimes.jp/main/html/rd/p/000000036.000036632.html" target="_blank" rel="noopener"
-           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
-          <span class="shrink-0 flex items-center gap-3 sm:w-44">
-            <time class="text-sm font-bold text-brand-dark/60">2026.04.03</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange">お知らせ</span>
-          </span>
-          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">【PR TIMES】ものづくりの未来を考えるコミュニティが発足しました</span>
-          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
-
-<!-- 9. メディア -->
+<!-- 8. メディア -->
 <section class="bg-brand-beige/40 py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">メディア・コンテンツ</h2>
@@ -616,8 +601,65 @@
   </div>
 </section>
 
+<!-- 9. お知らせ・メディア掲載 -->
+<section id="news" class="bg-brand-cream py-20 sm:py-24">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">お知らせ・メディア掲載</h2>
+    <p class="mt-4 text-center text-brand-dark/70 text-sm sm:text-base">
+      活動の告知と、メディアに取り上げられた記事をまとめています。
+    </p>
+
+    <ul class="mt-12 bg-white rounded-2xl shadow-sm divide-y divide-brand-cream overflow-hidden">
+      <li>
+        <a href="https://www.krp.co.jp/goconc-event/detail/5626.html" target="_blank" rel="noopener"
+           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
+          <span class="shrink-0 flex items-center gap-3 sm:w-44">
+            <time class="text-sm font-bold text-brand-dark/60">2026.08.24</time>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green">掲載</span>
+          </span>
+          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">京都リサーチパーク「GOCONC」に第2回イベント情報が掲載されました</span>
+          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://news.livedoor.com/pr_topics/detail/32032096/" target="_blank" rel="noopener"
+           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
+          <span class="shrink-0 flex items-center gap-3 sm:w-44">
+            <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green">掲載</span>
+          </span>
+          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">ライブドアニュースに第2回開催のリリースが掲載されました</span>
+          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://prtimes.jp/main/html/rd/p/000000037.000036632.html" target="_blank" rel="noopener"
+           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
+          <span class="shrink-0 flex items-center gap-3 sm:w-44">
+            <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange">お知らせ</span>
+          </span>
+          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">【PR TIMES】第2回「未来をつくる ものづくりムーブメント」を開催！</span>
+          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://prtimes.jp/main/html/rd/p/000000036.000036632.html" target="_blank" rel="noopener"
+           class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
+          <span class="shrink-0 flex items-center gap-3 sm:w-44">
+            <time class="text-sm font-bold text-brand-dark/60">2026.04.03</time>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange">お知らせ</span>
+          </span>
+          <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">【PR TIMES】ものづくりの未来を考えるコミュニティが発足しました</span>
+          <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
 <!-- 10. CTA -->
-<section class="bg-brand-green text-white py-20 sm:py-28">
+<section id="join" class="bg-brand-green text-white py-20 sm:py-28">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-balance leading-snug">
       次世代のものづくりを牽引するコミュニティメンバー求む。
@@ -651,6 +693,35 @@
     <p class="mt-8 text-xs text-white/50">&copy; 2026 ものづくり ムーブメント.</p>
   </div>
 </footer>
+
+<script>
+  // スクロール位置に合わせて、ヘッダーメニューの該当項目に下線を出す
+  (function () {
+    var header = document.querySelector('header');
+    var markers = ['about', 'events', 'news', 'join'].map(function (id) { return document.getElementById(id); });
+    var links = document.querySelectorAll('[data-nav]');
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var line = header.offsetHeight + window.innerHeight * 0.3;
+      var current = null;
+      markers.forEach(function (el) {
+        if (el.getBoundingClientRect().top <= line) current = el.id;
+      });
+      links.forEach(function (a) {
+        var on = a.dataset.nav === current;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      });
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+    update();
+  })();
+</script>
 
 </body>
 </html>
