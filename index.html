@@ -95,7 +95,7 @@
     --wave-w: 4.5;    /* 波3つ分の横幅（＝波1つがカード幅の1.5倍） */
     position: relative;
     overflow-x: auto; overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory; scrollbar-width: none;
+    scroll-snap-type: x mandatory; scroll-padding-left: 16px; scrollbar-width: none;
     /* 帯の両端をふわっとフェードさせ、まだ続きがあることを示す */
     -webkit-mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
             mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
@@ -116,7 +116,7 @@
   .weave-card {
     position: relative; z-index: 2; flex-shrink: 0;
     width: var(--card-w); min-height: calc(var(--card-w) * .72);
-    scroll-snap-align: center;
+    scroll-snap-align: start;
     display: flex; align-items: center;
     gap: calc(var(--card-w) * .07);
     padding: calc(var(--card-w) * .085);
