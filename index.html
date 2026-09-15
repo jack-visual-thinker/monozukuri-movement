@@ -113,21 +113,20 @@
     height: calc(var(--card-w) * var(--wave-h));
     background: url(./images/weave-wave.png) repeat-x center / calc(var(--card-w) * var(--wave-w)) 100%;
   }
+  /* カードは常にアイコン上・文章下の縦積み。文章がカード幅いっぱいを使えるので、
+     幅を小さくしてもカード同士を横に並べたまま説明文まで読めるようにする */
   .weave-card {
     position: relative; z-index: 2; flex-shrink: 0;
     width: var(--card-w); min-height: calc(var(--card-w) * .72);
     scroll-snap-align: start;
-    display: flex; align-items: center;
-    gap: calc(var(--card-w) * .07);
-    padding: calc(var(--card-w) * .085);
+    display: flex; flex-direction: column; align-items: center;
+    gap: calc(var(--card-w) * .05);
+    padding: calc(var(--card-w) * .1);
   }
-  .weave-card-img { width: calc(var(--card-w) * .32); }
+  .weave-card-img { width: calc(var(--card-w) * .4); }
   .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: calc(var(--card-w) * .5); height: calc(var(--card-w) * .37); border-radius: .2rem; }
-  /* 640px以上は説明文を表示するため、カードを縦積み（アイコン上・文章下）にしてカード幅も広げ、テキスト欄の折り返しを緩和 */
   @media (min-width: 640px) {
     .weave { --card-w: clamp(210px, 20vw, 260px); }
-    .weave-card { flex-direction: column; gap: calc(var(--card-w) * .05); }
-    .weave-card-img { width: calc(var(--card-w) * .4); }
   }
   body { font-family: 'Noto Sans JP', sans-serif; color: #434343; }
   .text-balance { text-wrap: balance; }
@@ -330,30 +329,30 @@
         <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-koto-tile.png" alt="縦糸と横糸が交差するイラスト" class="w-full h-auto" />
         </div>
-        <div class="min-w-0 sm:w-full sm:text-center">
+        <div class="w-full text-center">
           <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">コト</h3>
-          <p class="hidden sm:block mt-1.5 text-[11px] font-bold opacity-90 text-pretty">縦糸 / 知的創造</p>
-          <p class="hidden sm:block mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</budoux-ja></p>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">縦糸 / 知的創造</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</budoux-ja></p>
         </div>
       </div>
       <div class="weave-card rounded-2xl shadow-md bg-brand-green text-white">
         <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-mono-tile.png" alt="手でつくられた道具やかたちのイラスト" class="w-[85%] h-auto" />
         </div>
-        <div class="min-w-0 sm:w-full sm:text-center">
+        <div class="w-full text-center">
           <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">モノ</h3>
-          <p class="hidden sm:block mt-1.5 text-[11px] font-bold opacity-90 text-pretty">横糸 / 物的創造</p>
-          <p class="hidden sm:block mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>テクノロジーを用いて社会へ届けるための実装と共創の営み。</budoux-ja></p>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">横糸 / 物的創造</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>テクノロジーを用いて社会へ届けるための実装と共創の営み。</budoux-ja></p>
         </div>
       </div>
       <div class="weave-card rounded-2xl shadow-md bg-brand-beige text-white">
         <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-shakai-tile.png" alt="山と家のある小さな世界のイラスト" class="w-[75%] h-auto" />
         </div>
-        <div class="min-w-0 sm:w-full sm:text-center">
+        <div class="w-full text-center">
           <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">社会</h3>
-          <p class="hidden sm:block mt-1.5 text-[11px] font-bold opacity-90 text-pretty">布地 / 自由な未来</p>
-          <p class="hidden sm:block mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</budoux-ja></p>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">布地 / 自由な未来</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</budoux-ja></p>
         </div>
       </div>
       <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
