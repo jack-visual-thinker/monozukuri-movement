@@ -82,7 +82,7 @@
   /* 哲学：糸（波）の上にカードを並べた横長の帯。サイズはすべてカード幅 --card-w 基準。
      PC・スマホともに横スクロールできる1本の帯にし、左右に色面を長く連ねて「織物が続いていく」印象を出す */
   .weave {
-    --card-w: min(78vw, 300px);
+    --card-w: min(30vw, 190px);
     --wave-h: 1.45;   /* 波の高さ（カード幅の何倍か） */
     --wave-w: 4.5;    /* 波3つ分の横幅（＝波1つがカード幅の1.5倍） */
     position: relative;
@@ -105,7 +105,15 @@
     height: calc(var(--card-w) * var(--wave-h));
     background: url(./images/weave-wave.png) repeat-x center / calc(var(--card-w) * var(--wave-w)) 100%;
   }
-  .weave-card { position: relative; z-index: 2; flex-shrink: 0; width: var(--card-w); min-height: calc(var(--card-w) * .72); scroll-snap-align: center; }
+  .weave-card {
+    position: relative; z-index: 2; flex-shrink: 0;
+    width: var(--card-w); min-height: calc(var(--card-w) * .72);
+    scroll-snap-align: center;
+    display: flex; align-items: center;
+    gap: calc(var(--card-w) * .07);
+    padding: calc(var(--card-w) * .085);
+  }
+  .weave-card-img { width: calc(var(--card-w) * .32); }
   .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: calc(var(--card-w) * .5); height: calc(var(--card-w) * .37); border-radius: .2rem; }
   @media (min-width: 1024px) {
     .weave { --card-w: clamp(190px, 15vw, 240px); }
@@ -287,34 +295,34 @@
       <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
       <span class="weave-block bg-brand-green" aria-hidden="true"></span>
       <span class="weave-block bg-brand-beige" aria-hidden="true"></span>
-      <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-orange text-white flex items-center gap-4">
-        <div class="shrink-0 w-24 lg:w-[34%] flex justify-center">
+      <div class="weave-card rounded-2xl shadow-md bg-brand-orange text-white">
+        <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-koto-tile.png" alt="縦糸と横糸が交差するイラスト" class="w-full h-auto" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">コト</h3>
-          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">縦糸 / 知的創造</p>
-          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</budoux-ja></p>
+          <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">コト</h3>
+          <p class="hidden lg:block mt-1.5 text-[11px] font-bold opacity-90 text-pretty">縦糸 / 知的創造</p>
+          <p class="hidden lg:block mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</budoux-ja></p>
         </div>
       </div>
-      <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-green text-white flex items-center gap-4">
-        <div class="shrink-0 w-24 lg:w-[34%] flex justify-center">
+      <div class="weave-card rounded-2xl shadow-md bg-brand-green text-white">
+        <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-mono-tile.png" alt="手でつくられた道具やかたちのイラスト" class="w-[85%] h-auto" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">モノ</h3>
-          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">横糸 / 物的創造</p>
-          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>テクノロジーを用いて社会へ届けるための実装と共創の営み。</budoux-ja></p>
+          <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">モノ</h3>
+          <p class="hidden lg:block mt-1.5 text-[11px] font-bold opacity-90 text-pretty">横糸 / 物的創造</p>
+          <p class="hidden lg:block mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>テクノロジーを用いて社会へ届けるための実装と共創の営み。</budoux-ja></p>
         </div>
       </div>
-      <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-beige text-white flex items-center gap-4">
-        <div class="shrink-0 w-24 lg:w-[34%] flex justify-center">
+      <div class="weave-card rounded-2xl shadow-md bg-brand-beige text-white">
+        <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-shakai-tile.png" alt="山と家のある小さな世界のイラスト" class="w-[75%] h-auto" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">社会</h3>
-          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">布地 / 自由な未来</p>
-          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</budoux-ja></p>
+          <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">社会</h3>
+          <p class="hidden lg:block mt-1.5 text-[11px] font-bold opacity-90 text-pretty">布地 / 自由な未来</p>
+          <p class="hidden lg:block mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</budoux-ja></p>
         </div>
       </div>
       <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
@@ -847,7 +855,8 @@
   document.querySelectorAll('.weave').forEach(function (w) {
     if (w.scrollWidth <= w.clientWidth) return;
     var first = w.querySelector('.weave-card');
-    w.scrollLeft = first.offsetLeft + first.offsetWidth / 2 - w.clientWidth / 2;
+    // 3枚のカードができるだけ見える位置から始める（中央寄せではなく、先頭カードを少し左に余白を残して開始）
+    w.scrollLeft = Math.max(0, first.offsetLeft - 16);
   });
 </script>
 <script>
