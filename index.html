@@ -74,6 +74,37 @@
   }
   .nav-link.is-active { color: #434343; }
   .nav-link.is-active::after { transform: scaleX(1); }
+  /* 哲学：糸（波）の上にカードを並べた横長の帯。サイズはすべてカード幅 --card-w 基準。
+     スマホ・タブレットは横にスワイプ、PCは中央に固定して左右をはみ出させる */
+  .weave {
+    --card-w: min(78vw, 300px);
+    --wave-h: 1.45;   /* 波の高さ（カード幅の何倍か） */
+    --wave-w: 4.5;    /* 波3つ分の横幅（＝波1つがカード幅の1.5倍） */
+    position: relative;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+  }
+  .weave::-webkit-scrollbar { display: none; }
+  .weave-row {
+    position: relative; display: flex; align-items: center;
+    width: max-content;
+    gap: calc(var(--card-w) * .08);
+    padding: calc(var(--card-w) * .42) 1rem;
+  }
+  .weave-wave {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    z-index: 1; pointer-events: none;
+    height: calc(var(--card-w) * var(--wave-h));
+    background: url(./images/weave-wave.png) repeat-x center / calc(var(--card-w) * var(--wave-w)) 100%;
+  }
+  .weave-card { position: relative; z-index: 2; flex-shrink: 0; width: var(--card-w); min-height: calc(var(--card-w) * .72); scroll-snap-align: center; }
+  .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: calc(var(--card-w) * .5); height: calc(var(--card-w) * .37); border-radius: .2rem; }
+  .weave-far { display: none; }
+  @media (min-width: 1024px) {
+    .weave { --card-w: clamp(190px, 15vw, 240px); overflow: hidden; }
+    .weave-row { left: 50%; transform: translateX(-50%); }
+    .weave-far { display: block; }
+  }
   body { font-family: 'Noto Sans JP', sans-serif; color: #434343; }
   .text-balance { text-wrap: balance; }
   .bean {
@@ -151,15 +182,14 @@
     </div>
   
     <!-- 2.5 告知バー（最新1件・なければこのブロックごと削除） -->
-    <a href="https://prtimes.jp/main/html/rd/p/000000037.000036632.html"
-       target="_blank" rel="noopener"
+    <a href="#vol3"
        class="group mt-8 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 bg-brand-beige/25 hover:bg-brand-beige/40 border border-brand-beige/70 rounded-2xl sm:rounded-full px-5 sm:px-7 py-4 transition">
       <span class="shrink-0 flex items-center gap-3">
         <span class="bg-brand-orange text-white text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full">NEW</span>
-        <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
+        <time class="text-sm font-bold text-brand-dark/60">2026.09.15</time>
       </span>
       <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark">
-        第2回「未来をつくる ものづくりムーブメント」を開催しました
+        第3回「未来をつくる ものづくりムーブメント」を12月14日（月）に開催します
       </span>
       <span class="shrink-0 text-sm font-bold text-brand-green">詳しく見る →</span>
     </a>
@@ -223,43 +253,63 @@
 </section>
 
 <!-- 4. 哲学 -->
-<section class="bg-white py-20 sm:py-24">
+<section class="bg-white py-20 sm:py-24 overflow-hidden">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark leading-loose">
-      <img src="./images/badge-koto.png" alt="コト" class="inline-block align-middle mx-[0.1em] h-[3.8em] w-auto" />が<img
-           src="./images/badge-mono.png" alt="モノ" class="inline-block align-middle mx-[0.1em] h-[3.8em] w-auto" />を生み、<img
-           src="./images/badge-mono.png" alt="モノ" class="inline-block align-middle mx-[0.1em] h-[3.8em] w-auto" />が<img
-           src="./images/badge-shakai.png" alt="社会" class="inline-block align-middle mx-[0.1em] h-[3.8em] w-auto" />を変える
+      <img src="./images/badge-koto.png" alt="コト" class="inline-block align-middle mx-[0.1em] h-[2.4em] w-auto" />が<img
+           src="./images/badge-mono.png" alt="モノ" class="inline-block align-middle mx-[0.1em] h-[2.4em] w-auto" />を生み、<img
+           src="./images/badge-mono.png" alt="モノ" class="inline-block align-middle mx-[0.1em] h-[2.4em] w-auto" />が<img
+           src="./images/badge-shakai.png" alt="社会" class="inline-block align-middle mx-[0.1em] h-[2.4em] w-auto" />を変える
     </h2>
-    <div class="flex justify-center mt-8 mb-8">
-      <img src="./images/kotomonoshakai.png"
-           alt="コト・モノ・社会が織りなす波"
-           class="w-full max-w-5xl h-auto" />
+  </div>
+
+  <!-- 織りの帯：糸（波）の上に3枚のカード。左右の小さな色面で、コト→モノ→社会の循環が続くことを表す -->
+  <div class="weave mt-6 lg:mt-2">
+    <div class="weave-row">
+      <div class="weave-wave" aria-hidden="true"></div>
+      <span class="weave-block weave-far bg-brand-beige" aria-hidden="true"></span>
+      <span class="weave-block weave-far bg-brand-orange" aria-hidden="true"></span>
+      <span class="weave-block weave-far bg-brand-green" aria-hidden="true"></span>
+      <span class="weave-block bg-brand-beige" aria-hidden="true"></span>
+      <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-orange text-white flex items-center gap-4">
+        <div class="shrink-0 w-24 lg:w-[34%] flex justify-center">
+          <img src="./images/philo-koto-tile.png" alt="縦糸と横糸が交差するイラスト" class="w-full h-auto" />
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">コト</h3>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90">縦糸 / 知的創造</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px]">「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</p>
+        </div>
+      </div>
+      <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-green text-white flex items-center gap-4">
+        <div class="shrink-0 w-24 lg:w-[34%] flex justify-center">
+          <img src="./images/philo-mono-tile.png" alt="手でつくられた道具やかたちのイラスト" class="w-[85%] h-auto" />
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">モノ</h3>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90">横糸 / 物的創造</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px]">テクノロジーを用いて社会へ届けるための実装と共創の営み。</p>
+        </div>
+      </div>
+      <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-beige text-white flex items-center gap-4">
+        <div class="shrink-0 w-24 lg:w-[34%] flex justify-center">
+          <img src="./images/philo-shakai-tile.png" alt="山と家のある小さな世界のイラスト" class="w-[75%] h-auto" />
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">社会</h3>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90">布地 / 自由な未来</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px]">つくる（Doing）が新しい生き方（Being）として織りなされた世界。</p>
+        </div>
+      </div>
+      <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
+      <span class="weave-block weave-far bg-brand-green" aria-hidden="true"></span>
+      <span class="weave-block weave-far bg-brand-beige" aria-hidden="true"></span>
+      <span class="weave-block weave-far bg-brand-orange" aria-hidden="true"></span>
     </div>
-    <div class="grid md:grid-cols-3 gap-3 sm:gap-6 md:gap-8">
-      <div class="rounded-2xl shadow-md hover:shadow-xl transition p-4 sm:p-8 bg-brand-orange text-white">
-        <div class="text-xs sm:text-sm font-bold opacity-90">縦糸 / 知的創造</div>
-        <h3 class="mt-1 sm:mt-2 text-xl sm:text-3xl font-bold">コト</h3>
-        <p class="mt-1.5 sm:mt-4 leading-relaxed text-xs sm:text-base">
-          「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。
-        </p>
-      </div>
-      <div class="rounded-2xl shadow-md hover:shadow-xl transition p-4 sm:p-8 bg-brand-green text-white">
-        <div class="text-xs sm:text-sm font-bold opacity-90">横糸 / 物的創造</div>
-        <h3 class="mt-1 sm:mt-2 text-xl sm:text-3xl font-bold">モノ</h3>
-        <p class="mt-1.5 sm:mt-4 leading-relaxed text-xs sm:text-base">
-          テクノロジーを用いて社会へ届けるための実装と共創の営み。
-        </p>
-      </div>
-      <div class="rounded-2xl shadow-md hover:shadow-xl transition p-4 sm:p-8 bg-brand-beige text-white">
-        <div class="text-xs sm:text-sm font-bold opacity-90">布地 / 自由な未来</div>
-        <h3 class="mt-1 sm:mt-2 text-xl sm:text-3xl font-bold">社会</h3>
-        <p class="mt-1.5 sm:mt-4 leading-relaxed text-xs sm:text-base">
-          つくる（Doing）が新しい生き方（Being）として織りなされた世界。
-        </p>
-      </div>
-    </div>
-    <p class="mt-12 text-center text-base sm:text-lg text-brand-dark/80 max-w-3xl mx-auto leading-relaxed text-balance">
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <p class="mt-6 lg:mt-2 text-center text-base sm:text-lg text-brand-dark/80 max-w-3xl mx-auto leading-relaxed text-balance">
       この3つの循環を通じて、不確実な時代のものづくりのあり方を共に探求します。
     </p>
   </div>
@@ -399,116 +449,102 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">ウェビナーシリーズ</h2>
 
-    <!-- 最新回 -->
-    <article class="mt-12 grid md:grid-cols-2 gap-8 lg:gap-12 items-stretch">
-      <a href="./images/grareco-vol2/1.jpg" target="_blank" rel="noopener"
-         class="rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition">
-        <img src="./images/grareco-vol2/1.jpg" alt="第2回ウェビナー グラフィックレコーディング 1/6" class="w-full h-full object-cover object-top" />
-      </a>
-
-      <div class="bg-brand-beige/40 rounded-2xl shadow-sm hover:shadow-lg transition p-8 sm:p-10 flex flex-col">
+    <!-- 次回予告（開催後は「LATEST」の位置へ移し、この枠は次の回に差し替える） -->
+    <article id="vol3" class="mt-10 scroll-mt-28 lg:scroll-mt-20 rounded-2xl border-2 border-brand-green/25 bg-brand-green/5 p-6 sm:p-8 grid md:grid-cols-[auto_1fr] gap-6 md:gap-10 items-start">
+      <img src="./images/guest-kiuchi.jpg" alt="木内 文昭 氏" loading="lazy"
+           class="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-2xl object-cover" />
+      <div>
         <div class="flex flex-wrap items-center gap-3">
-          <span class="bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-full">第2回 終了</span>
-          <span class="text-sm text-brand-dark/70">YouTube Live / GOCONC（京都）</span>
+          <span class="bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-full">第3回 開催予定</span>
+          <span class="text-sm font-bold text-brand-dark/60">次回予定ゲスト</span>
         </div>
-        <h3 class="mt-4 text-xl sm:text-2xl font-bold text-brand-dark">
-          第2回 未来をつくる ものづくりムーブメント
-        </h3>
-        <p class="mt-2 text-brand-dark/80 text-sm sm:text-base">
-          ゲスト講演「モノからコトへ。AIと職人、個人の時代を考える」
-        </p>
-        <p class="mt-2 text-brand-green font-bold">
-          2026年8月24日（月） 18:30〜20:00
-        </p>
-
-        <ol class="mt-6 space-y-4 text-sm sm:text-base text-brand-dark/85">
-          <li class="flex gap-4">
-            <time class="shrink-0 w-14 text-brand-green font-bold text-sm sm:text-base">18:30</time>
-            <div>
-              <span class="font-bold">オープニング</span>
-              <span class="block text-sm text-brand-dark/70">コミュニティの目的・趣旨説明</span>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <time class="shrink-0 w-14 text-brand-green font-bold text-sm sm:text-base">18:35</time>
-            <div>
-              <span class="font-bold">ゲスト講演（30分）</span>
-              <span class="block text-sm text-brand-dark/70">成嶋 祐介 氏 / 株式会社 成島（人形屋ホンポ）代表取締役</span>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <time class="shrink-0 w-14 text-brand-green font-bold text-sm sm:text-base">19:05</time>
-            <div>
-              <span class="font-bold">パネルディスカッション（45分）</span>
-              <span class="block text-sm text-brand-dark/70">成嶋 祐介 氏 × 竹林 一 氏 × 辻本 裕哉 氏 × 積 高之 氏／質疑応答あり</span>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <time class="shrink-0 w-14 text-brand-green font-bold text-sm sm:text-base">19:50</time>
-            <div>
-              <span class="font-bold">エンディング・クロージング</span>
-              <span class="block text-sm text-brand-dark/70">次回予告・コミュニティへの参加案内</span>
-            </div>
-          </li>
-        </ol>
-
-        <a href="https://peatix.com/event/5110524"
-           target="_blank" rel="noopener"
-           class="mt-8 inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-full transition shadow-sm">
-          イベントページを見る
-          <span aria-hidden="true">→</span>
-        </a>
-        <a href="https://www.youtube.com/live/F23JTbdQ6E0"
-           target="_blank" rel="noopener"
-           class="mt-3 inline-flex items-center gap-2 bg-[#C0392B] hover:bg-[#A03325] text-white font-bold px-6 py-3 rounded-full transition shadow-sm">
-          <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" aria-hidden="true">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-          </svg>
-          YouTubeアーカイブを見る
-          <span aria-hidden="true">→</span>
-        </a>
+        <h3 class="mt-3 text-xl sm:text-2xl font-bold text-brand-dark">第3回 未来をつくる ものづくりムーブメント</h3>
+        <p class="mt-1 font-bold text-brand-green">2026年12月14日（月） 18:30〜20:00</p>
+        <p class="mt-5 font-bold text-brand-dark">木内 文昭（きうち ふみあき）氏<span class="block sm:inline sm:ml-3 text-sm font-normal text-brand-dark/70">株式会社マクアケ 代表取締役</span></p>
+        <ul class="mt-3 space-y-1.5 text-sm text-brand-dark/80 leading-relaxed list-disc pl-5 marker:text-brand-green">
+          <li>リクルートグループ、BtoBマーケティング会社を経て、2009年にサイバーエージェントへ入社</li>
+          <li>2013年に株式会社マクアケを共同創業。新規事業開発や上場準備などを担い、2024年に代表取締役へ就任</li>
+          <li>「Makuake」を通じて、作り手の新しい「モノ」や「体験」と、それを応援したい生活者との出会いを創出</li>
+          <li>生活者の反応や声を商品開発に活かし、仮説検証から一般販売・定番化までつなげる「共創型のものづくり」を推進</li>
+        </ul>
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <span class="inline-flex items-center bg-gray-200 text-gray-600 font-bold px-5 py-2.5 rounded-full text-sm">Peatixで近日公開予定</span>
+          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E7%AC%AC3%E5%9B%9E%20%E6%9C%AA%E6%9D%A5%E3%82%92%E3%81%A4%E3%81%8F%E3%82%8B%20%E3%82%82%E3%81%AE%E3%81%A5%E3%81%8F%E3%82%8A%E3%83%A0%E3%83%BC%E3%83%96%E3%83%A1%E3%83%B3%E3%83%88&amp;dates=20261214T093000Z%2F20261214T110000Z&amp;details=%E3%82%B2%E3%82%B9%E3%83%88%EF%BC%9A%E6%9C%A8%E5%86%85%20%E6%96%87%E6%98%AD%20%E6%B0%8F%EF%BC%88%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE%E3%83%9E%E3%82%AF%E3%82%A2%E3%82%B1%20%E4%BB%A3%E8%A1%A8%E5%8F%96%E7%B7%A0%E5%BD%B9%EF%BC%89%0A%E8%A9%B3%E7%B4%B0%E3%83%BB%E3%81%8A%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF%E3%81%AFPeatix%E3%81%A7%E8%BF%91%E6%97%A5%E5%85%AC%E9%96%8B%E4%BA%88%E5%AE%9A%E3%81%A7%E3%81%99%E3%80%82%0Ahttps%3A%2F%2Fmonozukuri-movement.vercel.app%2F%23vol3" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition shadow-sm text-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Googleカレンダーに追加
+          </a>
+          <a href="./events/vol3.ics" class="inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition shadow-sm text-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Appleカレンダーに追加
+          </a>
+        </div>
       </div>
     </article>
 
-    <!-- グラレコ全6枚 -->
-    <details class="group mt-8">
-      <summary class="cursor-pointer inline-flex items-center gap-2 text-brand-green font-bold text-sm sm:text-base hover:text-brand-orange transition">
-        <span>グラフィックレコーディングを全部見る（全6枚）</span>
-        <span class="transition-transform group-open:rotate-180" aria-hidden="true">▼</span>
-      </summary>
-      <div class="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-        <a href="./images/grareco-vol2/1.jpg" target="_blank" rel="noopener"
-           class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-          <img src="./images/grareco-vol2/1.jpg" alt="第2回ウェビナー グラフィックレコーディング 1/6" loading="lazy" class="w-full h-auto" />
-        </a>
-        <a href="./images/grareco-vol2/2.jpg" target="_blank" rel="noopener"
-           class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-          <img src="./images/grareco-vol2/2.jpg" alt="第2回ウェビナー グラフィックレコーディング 2/6" loading="lazy" class="w-full h-auto" />
-        </a>
-        <a href="./images/grareco-vol2/3.jpg" target="_blank" rel="noopener"
-           class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-          <img src="./images/grareco-vol2/3.jpg" alt="第2回ウェビナー グラフィックレコーディング 3/6" loading="lazy" class="w-full h-auto" />
-        </a>
-        <a href="./images/grareco-vol2/4.jpg" target="_blank" rel="noopener"
-           class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-          <img src="./images/grareco-vol2/4.jpg" alt="第2回ウェビナー グラフィックレコーディング 4/6" loading="lazy" class="w-full h-auto" />
-        </a>
-        <a href="./images/grareco-vol2/5.jpg" target="_blank" rel="noopener"
-           class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-          <img src="./images/grareco-vol2/5.jpg" alt="第2回ウェビナー グラフィックレコーディング 5/6" loading="lazy" class="w-full h-auto" />
-        </a>
-        <a href="./images/grareco-vol2/6.jpg" target="_blank" rel="noopener"
-           class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-          <img src="./images/grareco-vol2/6.jpg" alt="第2回ウェビナー グラフィックレコーディング 6/6" loading="lazy" class="w-full h-auto" />
-        </a>
-      </div>
-    </details>
-
-    <!-- 過去の開催 -->
+    <!-- 過去の開催：終わった回はここへ（新しい回が上） -->
     <div class="mt-14">
       <h3 class="text-sm font-bold tracking-widest text-brand-dark/50">ARCHIVE</h3>
       <div class="mt-4 border-t border-brand-cream">
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 py-5 border-b border-brand-cream">
+
+        <!-- 第2回 -->
+        <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 py-6 border-b border-brand-cream">
+          <a href="./images/grareco-vol2/1.jpg" target="_blank" rel="noopener" class="shrink-0">
+            <img src="./images/grareco-vol2/1.jpg" alt="第2回ウェビナー グラフィックレコーディング 1/6"
+                 loading="lazy" class="w-20 h-20 rounded-lg object-cover object-top" />
+          </a>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="bg-brand-orange text-white text-[10px] font-bold px-2.5 py-1 rounded-full">第2回 終了</span>
+              <time class="text-sm font-bold text-brand-dark/60">2026.08.24</time>
+            </div>
+            <p class="mt-1.5 font-bold text-brand-dark">第2回 未来をつくる ものづくりムーブメント</p>
+            <p class="text-sm text-brand-dark/70">ゲスト講演「モノからコトへ。AIと職人、個人の時代を考える」— 成嶋 祐介 氏</p>
+
+            <details class="group mt-3">
+              <summary class="cursor-pointer inline-flex items-center gap-1.5 text-sm font-bold text-brand-green hover:text-brand-orange transition">
+                グラフィックレコーディングを見る（全6枚）
+                <span class="transition-transform group-open:rotate-180" aria-hidden="true">▼</span>
+              </summary>
+              <div class="mt-4 grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+                <a href="./images/grareco-vol2/1.jpg" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                  <img src="./images/grareco-vol2/1.jpg" alt="第2回ウェビナー グラフィックレコーディング 1/6" loading="lazy" class="w-full h-auto" />
+                </a>
+                <a href="./images/grareco-vol2/2.jpg" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                  <img src="./images/grareco-vol2/2.jpg" alt="第2回ウェビナー グラフィックレコーディング 2/6" loading="lazy" class="w-full h-auto" />
+                </a>
+                <a href="./images/grareco-vol2/3.jpg" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                  <img src="./images/grareco-vol2/3.jpg" alt="第2回ウェビナー グラフィックレコーディング 3/6" loading="lazy" class="w-full h-auto" />
+                </a>
+                <a href="./images/grareco-vol2/4.jpg" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                  <img src="./images/grareco-vol2/4.jpg" alt="第2回ウェビナー グラフィックレコーディング 4/6" loading="lazy" class="w-full h-auto" />
+                </a>
+                <a href="./images/grareco-vol2/5.jpg" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                  <img src="./images/grareco-vol2/5.jpg" alt="第2回ウェビナー グラフィックレコーディング 5/6" loading="lazy" class="w-full h-auto" />
+                </a>
+                <a href="./images/grareco-vol2/6.jpg" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                  <img src="./images/grareco-vol2/6.jpg" alt="第2回ウェビナー グラフィックレコーディング 6/6" loading="lazy" class="w-full h-auto" />
+                </a>
+              </div>
+            </details>
+
+            <div class="mt-3 flex flex-wrap gap-2">
+              <a href="https://peatix.com/event/5110524" target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-1.5 bg-brand-green hover:bg-emerald-800 text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm">
+                イベントページ
+                <span aria-hidden="true">→</span>
+              </a>
+              <a href="https://www.youtube.com/live/F23JTbdQ6E0" target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-1.5 bg-[#C0392B] hover:bg-[#A03325] text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" aria-hidden="true">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                YouTube
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第1回 -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 py-6 border-b border-brand-cream">
           <img src="./images/webinar-graphic-recording.png" alt="第1回ウェビナー グラフィックレコーディング"
                loading="lazy" class="w-20 h-20 rounded-lg object-cover object-top shrink-0" />
           <div class="flex-1 min-w-0">
@@ -535,6 +571,7 @@
             </a>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -707,6 +744,14 @@
   </div>
 </footer>
 
+<script>
+  // 哲学の帯：横スワイプになる幅では、最初に「コト」のカードを中央に表示する
+  document.querySelectorAll('.weave').forEach(function (w) {
+    if (w.scrollWidth <= w.clientWidth) return;
+    var first = w.querySelector('.weave-card');
+    w.scrollLeft = first.offsetLeft + first.offsetWidth / 2 - w.clientWidth / 2;
+  });
+</script>
 <script>
   // スクロール位置に合わせて、ヘッダーメニューの該当項目に下線を出す
   (function () {
