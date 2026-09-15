@@ -75,6 +75,14 @@
   }
   .nav-link.is-active { color: #434343; }
   .nav-link.is-active::after { transform: scaleX(1); }
+  /* PCのドロップダウン：ボタンをリンクと同じ見た目にし、開閉の矢印を付ける */
+  .nav-trigger { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; color: inherit; }
+  .nav-trigger .chev { transition: transform .2s; }
+  .nav-trigger[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .nav-dropdown { z-index: 60; }
+  .nav-dd-link { display: block; color: rgba(67, 67, 67, .75); transition: background-color .15s, color .15s; }
+  .nav-dd-link:hover { background: rgba(215, 193, 164, .25); color: #338A75; }
+  .nav-dd-link.is-active { background: rgba(215, 193, 164, .35); color: #434343; }
   /* スマホ・タブレットの開閉メニュー：下線ではなく、左のオレンジの棒＋薄い背景で現在地を示す */
   #nav-menu .nav-link::after { display: none; }
   #nav-menu .nav-link { padding-left: .75rem; border-left: 3px solid transparent; }
@@ -147,12 +155,32 @@
       ものづくり ムーブメント
     </a>
     <div class="flex items-center gap-3 sm:gap-6 lg:gap-10">
-      <!-- PC：ページ内メニュー -->
+      <!-- PC：ページ内メニュー（「ムーブメントとは」「イベント」は押すと下に項目が広がる） -->
       <nav aria-label="ページ内メニュー" class="hidden lg:block">
         <ul class="flex items-center gap-8 text-[15px] font-bold whitespace-nowrap">
-          <li class="text-pretty"><a href="#about" data-nav="about" class="nav-link">ムーブメントとは</a></li>
-          <li class="text-pretty"><a href="#events" data-nav="events" class="nav-link">イベント</a></li>
-          <li class="text-pretty"><a href="#news" data-nav="news" class="nav-link">お知らせ</a></li>
+          <li class="relative text-pretty">
+            <button type="button" class="nav-link nav-trigger inline-flex items-center gap-1" data-nav-group="about" aria-expanded="false" aria-controls="dd-about">
+              ムーブメントとは
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="chev w-3.5 h-3.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div id="dd-about" class="nav-dropdown hidden absolute left-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-lg border border-brand-cream py-2">
+              <a href="#about" data-nav="about" class="nav-dd-link block px-4 py-2.5 rounded-lg text-sm">課題</a>
+              <a href="#philosophy" data-nav="philosophy" class="nav-dd-link block px-4 py-2.5 rounded-lg text-sm">コト・モノ・社会</a>
+              <a href="#activities" data-nav="activities" class="nav-dd-link block px-4 py-2.5 rounded-lg text-sm">活動内容</a>
+              <a href="#founders" data-nav="founders" class="nav-dd-link block px-4 py-2.5 rounded-lg text-sm">発起人</a>
+            </div>
+          </li>
+          <li class="relative text-pretty">
+            <button type="button" class="nav-link nav-trigger inline-flex items-center gap-1" data-nav-group="events" aria-expanded="false" aria-controls="dd-events">
+              イベント
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="chev w-3.5 h-3.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div id="dd-events" class="nav-dropdown hidden absolute left-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-lg border border-brand-cream py-2">
+              <a href="#events" data-nav="events" class="nav-dd-link block px-4 py-2.5 rounded-lg text-sm">ウェビナーシリーズ</a>
+              <a href="#media" data-nav="media" class="nav-dd-link block px-4 py-2.5 rounded-lg text-sm">メディア・コンテンツ</a>
+            </div>
+          </li>
+          <li class="text-pretty"><a href="#news" data-nav="news" data-nav-group="news" class="nav-link">お知らせ</a></li>
         </ul>
       </nav>
       <a href="https://www.facebook.com/groups/1723416302397626/"
@@ -172,9 +200,9 @@
   <!-- スマホ・タブレット：ボタンで開閉するメニュー（既定は非表示） -->
   <nav id="nav-menu" aria-label="ページ内メニュー" class="hidden lg:hidden border-t border-brand-cream">
     <ul class="max-w-7xl mx-auto px-4 sm:px-6 py-2 text-[15px] font-bold">
-      <li class="text-pretty"><a href="#about" data-nav="about" class="nav-link block py-2.5">ムーブメントとは</a></li>
-      <li class="text-pretty"><a href="#events" data-nav="events" class="nav-link block py-2.5">イベント</a></li>
-      <li class="text-pretty"><a href="#news" data-nav="news" class="nav-link block py-2.5">お知らせ</a></li>
+      <li class="text-pretty"><a href="#about" data-nav="about" data-nav-group="about" class="nav-link block py-2.5">ムーブメントとは</a></li>
+      <li class="text-pretty"><a href="#events" data-nav="events" data-nav-group="events" class="nav-link block py-2.5">イベント</a></li>
+      <li class="text-pretty"><a href="#news" data-nav="news" data-nav-group="news" class="nav-link block py-2.5">お知らせ</a></li>
     </ul>
   </nav>
 </header>
@@ -272,7 +300,7 @@
 </section>
 
 <!-- 4. 哲学 -->
-<section class="bg-white py-20 sm:py-24 overflow-hidden">
+<section id="philosophy" class="bg-white py-20 sm:py-24 overflow-hidden">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-brand-dark leading-loose">
       <img src="./images/badge-koto.png" alt="コト" class="inline-block align-middle mx-[0.1em] h-[2.4em] w-auto" />が<img
@@ -413,7 +441,7 @@
 </section>
 
 <!-- 6. 発起人 -->
-<section class="bg-white py-20 sm:py-24">
+<section id="founders" class="bg-white py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-brand-dark">発起人</h2>
     <div class="mt-12 grid md:grid-cols-2 gap-8">
@@ -661,7 +689,7 @@
 </section>
 
 <!-- 8. メディア -->
-<section class="bg-brand-beige/40 py-20 sm:py-24">
+<section id="media" class="bg-brand-beige/40 py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-brand-dark">メディア・コンテンツ</h2>
     <div class="mt-12 grid md:grid-cols-2 md:grid-rows-2 gap-6 md:gap-8">
@@ -851,6 +879,38 @@
 </script>
 
 <script>
+  // ヘッダー：PCの「ムーブメントとは」「イベント」ドロップダウン
+  (function () {
+    var triggers = document.querySelectorAll('.nav-trigger');
+    if (!triggers.length) return;
+    function closeAll(except) {
+      triggers.forEach(function (t) {
+        if (t === except) return;
+        t.setAttribute('aria-expanded', 'false');
+        document.getElementById(t.getAttribute('aria-controls')).classList.add('hidden');
+      });
+    }
+    triggers.forEach(function (t) {
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      t.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = t.getAttribute('aria-expanded') === 'true';
+        closeAll(t);
+        t.setAttribute('aria-expanded', String(!open));
+        panel.classList.toggle('hidden', open);
+      });
+    });
+    document.addEventListener('click', function () { closeAll(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAll();
+    });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth < 1024) closeAll();
+    });
+  })();
+</script>
+
+<script>
   // 哲学の帯：横スワイプになる幅では、最初に「コト」のカードを中央に表示する
   document.querySelectorAll('.weave').forEach(function (w) {
     if (w.scrollWidth <= w.clientWidth) return;
@@ -861,10 +921,18 @@
 </script>
 <script>
   // スクロール位置に合わせて、ヘッダーメニューの該当項目に下線を出す
+  // 「ムーブメントとは」「イベント」はドロップダウンの中の項目なので、
+  // 個々のセクション（哲学・発起人・メディアなど）を親グループに束ねて判定する
   (function () {
     var header = document.querySelector('header');
-    var markers = ['about', 'events', 'news', 'join'].map(function (id) { return document.getElementById(id); });
+    var groupOf = {
+      about: 'about', philosophy: 'about', activities: 'about', founders: 'about',
+      events: 'events', media: 'events',
+      news: 'news', join: null
+    };
+    var markers = Object.keys(groupOf).map(function (id) { return document.getElementById(id); }).filter(Boolean);
     var links = document.querySelectorAll('[data-nav]');
+    var groupTriggers = document.querySelectorAll('[data-nav-group]');
     var ticking = false;
     function update() {
       ticking = false;
@@ -873,10 +941,16 @@
       markers.forEach(function (el) {
         if (el.getBoundingClientRect().top <= line) current = el.id;
       });
+      var currentGroup = current ? groupOf[current] : null;
       links.forEach(function (a) {
         var on = a.dataset.nav === current;
         a.classList.toggle('is-active', on);
         if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      });
+      groupTriggers.forEach(function (el) {
+        var on = el.dataset.navGroup === currentGroup;
+        el.classList.toggle('is-active', on);
+        if (on) el.setAttribute('aria-current', 'true'); else if (!el.hasAttribute('data-nav')) el.removeAttribute('aria-current');
       });
     }
     window.addEventListener('scroll', function () {
