@@ -7,6 +7,8 @@
 <title>未来をつくる ものづくり ムーブメント</title>
 <meta name="description" content="「未来をつくる ものづくり ムーブメント」コミュニティ公式LP。"つくること"は"生きること"。哲学(縦糸)と技術(横糸)を交差させ、新しい社会を共創する実践の場。" />
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- 日本語の行送り（意味の区切りで改行する）。Google製、CDNから読み込むだけで動く -->
+<script src="https://cdn.jsdelivr.net/npm/budoux@0.6.3/bundle/budoux-ja.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
@@ -137,9 +139,9 @@
       <!-- PC：ページ内メニュー -->
       <nav aria-label="ページ内メニュー" class="hidden lg:block">
         <ul class="flex items-center gap-8 text-[15px] font-bold whitespace-nowrap">
-          <li><a href="#about" data-nav="about" class="nav-link">ムーブメントとは</a></li>
-          <li><a href="#events" data-nav="events" class="nav-link">イベント</a></li>
-          <li><a href="#news" data-nav="news" class="nav-link">お知らせ</a></li>
+          <li class="text-pretty"><a href="#about" data-nav="about" class="nav-link">ムーブメントとは</a></li>
+          <li class="text-pretty"><a href="#events" data-nav="events" class="nav-link">イベント</a></li>
+          <li class="text-pretty"><a href="#news" data-nav="news" class="nav-link">お知らせ</a></li>
         </ul>
       </nav>
       <a href="https://www.facebook.com/groups/1723416302397626/"
@@ -153,9 +155,9 @@
   <!-- スマホ・タブレット：2段目に常時表示 -->
   <nav aria-label="ページ内メニュー" class="lg:hidden border-t border-brand-cream">
     <ul class="grid grid-cols-3 h-10 text-xs sm:text-sm font-bold whitespace-nowrap">
-      <li><a href="#about" data-nav="about" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:18%]">ムーブメントとは</a></li>
-      <li><a href="#events" data-nav="events" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:24%]">イベント</a></li>
-      <li><a href="#news" data-nav="news" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:24%]">お知らせ</a></li>
+      <li class="text-pretty"><a href="#about" data-nav="about" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:18%]">ムーブメントとは</a></li>
+      <li class="text-pretty"><a href="#events" data-nav="events" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:24%]">イベント</a></li>
+      <li class="text-pretty"><a href="#news" data-nav="news" class="nav-link h-full flex items-center justify-center [--ul-bottom:0px] [--ul-x:24%]">お知らせ</a></li>
     </ul>
   </nav>
 </header>
@@ -185,7 +187,7 @@
     <a href="#vol3"
        class="group mt-8 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 bg-brand-beige/25 hover:bg-brand-beige/40 border border-brand-beige/70 rounded-2xl sm:rounded-full px-5 sm:px-7 py-4 transition">
       <span class="shrink-0 flex items-center gap-3">
-        <span class="bg-brand-orange text-white text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full">NEW</span>
+        <span class="bg-brand-orange text-white text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap">NEW</span>
         <time class="text-sm font-bold text-brand-dark/60">2026.09.15</time>
       </span>
       <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark">
@@ -217,8 +219,8 @@
         </div>
         <div class="flex-1">
           <h3 class="text-lg sm:text-xl font-bold text-brand-green">目的の喪失</h3>
-          <p class="mt-2 text-brand-dark/80 leading-relaxed text-sm sm:text-base">
-            「どう作るか」という効率化が目的化し、「何のために作るのか」という本質的な問いを見失っている。
+          <p class="mt-2 text-brand-dark/80 leading-relaxed text-sm sm:text-base text-pretty">
+            <budoux-ja>「どう作るか」という効率化が目的化し、「何のために作るのか」という本質的な問いを見失っている。</budoux-ja>
           </p>
         </div>
       </div>
@@ -230,8 +232,8 @@
         </div>
         <div class="flex-1">
           <h3 class="text-lg sm:text-xl font-bold text-brand-green">時代の転換</h3>
-          <p class="mt-2 text-brand-dark/80 leading-relaxed text-sm sm:text-base">
-            AI台頭・資源の枯渇。「何が売れるか」より「私たちは何を実現したいのか」という哲学が求められる時代へ。
+          <p class="mt-2 text-brand-dark/80 leading-relaxed text-sm sm:text-base text-pretty">
+            <budoux-ja>AI台頭・資源の枯渇。「何が売れるか」より「私たちは何を実現したいのか」という哲学が求められる時代へ。</budoux-ja>
           </p>
         </div>
       </div>
@@ -243,8 +245,8 @@
         </div>
         <div class="flex-1">
           <h3 class="text-lg sm:text-xl font-bold text-brand-green">変革の機会</h3>
-          <p class="mt-2 text-brand-dark/80 leading-relaxed text-sm sm:text-base">
-            ものづくりは世界を物質的に豊かにするだけでなく、一人ひとりが「新しい社会の在り方」をデザイン・実装する力を持っている。
+          <p class="mt-2 text-brand-dark/80 leading-relaxed text-sm sm:text-base text-pretty">
+            <budoux-ja>ものづくりは世界を物質的に豊かにするだけでなく、一人ひとりが「新しい社会の在り方」をデザイン・実装する力を持っている。</budoux-ja>
           </p>
         </div>
       </div>
@@ -277,8 +279,8 @@
         </div>
         <div class="min-w-0">
           <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">コト</h3>
-          <p class="mt-1.5 text-[11px] font-bold opacity-90">縦糸 / 知的創造</p>
-          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px]">「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</p>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">縦糸 / 知的創造</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</budoux-ja></p>
         </div>
       </div>
       <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-green text-white flex items-center gap-4">
@@ -287,8 +289,8 @@
         </div>
         <div class="min-w-0">
           <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">モノ</h3>
-          <p class="mt-1.5 text-[11px] font-bold opacity-90">横糸 / 物的創造</p>
-          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px]">テクノロジーを用いて社会へ届けるための実装と共創の営み。</p>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">横糸 / 物的創造</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>テクノロジーを用いて社会へ届けるための実装と共創の営み。</budoux-ja></p>
         </div>
       </div>
       <div class="weave-card rounded-2xl shadow-md px-5 py-5 lg:px-6 bg-brand-beige text-white flex items-center gap-4">
@@ -297,8 +299,8 @@
         </div>
         <div class="min-w-0">
           <h3 class="text-2xl lg:text-[1.7rem] font-bold leading-none">社会</h3>
-          <p class="mt-1.5 text-[11px] font-bold opacity-90">布地 / 自由な未来</p>
-          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px]">つくる（Doing）が新しい生き方（Being）として織りなされた世界。</p>
+          <p class="mt-1.5 text-[11px] font-bold opacity-90 text-pretty">布地 / 自由な未来</p>
+          <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</budoux-ja></p>
         </div>
       </div>
       <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
@@ -334,9 +336,9 @@
                class="w-full aspect-square object-contain" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-base sm:text-xl font-bold">対話 — 業界・立場を超えた対話</h3>
-          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm">
-            企業経営者、研究者、技術者、クリエーターが垣根を越えて本質的な議論を交わします。
+          <h3 class="text-pretty text-base sm:text-xl font-bold"><budoux-ja>対話 — 業界・立場を超えた対話</budoux-ja></h3>
+          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm text-pretty">
+            <budoux-ja>企業経営者、研究者、技術者、クリエーターが垣根を越えて本質的な議論を交わします。</budoux-ja>
           </p>
         </div>
       </div>
@@ -347,9 +349,9 @@
                class="w-full aspect-square object-contain" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-base sm:text-xl font-bold">探求 — 自分の「縦糸」を探求</h3>
-          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm">
-            日々の業務では見出しにくい自分自身の軸・哲学を言語化し、深める場を提供します。
+          <h3 class="text-pretty text-base sm:text-xl font-bold"><budoux-ja>探求 — 自分の「縦糸」を探求</budoux-ja></h3>
+          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm text-pretty">
+            <budoux-ja>日々の業務では見出しにくい自分自身の軸・哲学を言語化し、深める場を提供します。</budoux-ja>
           </p>
         </div>
       </div>
@@ -360,9 +362,9 @@
                class="w-full aspect-square object-contain" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-base sm:text-xl font-bold">実践 — 哲学×テクノロジー</h3>
-          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm">
-            人間が持つ哲学とテクノロジーを掛け合わせ、自らの手で社会をアップデートします。
+          <h3 class="text-pretty text-base sm:text-xl font-bold"><budoux-ja>実践 — 哲学×テクノロジー</budoux-ja></h3>
+          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm text-pretty">
+            <budoux-ja>人間が持つ哲学とテクノロジーを掛け合わせ、自らの手で社会をアップデートします。</budoux-ja>
           </p>
         </div>
       </div>
@@ -373,9 +375,9 @@
                class="w-full aspect-square object-contain" />
         </div>
         <div class="min-w-0">
-          <h3 class="text-base sm:text-xl font-bold">共創 — 共創による新活動の創出</h3>
-          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm">
-            継続的なコミュニティ運営を通じて、共創による新たなムーブメントを生み出します。
+          <h3 class="text-pretty text-base sm:text-xl font-bold"><budoux-ja>共創 — 共創による新活動の創出</budoux-ja></h3>
+          <p class="mt-1.5 text-white/90 leading-relaxed text-xs sm:text-sm text-pretty">
+            <budoux-ja>継続的なコミュニティ運営を通じて、共創による新たなムーブメントを生み出します。</budoux-ja>
           </p>
         </div>
       </div>
@@ -396,22 +398,22 @@
           <div>
             <div class="text-xs text-brand-orange font-bold tracking-widest">FOUNDER 01</div>
             <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">竹林 一</h3>
-            <p class="text-sm text-brand-dark/70">たけばやし はじめ</p>
+            <p class="text-sm text-brand-dark/70 text-pretty">たけばやし はじめ</p>
           </div>
         </div>
         <div class="mt-6 border-l-4 border-brand-green pl-4 space-y-1 text-sm text-brand-dark/80">
-          <p>麗澤大学 特任教授</p>
-          <p>横浜市立大学大学院 客員教授</p>
-          <p>大阪大学フォーサイト（株） エバンジェリスト</p>
-          <p>元オムロン株式会社 イノベーション推進本部 シニアアドバイザー</p>
+          <p class="text-pretty">麗澤大学 特任教授</p>
+          <p class="text-pretty">横浜市立大学大学院 客員教授</p>
+          <p class="text-pretty">大阪大学フォーサイト（株） エバンジェリスト</p>
+          <p class="text-pretty">元オムロン株式会社 イノベーション推進本部 シニアアドバイザー</p>
         </div>
-        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
-          「機械にできることは機械に任せ、人間はより創造的な分野での活動を楽しむべきである」というオムロン創業者・立石一真の理念に感動し入社。新規事業開発・グループ会社代表を歴任後、現在は大学での教育と「エコシステムデザイナー」として活動。著書に『たった1人からはじめるイノベーション入門』など。
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm text-pretty">
+          <budoux-ja>「機械にできることは機械に任せ、人間はより創造的な分野での活動を楽しむべきである」というオムロン創業者・立石一真の理念に感動し入社。新規事業開発・グループ会社代表を歴任後、現在は大学での教育と「エコシステムデザイナー」として活動。著書に『たった1人からはじめるイノベーション入門』など。</budoux-ja>
         </p>
         <div class="mt-5 flex flex-wrap gap-2">
-          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1">イノベーション</span>
-          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1">エコシステム</span>
-          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1">新規事業</span>
+          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1 whitespace-nowrap">イノベーション</span>
+          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1 whitespace-nowrap">エコシステム</span>
+          <span class="text-xs bg-white text-brand-green border border-brand-green/30 rounded-full px-3 py-1 whitespace-nowrap">新規事業</span>
         </div>
       </article>
 
@@ -422,21 +424,21 @@
           <div>
             <div class="text-xs text-brand-orange font-bold tracking-widest">FOUNDER 02</div>
             <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">山本 光世</h3>
-            <p class="text-sm text-brand-dark/70">やまもと みつよ</p>
+            <p class="text-sm text-brand-dark/70 text-pretty">やまもと みつよ</p>
           </div>
         </div>
         <div class="mt-6 border-l-4 border-brand-orange pl-4 space-y-1 text-sm text-brand-dark/80">
-          <p>JOHNAN株式会社 代表取締役社長執行役員</p>
-          <p>京都大学経営管理大学院 特命教授</p>
-          <p>ミシガン大学ビジネススクール MBA / 自然資源環境大学院 MS</p>
+          <p class="text-pretty">JOHNAN株式会社 代表取締役社長執行役員</p>
+          <p class="text-pretty">京都大学経営管理大学院 特命教授</p>
+          <p class="text-pretty">ミシガン大学ビジネススクール MBA / 自然資源環境大学院 MS</p>
         </div>
-        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
-          同志社大学神学部卒。ベンチャー支援会社での経営コンサルティングを経て、JOHNAN株式会社へ。国内外との資本提携・新規事業投資・組織文化改革に従事し、2010年より代表取締役社長に就任。ODM・EMS型ビジネスモデルから「ものづくりプラットフォーム」型への変革を牽引している。
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm text-pretty">
+          <budoux-ja>同志社大学神学部卒。ベンチャー支援会社での経営コンサルティングを経て、JOHNAN株式会社へ。国内外との資本提携・新規事業投資・組織文化改革に従事し、2010年より代表取締役社長に就任。ODM・EMS型ビジネスモデルから「ものづくりプラットフォーム」型への変革を牽引している。</budoux-ja>
         </p>
         <div class="mt-5 flex flex-wrap gap-2">
-          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1">ものづくり変革</span>
-          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1">経営戦略</span>
-          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1">プラットフォーム</span>
+          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1 whitespace-nowrap">ものづくり変革</span>
+          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1 whitespace-nowrap">経営戦略</span>
+          <span class="text-xs bg-white text-brand-orange border border-brand-orange/30 rounded-full px-3 py-1 whitespace-nowrap">プラットフォーム</span>
         </div>
       </article>
 
@@ -455,24 +457,24 @@
            class="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-2xl object-cover" />
       <div>
         <div class="flex flex-wrap items-center gap-3">
-          <span class="bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-full">第3回 開催予定</span>
+          <span class="bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">第3回 開催予定</span>
           <span class="text-sm font-bold text-brand-dark/60">次回予定ゲスト</span>
         </div>
-        <h3 class="mt-3 text-xl sm:text-2xl font-bold text-brand-dark">第3回 未来をつくる ものづくりムーブメント</h3>
-        <p class="mt-1 font-bold text-brand-green">2026年12月14日（月） 18:30〜20:00</p>
-        <p class="mt-5 font-bold text-brand-dark">木内 文昭（きうち ふみあき）氏<span class="block sm:inline sm:ml-3 text-sm font-normal text-brand-dark/70">株式会社マクアケ 代表取締役</span></p>
+        <h3 class="text-pretty mt-3 text-xl sm:text-2xl font-bold text-brand-dark"><budoux-ja>第3回 未来をつくる ものづくりムーブメント</budoux-ja></h3>
+        <p class="mt-1 font-bold text-brand-green text-pretty">2026年12月14日（月） 18:30〜20:00</p>
+        <p class="mt-5 font-bold text-brand-dark text-pretty"><budoux-ja>木内 文昭（きうち ふみあき）氏<span class="block sm:inline sm:ml-3 text-sm font-normal text-brand-dark/70">株式会社マクアケ 代表取締役</span></budoux-ja></p>
         <ul class="mt-3 space-y-1.5 text-sm text-brand-dark/80 leading-relaxed list-disc pl-5 marker:text-brand-green">
-          <li>リクルートグループ、BtoBマーケティング会社を経て、2009年にサイバーエージェントへ入社</li>
-          <li>2013年に株式会社マクアケを共同創業。新規事業開発や上場準備などを担い、2024年に代表取締役へ就任</li>
-          <li>「Makuake」を通じて、作り手の新しい「モノ」や「体験」と、それを応援したい生活者との出会いを創出</li>
-          <li>生活者の反応や声を商品開発に活かし、仮説検証から一般販売・定番化までつなげる「共創型のものづくり」を推進</li>
+          <li class="text-pretty"><budoux-ja>リクルートグループ、BtoBマーケティング会社を経て、2009年にサイバーエージェントへ入社</budoux-ja></li>
+          <li class="text-pretty"><budoux-ja>2013年に株式会社マクアケを共同創業。新規事業開発や上場準備などを担い、2024年に代表取締役へ就任</budoux-ja></li>
+          <li class="text-pretty"><budoux-ja>「Makuake」を通じて、作り手の新しい「モノ」や「体験」と、それを応援したい生活者との出会いを創出</budoux-ja></li>
+          <li class="text-pretty"><budoux-ja>生活者の反応や声を商品開発に活かし、仮説検証から一般販売・定番化までつなげる「共創型のものづくり」を推進</budoux-ja></li>
         </ul>
         <div class="mt-6 flex flex-wrap items-center gap-3">
-          <span class="inline-flex items-center bg-gray-200 text-gray-600 font-bold px-5 py-2.5 rounded-full text-sm">Peatixで近日公開予定</span>
-          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E7%AC%AC3%E5%9B%9E%20%E6%9C%AA%E6%9D%A5%E3%82%92%E3%81%A4%E3%81%8F%E3%82%8B%20%E3%82%82%E3%81%AE%E3%81%A5%E3%81%8F%E3%82%8A%E3%83%A0%E3%83%BC%E3%83%96%E3%83%A1%E3%83%B3%E3%83%88&amp;dates=20261214T093000Z%2F20261214T110000Z&amp;details=%E3%82%B2%E3%82%B9%E3%83%88%EF%BC%9A%E6%9C%A8%E5%86%85%20%E6%96%87%E6%98%AD%20%E6%B0%8F%EF%BC%88%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE%E3%83%9E%E3%82%AF%E3%82%A2%E3%82%B1%20%E4%BB%A3%E8%A1%A8%E5%8F%96%E7%B7%A0%E5%BD%B9%EF%BC%89%0A%E8%A9%B3%E7%B4%B0%E3%83%BB%E3%81%8A%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF%E3%81%AFPeatix%E3%81%A7%E8%BF%91%E6%97%A5%E5%85%AC%E9%96%8B%E4%BA%88%E5%AE%9A%E3%81%A7%E3%81%99%E3%80%82%0Ahttps%3A%2F%2Fmonozukuri-movement.vercel.app%2F%23vol3" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition shadow-sm text-sm">
+          <span class="inline-flex items-center bg-gray-200 text-gray-600 font-bold px-5 py-2.5 rounded-full text-sm whitespace-nowrap">Peatixで近日公開予定</span>
+          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E7%AC%AC3%E5%9B%9E%20%E6%9C%AA%E6%9D%A5%E3%82%92%E3%81%A4%E3%81%8F%E3%82%8B%20%E3%82%82%E3%81%AE%E3%81%A5%E3%81%8F%E3%82%8A%E3%83%A0%E3%83%BC%E3%83%96%E3%83%A1%E3%83%B3%E3%83%88&amp;dates=20261214T093000Z%2F20261214T110000Z&amp;details=%E3%82%B2%E3%82%B9%E3%83%88%EF%BC%9A%E6%9C%A8%E5%86%85%20%E6%96%87%E6%98%AD%20%E6%B0%8F%EF%BC%88%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE%E3%83%9E%E3%82%AF%E3%82%A2%E3%82%B1%20%E4%BB%A3%E8%A1%A8%E5%8F%96%E7%B7%A0%E5%BD%B9%EF%BC%89%0A%E8%A9%B3%E7%B4%B0%E3%83%BB%E3%81%8A%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF%E3%81%AFPeatix%E3%81%A7%E8%BF%91%E6%97%A5%E5%85%AC%E9%96%8B%E4%BA%88%E5%AE%9A%E3%81%A7%E3%81%99%E3%80%82%0Ahttps%3A%2F%2Fmonozukuri-movement.vercel.app%2F%23vol3" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition shadow-sm text-sm whitespace-nowrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Googleカレンダーに追加
           </a>
-          <a href="./events/vol3.ics" class="inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition shadow-sm text-sm">
+          <a href="./events/vol3.ics" class="inline-flex items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition shadow-sm text-sm whitespace-nowrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Appleカレンダーに追加
           </a>
         </div>
@@ -492,11 +494,11 @@
           </a>
           <div class="flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-3">
-              <span class="bg-brand-orange text-white text-[10px] font-bold px-2.5 py-1 rounded-full">第2回 終了</span>
+              <span class="bg-brand-beige text-white text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap">第2回 終了</span>
               <time class="text-sm font-bold text-brand-dark/60">2026.08.24</time>
             </div>
-            <p class="mt-1.5 font-bold text-brand-dark">第2回 未来をつくる ものづくりムーブメント</p>
-            <p class="text-sm text-brand-dark/70">ゲスト講演「モノからコトへ。AIと職人、個人の時代を考える」— 成嶋 祐介 氏</p>
+            <p class="mt-1.5 font-bold text-brand-dark text-pretty"><budoux-ja>第2回 未来をつくる ものづくりムーブメント</budoux-ja></p>
+            <p class="text-sm text-brand-dark/70 text-pretty"><budoux-ja>ゲスト講演「モノからコトへ。AIと職人、個人の時代を考える」— 成嶋 祐介 氏</budoux-ja></p>
 
             <details class="group mt-3">
               <summary class="cursor-pointer inline-flex items-center gap-1.5 text-sm font-bold text-brand-green hover:text-brand-orange transition">
@@ -527,12 +529,12 @@
 
             <div class="mt-3 flex flex-wrap gap-2">
               <a href="https://peatix.com/event/5110524" target="_blank" rel="noopener"
-                 class="inline-flex items-center gap-1.5 bg-brand-green hover:bg-emerald-800 text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm">
+                 class="inline-flex items-center gap-1.5 bg-brand-green hover:bg-emerald-800 text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm whitespace-nowrap">
                 イベントページ
                 <span aria-hidden="true">→</span>
               </a>
               <a href="https://www.youtube.com/live/F23JTbdQ6E0" target="_blank" rel="noopener"
-                 class="inline-flex items-center gap-1.5 bg-[#C0392B] hover:bg-[#A03325] text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm">
+                 class="inline-flex items-center gap-1.5 bg-[#C0392B] hover:bg-[#A03325] text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm whitespace-nowrap">
                 <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" aria-hidden="true">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
@@ -549,20 +551,20 @@
                loading="lazy" class="w-20 h-20 rounded-lg object-cover object-top shrink-0" />
           <div class="flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-3">
-              <span class="bg-brand-beige text-white text-[10px] font-bold px-2.5 py-1 rounded-full">第1回 終了</span>
+              <span class="bg-brand-beige text-white text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap">第1回 終了</span>
               <time class="text-sm font-bold text-brand-dark/60">2026.04.20</time>
             </div>
-            <p class="mt-1.5 font-bold text-brand-dark">第1回 未来をつくる ものづくりムーブメント</p>
-            <p class="text-sm text-brand-dark/70">発起人対談 — 竹林 一 × 山本 光世／なぜいま「ものづくりムーブメント」なのか</p>
+            <p class="mt-1.5 font-bold text-brand-dark text-pretty"><budoux-ja>第1回 未来をつくる ものづくりムーブメント</budoux-ja></p>
+            <p class="text-sm text-brand-dark/70 text-pretty"><budoux-ja>発起人対談 — 竹林 一 × 山本 光世／なぜいま「ものづくりムーブメント」なのか</budoux-ja></p>
           </div>
           <div class="flex flex-wrap gap-2 shrink-0">
             <a href="https://mirainomonodukuri.peatix.com/view" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-1.5 bg-brand-green hover:bg-emerald-800 text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm">
+               class="inline-flex items-center gap-1.5 bg-brand-green hover:bg-emerald-800 text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm whitespace-nowrap">
               イベントページ
               <span aria-hidden="true">→</span>
             </a>
             <a href="https://youtu.be/67_R4V85rPo?si=Nb9i-pF4TOftoaQI" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-1.5 bg-[#C0392B] hover:bg-[#A03325] text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm">
+               class="inline-flex items-center gap-1.5 bg-[#C0392B] hover:bg-[#A03325] text-white text-sm font-bold px-4 py-2 rounded-full transition shadow-sm whitespace-nowrap">
               <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" aria-hidden="true">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
@@ -575,7 +577,7 @@
       </div>
     </div>
 
-    <p class="mt-8 text-center text-brand-dark/70 text-sm sm:text-base">
+    <p class="mt-8 text-center text-brand-dark/70 text-sm sm:text-base text-pretty">
       次回イベントはFacebookグループで告知します。
     </p>
   </div>
@@ -595,14 +597,14 @@
         <div class="mt-6">
           <div class="text-xs text-brand-orange font-bold tracking-widest">YOUTUBE</div>
           <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">ものづくりムーブメント チャンネル</h3>
-          <p class="mt-1 text-sm text-brand-dark/70">ウェビナーアーカイブ・対談動画を配信</p>
+          <p class="mt-1 text-sm text-brand-dark/70 text-pretty">ウェビナーアーカイブ・対談動画を配信</p>
         </div>
-        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
-          過去のウェビナー全編アーカイブ、ゲスト対談、ものづくりの現場を訪ねる動画コンテンツをYouTubeで公開しています。
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm text-pretty">
+          <budoux-ja>過去のウェビナー全編アーカイブ、ゲスト対談、ものづくりの現場を訪ねる動画コンテンツをYouTubeで公開しています。</budoux-ja>
         </p>
         <a href="https://youtube.com/channel/UCZe8J4bywyi7ZlOTJf_iEHg"
            target="_blank" rel="noopener"
-           class="mt-6 inline-flex self-start items-center gap-2 bg-[#C0392B] hover:bg-[#A03325] text-white font-bold px-5 py-2.5 rounded-full transition">
+           class="mt-6 inline-flex self-start items-center gap-2 bg-[#C0392B] hover:bg-[#A03325] text-white font-bold px-5 py-2.5 rounded-full transition whitespace-nowrap">
           YouTubeで見る
           <span aria-hidden="true">→</span>
         </a>
@@ -615,13 +617,13 @@
           <div class="flex-1">
             <div class="text-xs text-brand-orange font-bold tracking-widest">NOTE</div>
             <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">活動レポート・コラム</h3>
-            <p class="mt-1 text-sm text-brand-dark/70">Noteで発信</p>
+            <p class="mt-1 text-sm text-brand-dark/70 text-pretty">Noteで発信</p>
           </div>
         </div>
-        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
-          ウェビナーのレポート、メンバーの気づき、思想的コラムをNoteで発信します。
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm text-pretty">
+          <budoux-ja>ウェビナーのレポート、メンバーの気づき、思想的コラムをNoteで発信します。</budoux-ja>
         </p>
-        <span class="mt-6 inline-flex self-start items-center bg-gray-200 text-gray-600 font-bold px-5 py-2.5 rounded-full text-sm">
+        <span class="mt-6 inline-flex self-start items-center bg-gray-200 text-gray-600 font-bold px-5 py-2.5 rounded-full text-sm whitespace-nowrap">
           準備中
         </span>
       </article>
@@ -633,15 +635,15 @@
           <div class="flex-1">
             <div class="text-xs text-brand-orange font-bold tracking-widest">PODCAST</div>
             <h3 class="mt-1 text-xl sm:text-2xl font-bold text-brand-dark">Talk Beans Talk</h3>
-            <p class="mt-1 text-sm text-brand-dark/70">「つくることは生きること？」そんな問いを育てるラジオ</p>
+            <p class="mt-1 text-sm text-brand-dark/70 text-pretty">「つくることは生きること？」そんな問いを育てるラジオ</p>
           </div>
         </div>
-        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm">
-          ものづくりの哲学・現場の声・未来への問いを対話形式で届けるPodcastです。
+        <p class="mt-5 text-brand-dark/80 leading-relaxed text-sm text-pretty">
+          <budoux-ja>ものづくりの哲学・現場の声・未来への問いを対話形式で届けるPodcastです。</budoux-ja>
         </p>
         <a href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh"
            target="_blank" rel="noopener"
-           class="mt-6 inline-flex self-start items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition">
+           class="mt-6 inline-flex self-start items-center gap-2 bg-brand-green hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-full transition whitespace-nowrap">
           Spotifyで聴く
           <span aria-hidden="true">→</span>
         </a>
@@ -655,50 +657,50 @@
 <section id="news" class="bg-brand-cream py-20 sm:py-24">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-brand-dark">お知らせ・メディア掲載</h2>
-    <p class="mt-4 text-center text-brand-dark/70 text-sm sm:text-base">
+    <p class="mt-4 text-center text-brand-dark/70 text-sm sm:text-base text-pretty">
       活動の告知と、メディアに取り上げられた記事をまとめています。
     </p>
 
     <ul class="mt-12 bg-white rounded-2xl shadow-sm divide-y divide-brand-cream overflow-hidden">
-      <li>
+      <li class="text-pretty">
         <a href="https://www.krp.co.jp/goconc-event/detail/5626.html" target="_blank" rel="noopener"
            class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
           <span class="shrink-0 flex items-center gap-3 sm:w-44">
             <time class="text-sm font-bold text-brand-dark/60">2026.08.24</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green">掲載</span>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green whitespace-nowrap">掲載</span>
           </span>
           <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">京都リサーチパーク「GOCONC」に第2回イベント情報が掲載されました</span>
           <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
         </a>
       </li>
-      <li>
+      <li class="text-pretty">
         <a href="https://news.livedoor.com/pr_topics/detail/32032096/" target="_blank" rel="noopener"
            class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
           <span class="shrink-0 flex items-center gap-3 sm:w-44">
             <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green">掲載</span>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-green/10 text-brand-green whitespace-nowrap">掲載</span>
           </span>
           <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">ライブドアニュースに第2回開催のリリースが掲載されました</span>
           <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
         </a>
       </li>
-      <li>
+      <li class="text-pretty">
         <a href="https://prtimes.jp/main/html/rd/p/000000037.000036632.html" target="_blank" rel="noopener"
            class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
           <span class="shrink-0 flex items-center gap-3 sm:w-44">
             <time class="text-sm font-bold text-brand-dark/60">2026.08.10</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange">お知らせ</span>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange whitespace-nowrap">お知らせ</span>
           </span>
           <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">【PR TIMES】第2回「未来をつくる ものづくりムーブメント」を開催！</span>
           <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
         </a>
       </li>
-      <li>
+      <li class="text-pretty">
         <a href="https://prtimes.jp/main/html/rd/p/000000036.000036632.html" target="_blank" rel="noopener"
            class="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 sm:px-8 py-5 hover:bg-brand-beige/20 transition">
           <span class="shrink-0 flex items-center gap-3 sm:w-44">
             <time class="text-sm font-bold text-brand-dark/60">2026.04.03</time>
-            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange">お知らせ</span>
+            <span class="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange whitespace-nowrap">お知らせ</span>
           </span>
           <span class="flex-1 text-sm sm:text-base font-bold text-brand-dark group-hover:text-brand-green transition">【PR TIMES】ものづくりの未来を考えるコミュニティが発足しました</span>
           <span class="hidden sm:inline shrink-0 text-brand-dark/40 group-hover:text-brand-green transition" aria-hidden="true">→</span>
@@ -719,7 +721,7 @@
     </p>
     <a href="https://www.facebook.com/groups/1723416302397626/"
        target="_blank" rel="noopener"
-       class="mt-10 inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-full transition shadow-lg text-base sm:text-lg">
+       class="mt-10 inline-flex items-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-full transition shadow-lg text-base sm:text-lg whitespace-nowrap">
       Facebookグループに参加する
       <span aria-hidden="true">→</span>
     </a>
@@ -731,8 +733,8 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
       <div>
-        <p class="text-white font-bold text-lg">未来をつくる ものづくり ムーブメント</p>
-        <p class="mt-2 text-sm">Powered by もーメント推進委員会</p>
+        <p class="text-white font-bold text-lg text-pretty">未来をつくる ものづくり ムーブメント</p>
+        <p class="mt-2 text-sm text-pretty">Powered by もーメント推進委員会</p>
       </div>
       <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm">
         <a href="https://www.facebook.com/groups/1723416302397626/" target="_blank" rel="noopener" class="hover:text-brand-orange transition">Facebook</a>
@@ -740,7 +742,7 @@
         <a href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener" class="hover:text-brand-orange transition">Spotify</a>
       </nav>
     </div>
-    <p class="mt-8 text-xs text-white/50">&copy; 2026 ものづくり ムーブメント.</p>
+    <p class="mt-8 text-xs text-white/50 text-pretty">&copy; 2026 ものづくり ムーブメント.</p>
   </div>
 </footer>
 
