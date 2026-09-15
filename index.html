@@ -119,11 +119,11 @@
     position: relative; z-index: 2; flex-shrink: 0;
     width: var(--card-w); min-height: calc(var(--card-w) * .15 + 235px);
     scroll-snap-align: start;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     gap: calc(var(--card-w) * .05);
     padding: calc(var(--card-w) * .1);
   }
-  .weave-card-img { width: calc(var(--card-w) * .4); }
+  .weave-card-img { width: calc(var(--card-w) * .4); height: calc(var(--card-w) * .4); align-items: center; }
   .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: calc(var(--card-w) * .5); height: calc(var(--card-w) * .37); border-radius: .2rem; }
   @media (min-width: 640px) {
     .weave { --card-w: clamp(210px, 20vw, 260px); }
@@ -328,7 +328,7 @@
       <span class="weave-block bg-brand-beige" aria-hidden="true"></span>
       <div class="weave-card rounded-2xl shadow-md bg-brand-orange text-white">
         <div class="weave-card-img shrink-0 flex justify-center">
-          <img src="./images/philo-koto-tile.png" alt="縦糸と横糸が交差するイラスト" class="w-full h-auto" />
+          <img src="./images/philo-koto-tile.png" alt="縦糸と横糸が交差するイラスト" class="max-w-full max-h-full w-auto h-auto" />
         </div>
         <div class="w-full text-center">
           <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">コト</h3>
@@ -338,7 +338,7 @@
       </div>
       <div class="weave-card rounded-2xl shadow-md bg-brand-green text-white">
         <div class="weave-card-img shrink-0 flex justify-center">
-          <img src="./images/philo-mono-tile.png" alt="手でつくられた道具やかたちのイラスト" class="w-[85%] h-auto" />
+          <img src="./images/philo-mono-tile.png" alt="手でつくられた道具やかたちのイラスト" class="max-w-[85%] max-h-full w-auto h-auto" />
         </div>
         <div class="w-full text-center">
           <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">モノ</h3>
@@ -348,7 +348,7 @@
       </div>
       <div class="weave-card rounded-2xl shadow-md bg-brand-beige text-white">
         <div class="weave-card-img shrink-0 flex justify-center">
-          <img src="./images/philo-shakai-tile.png" alt="山と家のある小さな世界のイラスト" class="w-[75%] h-auto" />
+          <img src="./images/philo-shakai-tile.png" alt="山と家のある小さな世界のイラスト" class="max-w-[75%] max-h-full w-auto h-auto" />
         </div>
         <div class="w-full text-center">
           <h3 class="text-base sm:text-lg lg:text-[1.7rem] font-bold leading-none">社会</h3>
