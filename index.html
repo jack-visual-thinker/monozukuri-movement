@@ -95,7 +95,7 @@
     --wave-w: 4.5;    /* 波3つ分の横幅（＝波1つがカード幅の1.5倍） */
     position: relative;
     overflow-x: auto; overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory; scroll-padding-left: 16px; scrollbar-width: none;
+    scroll-snap-type: x proximity; scroll-padding-left: 16px; scrollbar-width: none;
     /* 帯の両端をふわっとフェードさせ、まだ続きがあることを示す */
     -webkit-mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
             mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
@@ -117,9 +117,9 @@
      幅を小さくしてもカード同士を横に並べたまま説明文まで読めるようにする */
   .weave-card {
     position: relative; z-index: 2; flex-shrink: 0;
-    width: var(--card-w); min-height: calc(var(--card-w) * .72);
+    width: var(--card-w); min-height: calc(var(--card-w) * .15 + 235px);
     scroll-snap-align: start;
-    display: flex; flex-direction: column; align-items: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: calc(var(--card-w) * .05);
     padding: calc(var(--card-w) * .1);
   }
@@ -127,6 +127,7 @@
   .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: calc(var(--card-w) * .5); height: calc(var(--card-w) * .37); border-radius: .2rem; }
   @media (min-width: 640px) {
     .weave { --card-w: clamp(210px, 20vw, 260px); }
+    .weave-card { min-height: 300px; }
   }
   body { font-family: 'Noto Sans JP', sans-serif; color: #434343; }
   .text-balance { text-wrap: balance; }
