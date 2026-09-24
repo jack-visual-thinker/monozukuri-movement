@@ -9,6 +9,10 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- 日本語の行送り（意味の区切りで改行する）。Google製、CDNから読み込むだけで動く -->
 <script src="https://cdn.jsdelivr.net/npm/budoux@0.6.3/bundle/budoux-ja.min.js"></script>
+<!-- スクロールの動き：慣性スクロール（Lenis）と、カードの立体的な傾き（vanilla-tilt） -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js" defer></script>
+<script>document.documentElement.classList.add('js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
@@ -101,6 +105,13 @@
             mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
   }
   .weave::-webkit-scrollbar { display: none; }
+  /* スマホで帯を留めているときは、両端のフェードを細くしてカードが薄くならないようにする */
+  @media (max-width: 639px) {
+    .weave.is-pinned {
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
+              mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
+    }
+  }
   .weave-row {
     position: relative; display: flex; align-items: center;
     width: max-content;
@@ -124,12 +135,72 @@
     padding: calc(var(--card-w) * .1);
   }
   .weave-card-img { width: calc(var(--card-w) * .4); height: calc(var(--card-w) * .4); align-items: center; }
-  .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: calc(var(--card-w) * .5); height: calc(var(--card-w) * .37); border-radius: .2rem; }
+  /* カードの左右に続く色面：トップの絵のタイル（images/hero/）を、高さをそろえて並べる */
+  .weave-block { position: relative; z-index: 0; flex-shrink: 0; display: block; width: auto; max-width: none; height: calc(var(--card-w) * .62); border-radius: .3rem; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
   @media (min-width: 640px) {
     .weave { --card-w: clamp(210px, 20vw, 260px); }
     .weave-card { min-height: 300px; }
   }
   body { font-family: 'Noto Sans JP', sans-serif; color: #434343; }
+  /* ===== スクロールの動き ===== */
+  /* Lenis（慣性スクロール）が動いている間は、ブラウザ標準のスムーズスクロールを止めて二重にならないようにする */
+  html.lenis, html.lenis body { height: auto; }
+  html.lenis.lenis-smooth { scroll-behavior: auto !important; }
+  html.lenis.lenis-stopped { overflow: clip; }
+  /* 画面に入ったら、下からふわっと浮き上がる（JSが動くときだけ隠す） */
+  html.js .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+  html.js .reveal.is-in { opacity: 1; transform: none; }
+  /* 哲学の帯（PC）：画面に留めたまま、縦スクロールで帯が横に流れる */
+  .weave-pin { position: relative; }
+  .weave-pin.is-pinned > section {
+    position: sticky; top: var(--header-h);
+    /* 留めている間は、画面の高さにぴったり収めて中身を上下中央に */
+    height: calc(100vh - var(--header-h)); padding-top: 2rem; padding-bottom: 2rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .weave.is-pinned { overflow: hidden; scroll-snap-type: none; }
+  .weave.is-pinned .weave-row { will-change: transform; }
+  /* 帯の進み具合を示す細い糸 */
+  .weave-progress { display: none; }
+  .weave.is-pinned + .weave-progress {
+    display: block; width: min(240px, 40vw); height: 3px; margin: 1rem auto 0;
+    border-radius: 2px; background: rgba(215,193,164,.35); overflow: hidden;
+  }
+  .weave-progress span { display: block; height: 100%; background: #E78014; transform-origin: left; transform: scaleX(0); }
+  /* トップの絵：タイルが1枚ずつ集まってくる */
+  /* iPhone/iPadのSafariでも、集まる途中のタイルが枠の外（ヘッダーの裏など）に出ないよう確実に切り抜く */
+  .hero-art { position: relative; background: #fff; isolation: isolate; clip-path: inset(0 round 1rem); }
+  .hero-tiles { position: absolute; inset: 0; }
+  .hero-tile { position: absolute; display: block; max-width: none; border-radius: .35vw; }
+  html.js .hero-art:not(.is-in) .hero-tile {
+    opacity: 0;
+    transform: translate(var(--fx, 0), var(--fy, 0)) rotate(var(--fr, 0deg)) scale(.7);
+  }
+  html.js .hero-art.is-in .hero-tile {
+    transition: opacity .7s ease-out, transform 1.4s cubic-bezier(.2,.9,.25,1.12);
+    transition-delay: var(--d, 0s);
+  }
+  /* 集まり終わったら、マウスを乗せたタイルが少し浮き上がる（PC） */
+  html.js .hero-art.is-done .hero-tile {
+    transition: transform .35s cubic-bezier(.2,.9,.3,1.2), box-shadow .35s; transition-delay: 0s;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .hero-art.is-done .hero-tile:hover {
+      transform: translateY(-6px) rotate(-1.5deg) scale(1.04);
+      box-shadow: 0 10px 24px rgba(0,0,0,.18); z-index: 2;
+    }
+  }
+  /* 哲学の帯：糸が左から伸び、コト→モノ→社会→色面の順に1つずつつながっていく */
+  .weave.is-pinned .weave-wave { will-change: clip-path; }
+  .weave.is-pinned .weave-seq { will-change: opacity, transform; }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .hero-art:not(.is-in) .hero-tile { opacity: 1; transform: none; }
+    html.js .reveal { opacity: 1; transform: none; transition: none; }
+  }
   .text-balance { text-wrap: balance; }
   .bean {
     width: 120px;
@@ -159,8 +230,8 @@
     </a>
     <div class="flex items-center gap-3 sm:gap-6 lg:gap-10">
       <!-- PC：ページ内メニュー（「ムーブメントとは」「イベント」は押すと下に項目が広がる） -->
-      <nav aria-label="ページ内メニュー" class="hidden lg:block">
-        <ul class="flex items-center gap-8 text-[15px] font-bold whitespace-nowrap">
+      <nav aria-label="ページ内メニュー" class="hidden min-[880px]:block">
+        <ul class="flex items-center gap-6 lg:gap-8 text-[15px] font-bold whitespace-nowrap">
           <li class="relative text-pretty">
             <button type="button" class="nav-link nav-trigger inline-flex items-center gap-1" data-nav-group="about" aria-expanded="false" aria-controls="dd-about">
               ムーブメントとは
@@ -194,14 +265,14 @@
       </a>
       <!-- スマホ・タブレット：メニューの開閉ボタン -->
       <button type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="メニューを開く"
-              class="lg:hidden shrink-0 -mr-1 w-8 h-8 flex items-center justify-center text-brand-dark/70 hover:text-brand-green transition">
+              class="min-[880px]:hidden shrink-0 -mr-1 w-8 h-8 flex items-center justify-center text-brand-dark/70 hover:text-brand-green transition">
         <svg id="nav-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-6 h-6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg id="nav-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-6 h-6 hidden" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
   </div>
   <!-- スマホ・タブレット：ボタンで開閉するメニュー（既定は非表示） -->
-  <nav id="nav-menu" aria-label="ページ内メニュー" class="hidden lg:hidden border-t border-brand-cream">
+  <nav id="nav-menu" aria-label="ページ内メニュー" class="hidden min-[880px]:hidden border-t border-brand-cream">
     <ul class="max-w-7xl mx-auto px-4 sm:px-6 py-2 text-[15px] font-bold">
       <li class="text-pretty"><a href="#about" data-nav="about" data-nav-group="about" class="nav-link block py-2.5">ムーブメントとは</a></li>
       <li class="text-pretty"><a href="#events" data-nav="events" data-nav-group="events" class="nav-link block py-2.5">イベント</a></li>
@@ -214,8 +285,24 @@
 <section id="top" class="bg-white text-brand-dark py-12 sm:py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- ビジュアル -->
-    <div class="rounded-2xl overflow-hidden shadow-lg mb-8">
-      <img src="./images/hero-visual.png" alt="未来をつくる ものづくり ムーブメント" class="w-full h-auto object-cover" />
+    <!-- ビジュアル：タイトル文字だけの土台（hero-base）の上に、タイル12枚を元の位置に重ねている。
+         読み込み時にタイルが1枚ずつ集まってくる。元の1枚絵は images/hero-visual.png -->
+    <div class="hero-art rounded-2xl overflow-hidden shadow-lg mb-8">
+      <img src="./images/hero/hero-base.png" alt="未来をつくる ものづくり ムーブメント　〜モノとコトが織りなす世界〜" class="block w-full h-auto" />
+      <div class="hero-tiles" aria-hidden="true">
+        <img src="./images/hero/tile-01.png" alt="" class="hero-tile" style="left:44.974%;top:2.037%;width:12.526%;height:39.63%" />
+        <img src="./images/hero/tile-02.png" alt="" class="hero-tile" style="left:44.974%;top:42.593%;width:12.526%;height:31.991%" />
+        <img src="./images/hero/tile-03.png" alt="" class="hero-tile" style="left:44.974%;top:75.463%;width:22.005%;height:22.037%" />
+        <img src="./images/hero/tile-04.png" alt="" class="hero-tile" style="left:57.865%;top:2.037%;width:13.411%;height:23.472%" />
+        <img src="./images/hero/tile-05.png" alt="" class="hero-tile" style="left:57.865%;top:26.111%;width:26.823%;height:23.889%" />
+        <img src="./images/hero/tile-06.png" alt="" class="hero-tile" style="left:58.151%;top:50.88%;width:15.391%;height:23.657%" />
+        <img src="./images/hero/tile-07.png" alt="" class="hero-tile" style="left:67.526%;top:75.417%;width:17.188%;height:22.037%" />
+        <img src="./images/hero/tile-08.png" alt="" class="hero-tile" style="left:71.641%;top:2.037%;width:13.047%;height:23.472%" />
+        <img src="./images/hero/tile-09.png" alt="" class="hero-tile" style="left:73.984%;top:50.88%;width:10.703%;height:23.657%" />
+        <img src="./images/hero/tile-10.png" alt="" class="hero-tile" style="left:85.156%;top:2.037%;width:13.385%;height:23.472%" />
+        <img src="./images/hero/tile-11.png" alt="" class="hero-tile" style="left:85.156%;top:26.111%;width:13.359%;height:21.944%" />
+        <img src="./images/hero/tile-12.png" alt="" class="hero-tile" style="left:85.156%;top:49.074%;width:13.385%;height:48.38%" />
+      </div>
     </div>
 
     <!-- ボタン -->
@@ -304,7 +391,8 @@
   </div>
 </section>
 
-<!-- 4. 哲学 -->
+<!-- 4. 哲学（PCでは .weave-pin が縦に長くなり、その間セクションが画面に留まって帯が横に流れる） -->
+<div class="weave-pin">
 <section id="philosophy" class="bg-white py-20 sm:py-24 overflow-hidden">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-brand-dark leading-loose">
@@ -319,9 +407,13 @@
   <div class="weave mt-6 lg:mt-2">
     <div class="weave-row">
       <div class="weave-wave" aria-hidden="true"></div>
-      <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
-      <span class="weave-block bg-brand-green" aria-hidden="true"></span>
-      <span class="weave-block bg-brand-beige" aria-hidden="true"></span>
+      <!-- 色面（トップの絵のタイル）は オレンジ→緑→ベージュ の順を守って並べ、最後にコト→モノ→社会のカードで締める -->
+      <img src="./images/hero/tile-02.png" alt="" class="weave-block" aria-hidden="true" />
+      <img src="./images/hero/tile-10.png" alt="" class="weave-block" aria-hidden="true" />
+      <img src="./images/hero/tile-07.png" alt="" class="weave-block" aria-hidden="true" />
+      <img src="./images/hero/tile-04.png" alt="" class="weave-block" aria-hidden="true" />
+      <img src="./images/hero/tile-05.png" alt="" class="weave-block" aria-hidden="true" />
+      <img src="./images/hero/tile-08.png" alt="" class="weave-block" aria-hidden="true" />
       <div class="weave-card rounded-2xl shadow-md bg-brand-orange text-white">
         <div class="weave-card-img shrink-0 flex justify-center">
           <img src="./images/philo-koto-tile.png" alt="縦糸と横糸が交差するイラスト" class="max-w-full max-h-full w-auto h-auto" />
@@ -352,11 +444,9 @@
           <p class="mt-2.5 leading-relaxed text-xs lg:text-[13px] text-pretty"><budoux-ja>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</budoux-ja></p>
         </div>
       </div>
-      <span class="weave-block bg-brand-orange" aria-hidden="true"></span>
-      <span class="weave-block bg-brand-green" aria-hidden="true"></span>
-      <span class="weave-block bg-brand-beige" aria-hidden="true"></span>
     </div>
   </div>
+  <div class="weave-progress" aria-hidden="true"><span></span></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <p class="mt-6 lg:mt-2 text-center text-base sm:text-lg text-brand-dark/80 max-w-3xl mx-auto leading-relaxed text-balance">
@@ -364,6 +454,7 @@
     </p>
   </div>
 </section>
+</div>
 
 <!-- 5. 活動内容 -->
 <section id="activities" class="bg-brand-green text-white py-20 sm:py-24">
@@ -869,7 +960,7 @@
       if (e.target.closest('a')) setOpen(false);
     });
     window.addEventListener('resize', function () {
-      if (window.innerWidth >= 1024) setOpen(false);
+      if (window.innerWidth >= 880) setOpen(false);
     });
   })();
 </script>
@@ -901,7 +992,7 @@
       if (e.key === 'Escape') closeAll();
     });
     window.addEventListener('resize', function () {
-      if (window.innerWidth < 1024) closeAll();
+      if (window.innerWidth < 880) closeAll();
     });
   })();
 </script>
@@ -956,6 +1047,190 @@
     window.addEventListener('load', update);
     update();
   })();
+</script>
+
+<script>
+  // ===== スクロールの動き =====
+  // ① Lenis：PC（マウス・トラックパッド）で慣性のある滑らかなスクロールにする。スマホは標準のまま
+  // ② 見出しやカードが画面に入ったら、ふわっと浮き上がる
+  // ③ 哲学の帯：PCではセクションを画面に留め、縦スクロールの量に合わせて帯を横に流す
+  // ④ 活動内容・発起人のカード：PCでマウスを乗せると少しだけ立体的に傾く
+  window.addEventListener('DOMContentLoaded', function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var headerH = function () { return document.querySelector('header').offsetHeight; };
+
+    // ① 慣性スクロール
+    var lenis = null;
+    if (!reduce && window.Lenis) {
+      lenis = new Lenis({
+        lerp: 0.09,            // 小さいほど、ぬるっと長く滑る
+        wheelMultiplier: 1,
+        anchors: true           // メニューのページ内リンクも滑らかに（位置は既存の scroll-margin-top に従う）
+      });
+      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+      window.lenis = lenis;  // 確認・調整用（コンソールから lenis.scrollTo(...) で動かせる）
+    }
+
+    // ② ふわっと表示：対象は各セクションの見出しと、並んでいるカード類
+    var targets = document.querySelectorAll(
+      'section:not(#top) h2, #about .grid > div, #activities .grid > div, #founders article, ' +
+      '#events .grid > *, #media .grid > *, #news .grid > *, #news ul > li, #join h2 ~ *'
+    );
+    targets.forEach(function (el) {
+      el.classList.add('reveal');
+      // 同じ並びの中では、左から順に少しずつ遅らせて出す
+      var siblings = Array.prototype.filter.call(el.parentNode.children, function (c) { return c.classList.contains('reveal'); });
+      el.style.setProperty('--reveal-delay', (Math.min(siblings.indexOf(el), 4) * 0.08) + 's');
+    });
+    if ('IntersectionObserver' in window && !reduce) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          el.classList.add('is-in');
+          io.unobserve(el);
+          // 出終わったら動きのクラスを外す（カードの傾きと干渉しないように）
+          el.addEventListener('transitionend', function done() {
+            el.removeEventListener('transitionend', done);
+            el.classList.remove('reveal', 'is-in');
+            el.style.removeProperty('--reveal-delay');
+          });
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      targets.forEach(function (el) { io.observe(el); });
+    } else {
+      targets.forEach(function (el) { el.classList.remove('reveal'); });
+    }
+
+    // ③ 哲学の帯：セクションを画面に留め、縦スクロールに合わせて
+    //    糸が左から伸び → コト → モノ → 社会 → 色面… の順に1つずつ右へつながっていく。
+    //    帯の先頭が画面の右端に近づいたら、帯全体を左へ送って先頭を追いかける
+    var pin = document.querySelector('.weave-pin');
+    var section = pin && pin.querySelector('section');
+    var weave = pin && pin.querySelector('.weave');
+    var row = weave && weave.querySelector('.weave-row');
+    var wave = row && row.querySelector('.weave-wave');
+    var bar = pin && pin.querySelector('.weave-progress span');
+    var seq = [], edges = [], startX = 0, travel = 0, endMargin = 48, pinned = false;
+    if (row) {
+      // 順番に出す対象＝3枚のカードと、その右に続く色面（左側の色面は最初から見えている）
+      var kids = Array.prototype.slice.call(row.children).filter(function (c) { return c !== wave; });
+      // 左の3枚（オレンジ・緑・ベージュ）は最初から見せ、4枚目以降を順に出す
+      seq = kids.slice(3);
+      seq.forEach(function (el) { el.classList.add('weave-seq'); });
+    }
+    function clearSeq() {
+      seq.forEach(function (el) { el.style.opacity = ''; el.style.transform = ''; });
+      if (wave) wave.style.clipPath = '';
+    }
+    function layoutPin() {
+      if (!pin) return;
+      pin.classList.remove('is-pinned'); weave.classList.remove('is-pinned');
+      pin.style.height = ''; row.style.transform = ''; row.style.paddingRight = ''; clearSeq();
+      travel = row.scrollWidth - weave.clientWidth;
+      if (reduce || window.innerWidth < 360) { pinned = false; return; }
+      // いったん留める形にしてみて、中身が画面に収まるときだけ有効にする（タッチ端末でも動く）
+      pin.classList.add('is-pinned'); weave.classList.add('is-pinned');
+      pinned = section.scrollHeight <= section.clientHeight + 1;
+      if (!pinned) { pin.classList.remove('is-pinned'); weave.classList.remove('is-pinned'); return; }
+      weave.scrollLeft = 0;
+      // 最後にコト・モノ・社会の3枚が画面の中央にそろうよう、右側に余白を足す
+      var cards = row.querySelectorAll('.weave-card');
+      var groupW = cards[cards.length - 1].offsetLeft + cards[cards.length - 1].offsetWidth - cards[0].offsetLeft;
+      endMargin = Math.max(Math.min(48, weave.clientWidth * 0.03), (weave.clientWidth - groupW) / 2);
+      row.style.paddingRight = endMargin + 'px';
+      travel = Math.max(0, row.scrollWidth - weave.clientWidth);
+      startX = seq[0].offsetLeft;
+      edges = seq.map(function (el) { return el.offsetLeft + el.offsetWidth; });
+      // 1つにつき約150pxの縦スクロール
+      pin.style.height = (section.offsetHeight + seq.length * 150 + 200) + 'px';
+      updatePin();
+    }
+    function ease(t) { return 1 - Math.pow(1 - t, 3); }
+    function updatePin() {
+      if (!pinned) return;
+      var r = pin.getBoundingClientRect();
+      var range = pin.offsetHeight - section.offsetHeight;
+      var p = Math.min(1, Math.max(0, (headerH() - r.top) / range));
+      // 前後に少し「間」を置き、その間で全部を順に出す
+      var q = Math.min(1, Math.max(0, (p - 0.06) / 0.86)) * seq.length;
+      var front = startX, cam = startX;
+      seq.forEach(function (el, i) {
+        var v = ease(Math.min(1, Math.max(0, q - i)));
+        el.style.opacity = v;
+        el.style.transform = 'translate3d(' + ((1 - v) * -36) + 'px,0,0) scale(' + (0.8 + 0.2 * v) + ')';
+        var prev = i ? edges[i - 1] : startX;
+        if (q > i) {
+          front = prev + (edges[i] - prev) * Math.min(1, q - i);
+          // 帯の送りは先回りさせ、出てくるものが画面内に収まるようにする
+          cam = prev + (edges[i] - prev) * ease(Math.min(1, (q - i) * 2));
+        }
+      });
+      // 糸は先頭より少し先まで伸ばしておく
+      var lead = seq[0].offsetWidth * 0.6;
+      wave.style.clipPath = 'inset(0 ' + Math.max(0, row.scrollWidth - front - lead) + 'px 0 0)';
+      var shift = Math.min(travel, Math.max(0, cam - (weave.clientWidth - endMargin)));
+      row.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
+      if (bar) bar.style.transform = 'scaleX(' + p + ')';
+    }
+    if (lenis) lenis.on('scroll', updatePin);
+    window.addEventListener('scroll', updatePin, { passive: true });
+    window.addEventListener('resize', layoutPin);
+    window.addEventListener('load', layoutPin);
+    layoutPin();
+
+    // ⑤ トップの絵：タイルが散らばった位置から、1枚ずつ元の場所に集まってくる。
+    //    画面に見えたときに始め、いったん画面外へ出てから戻ってくると、もう一度集まり直す
+    var art = document.querySelector('.hero-art');
+    if (art && !reduce) {
+      var tiles = art.querySelectorAll('.hero-tile');
+      // 集まる順番（左上から右下へ、少しばらけさせた順）
+      var order = [0, 3, 1, 4, 7, 5, 2, 9, 8, 10, 6, 11];
+      tiles.forEach(function (t, i) {
+        // 絵の中心から外側へ大きく散らしておく（上下は控えめ）
+        var cx = parseFloat(t.style.left) + parseFloat(t.style.width) / 2 - 60;
+        var cy = parseFloat(t.style.top) + parseFloat(t.style.height) / 2 - 50;
+        var len = Math.sqrt(cx * cx + cy * cy) || 1;
+        var dist = 22 + (i % 4) * 6;  // 画面幅に対する%
+        t.style.setProperty('--fx', (cx / len * dist) + 'vw');
+        t.style.setProperty('--fy', (cy / len * dist * 0.5 + 10) + 'vw');
+        t.style.setProperty('--fr', ((i % 2 ? 1 : -1) * (12 + (i * 7) % 16)) + 'deg');
+        t.style.setProperty('--d', (0.3 + order.indexOf(i) * 0.16) + 's');
+      });
+      var ready = false, visible = false, doneTimer = null;
+      var total = (0.3 + 11 * 0.16 + 1.4) * 1000;
+      function gather() {
+        if (!ready || !visible || document.visibilityState !== 'visible' || art.classList.contains('is-in')) return;
+        art.classList.add('is-in');
+        clearTimeout(doneTimer);
+        doneTimer = setTimeout(function () { art.classList.add('is-done'); }, total);
+      }
+      function scatter() {
+        clearTimeout(doneTimer);
+        art.classList.remove('is-in', 'is-done');
+      }
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.intersectionRatio >= 0.35) { visible = true; gather(); }
+          else if (!e.isIntersecting) { visible = false; scatter(); }
+        });
+      }, { threshold: [0, 0.35] }).observe(art);
+      document.addEventListener('visibilitychange', gather);
+      var imgs = Array.prototype.slice.call(art.querySelectorAll('img'));
+      Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : null; }))
+        .then(function () { ready = true; setTimeout(gather, 50); });
+    } else if (art) {
+      art.classList.add('is-in', 'is-done');
+    }
+
+    // ④ カードの傾き（PCのみ・控えめに）
+    if (!reduce && finePointer && window.VanillaTilt) {
+      VanillaTilt.init(document.querySelectorAll('#activities .grid > div, #founders article'), {
+        max: 5, speed: 600, scale: 1.02, perspective: 1200, gyroscope: false
+      });
+    }
+  });
 </script>
 
 </body>
