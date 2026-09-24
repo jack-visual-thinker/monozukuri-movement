@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>未来をつくる ものづくりムーブメント</title>
+<meta name="description" content="企業や個人の哲学（縦糸）と技術（横糸）を交差させ、新しい社会（布地）を自らの手でデザインする実践の場。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#E07B26; --green:#2E7D64; --sand:#D8C6A8; --beige:#EFE6D6; --cream:#FAF6EE;
+  --ink:#231F1A; --muted:#6F665B; --white:#fff;
+  --r:20px; --r-s:12px; --gap:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:"Zen Kaku Gothic New",system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:1320px;margin:0 auto;padding:0 16px}
+
+/* ===== 共通パーツ：すべて「角丸の四角」 ===== */
+.tile{border-radius:var(--r);position:relative;overflow:hidden;padding:24px;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+a.tile:hover,.tile.lift:hover{transform:translateY(-4px) rotate(-.4deg)}
+.o{background:var(--orange);color:#fff}.g{background:var(--green);color:#fff}.s{background:var(--sand)}
+.b{background:var(--beige)}.w{background:#fff}.k{background:var(--ink);color:#fff}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:var(--r-s);padding:12px 20px;font:inherit;font-weight:700;font-size:.95rem;border:0;cursor:pointer;transition:transform .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn .sq{width:9px;height:9px;border-radius:2px;background:currentColor;transition:transform .3s}
+.btn:hover .sq{transform:rotate(45deg) scale(1.2)}
+.btn-o{background:var(--orange);color:#fff}.btn-g{background:var(--green);color:#fff}
+.btn-w{background:#fff;color:var(--ink)}.btn-k{background:var(--ink);color:#fff}.btn-yt{background:#C0392B;color:#fff}
+.chip{display:inline-block;border-radius:7px;padding:2px 10px;font-size:.75rem;font-weight:700;letter-spacing:.05em}
+.label{font-size:.75rem;font-weight:700;letter-spacing:.2em;opacity:.7}
+
+/* ===== ヘッダー ===== */
+header{position:sticky;top:0;z-index:50;padding:12px 0;background:color-mix(in srgb,var(--cream) 88%,transparent);backdrop-filter:blur(10px)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:.95rem;line-height:1.2}
+.logo-mark{display:grid;grid-template-columns:repeat(3,7px);gap:2px}
+.logo-mark i{height:7px;border-radius:2px}
+nav ul{display:flex;gap:6px;list-style:none}
+nav a{display:block;padding:7px 14px;border-radius:var(--r-s);background:var(--beige);font-size:.85rem;font-weight:500;transition:background .2s}
+nav a:hover{background:var(--sand)}
+@media(max-width:1000px){nav{display:none}}
+
+/* ===== ヒーロー：タイルのモザイク ===== */
+.hero{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:clamp(90px,11vw,150px);gap:var(--gap);grid-auto-flow:dense;margin-top:16px}
+.hero .title{grid-column:span 3;grid-row:span 3;display:flex;flex-direction:column;justify-content:space-between;background:#fff}
+.hero .title h1{font-size:clamp(1.8rem,4.2vw,3.6rem);font-weight:900;line-height:1.2;letter-spacing:-.01em}
+.hero .title h1 .hl{color:var(--orange)}
+.hero .title p{color:var(--muted);font-size:clamp(.85rem,1.2vw,1rem);margin-top:12px}
+.pic{border-radius:var(--r);overflow:hidden;background:var(--beige);cursor:grab;touch-action:none;user-select:none;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.pic img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.pic:hover{transform:scale(1.03) rotate(1deg)}
+.pic.dragging{cursor:grabbing;z-index:10;transition:none;box-shadow:0 20px 40px rgba(0,0,0,.18)}
+.c1{grid-column:span 1}.c2{grid-column:span 2}.r1{grid-row:span 1}.r2{grid-row:span 2}
+@media(max-width:800px){
+  .hero{grid-template-columns:repeat(4,1fr);grid-auto-rows:90px}
+  .hero .title{grid-column:span 4;grid-row:span 4}
+}
+.hint{font-size:.8rem;color:var(--muted);margin-top:10px;text-align:right}
+
+/* ニュース帯 */
+.news{display:flex;align-items:center;gap:16px;margin-top:var(--gap);padding:16px 20px;flex-wrap:wrap}
+.news .t{flex:1;min-width:240px;font-weight:700}
+
+/* ===== セクション ===== */
+section{padding-top:110px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(1.7rem,4vw,3rem);font-weight:900;line-height:1.15}
+.sec-head .en{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:700;letter-spacing:.2em;color:var(--muted);margin-bottom:8px}
+.sec-head .en::before{content:"";width:14px;height:14px;border-radius:4px;background:var(--orange)}
+.sec-head p{max-width:440px;color:var(--muted);font-size:.95rem}
+.hl{color:var(--orange)}
+
+/* 課題 */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+.card-ill{display:flex;flex-direction:column;gap:14px}
+.card-ill .ill{aspect-ratio:4/3;border-radius:var(--r-s);background:#fff;display:grid;place-items:center;padding:14px}
+.card-ill .ill img{max-height:100%;object-fit:contain}
+.card-ill h3{font-size:1.3rem;font-weight:900}
+.card-ill p{font-size:.9rem}
+@media(max-width:800px){.grid3{grid-template-columns:1fr}}
+
+/* コト・モノ・社会 */
+.kms{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
+.kms .koto{grid-column:span 4}.kms .mono{grid-column:span 4}.kms .shakai{grid-column:span 4}
+.kms .cap{grid-column:span 12;text-align:center;font-weight:700;padding:28px}
+.kms .big{font-size:clamp(2.6rem,5vw,4.2rem);font-weight:900;line-height:1}
+.kms img{height:150px;object-fit:contain;margin:18px 0;background:#fff;border-radius:var(--r-s);width:100%;padding:12px}
+.equation{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:clamp(1.2rem,2.6vw,2rem);font-weight:900}
+.equation span.sq{border-radius:var(--r-s);padding:4px 16px}
+@media(max-width:800px){.kms .koto,.kms .mono,.kms .shakai{grid-column:span 12}}
+
+/* 活動内容 */
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap)}
+.acts .tile{display:flex;flex-direction:column;gap:10px;min-height:360px}
+.acts .ill{flex:1;border-radius:var(--r-s);background:#fff;display:grid;place-items:center;padding:14px;min-height:150px}
+.acts .ill img{max-height:170px;object-fit:contain}
+.acts h3{font-size:1.2rem;font-weight:900;line-height:1.3}
+.acts h3 small{display:block;font-size:.8rem;font-weight:700;opacity:.8}
+.acts p{font-size:.85rem}
+@media(max-width:1000px){.acts{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.acts{grid-template-columns:1fr}}
+
+/* 発起人 */
+.founders{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.founder{display:grid;grid-template-columns:180px 1fr;gap:20px;border:3px solid var(--green);background:#fff}
+.founder .ph{border-radius:var(--r-s);overflow:hidden;aspect-ratio:1;background:var(--beige)}
+.founder .ph img{width:100%;height:100%;object-fit:cover}
+.founder .ruby{font-size:.72rem;color:var(--muted);letter-spacing:.25em}
+.founder h3{font-size:2rem;font-weight:900;line-height:1.15}
+.founder .role{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.55}
+.founder .bio{grid-column:span 2;font-size:.88rem}
+.tags{display:flex;gap:6px;flex-wrap:wrap;grid-column:span 2}
+.tags span{background:var(--beige);border-radius:7px;padding:2px 10px;font-size:.78rem;font-weight:700}
+@media(max-width:900px){.founders{grid-template-columns:1fr}.founder{grid-template-columns:120px 1fr}}
+
+/* イベント */
+.vol3{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
+.vol3 .theme{grid-column:span 8;grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:340px}
+.vol3 .theme h3{font-size:clamp(1.3rem,2.6vw,2.1rem);font-weight:900;line-height:1.5}
+.vol3 .when{grid-column:span 4}
+.vol3 .when .d{font-size:clamp(3rem,6vw,5rem);font-weight:900;line-height:1;letter-spacing:-.03em}
+.vol3 .cnt{grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between}
+.vol3 .cnt b{font-size:2.4rem;line-height:1}
+.vol3 .free{grid-column:span 2;display:grid;place-items:center;font-weight:900;font-size:1.15rem;text-align:center;line-height:1.3}
+.vol3 .guest-ph{grid-column:span 4;grid-row:span 2;padding:0;min-height:320px}
+.vol3 .guest-ph img{width:100%;height:100%;object-fit:cover}
+.vol3 .guest-ph .nm{position:absolute;left:12px;bottom:12px;right:12px;background:#fff;border-radius:var(--r-s);padding:12px 16px}
+.vol3 .guest-ph .nm b{font-size:1.5rem;font-weight:900}
+.vol3 .profile{grid-column:span 8;border:3px solid var(--orange);background:#fff}
+.vol3 .profile ul{list-style:none;display:grid;gap:10px}
+.vol3 .profile li{display:grid;grid-template-columns:12px 1fr;gap:12px;font-size:.93rem}
+.vol3 .profile li::before{content:"";width:11px;height:11px;border-radius:3px;margin-top:8px;background:var(--green)}
+.vol3 .profile li:nth-child(n+3)::before{background:var(--orange)}
+.vol3 .profile em{font-style:normal;color:var(--orange);font-weight:700}
+.vol3 .venue{grid-column:span 4;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.vol3 .actions{grid-column:span 8;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:900px){
+  .vol3 .theme,.vol3 .when,.vol3 .guest-ph,.vol3 .profile,.vol3 .venue,.vol3 .actions{grid-column:span 12}
+  .vol3 .cnt,.vol3 .free{grid-column:span 6}
+}
+
+.archive{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-top:var(--gap)}
+.arc .meta{display:flex;gap:8px;align-items:center;font-size:.8rem;font-weight:700}
+.arc h3{font-size:1.2rem;font-weight:900;margin:8px 0 4px}
+.arc p{font-size:.9rem;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:16px 0}
+.gallery a{border-radius:8px;overflow:hidden;aspect-ratio:3/4;background:#fff}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.gallery a:hover img{transform:scale(1.08)}
+.arc .row{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:900px){.archive{grid-template-columns:1fr}}
+
+/* メディア */
+.media{display:grid;grid-template-columns:5fr 4fr 3fr;gap:var(--gap)}
+.media .tile{display:flex;flex-direction:column;gap:12px}
+.media .thumb{border-radius:var(--r-s);overflow:hidden;aspect-ratio:16/10;background:#fff}
+.media .thumb img{width:100%;height:100%;object-fit:cover}
+.media h3{font-size:1.25rem;font-weight:900;line-height:1.35}
+.media p{font-size:.88rem;flex:1}
+@media(max-width:900px){.media{grid-template-columns:1fr}}
+
+/* お知らせ */
+.news-list{display:grid;gap:8px}
+.news-list a{display:grid;grid-template-columns:110px 80px 1fr 24px;gap:14px;align-items:center;padding:18px 22px;background:#fff;border-radius:var(--r-s);transition:background .2s,transform .2s}
+.news-list a:hover{background:var(--beige);transform:translateX(4px)}
+.news-list time{font-weight:700;font-size:.9rem}
+.news-list .chip{text-align:center}
+@media(max-width:700px){.news-list a{grid-template-columns:1fr auto}.news-list .chip,.news-list time{grid-row:1}.news-list span.t{grid-column:span 2}.news-list .arr{display:none}}
+
+/* CTA */
+.cta{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
+.cta .main{grid-column:span 9;padding:44px;display:flex;flex-direction:column;gap:20px;justify-content:space-between}
+.cta .main h2{font-size:clamp(1.6rem,3.6vw,2.8rem);font-weight:900;line-height:1.3}
+.cta .side{grid-column:span 3;display:grid;gap:var(--gap)}
+.cta .side .tile{display:flex;align-items:center;justify-content:space-between;font-weight:900}
+@media(max-width:900px){.cta .main,.cta .side{grid-column:span 12}}
+
+footer{margin-top:110px;padding:30px 0 50px;border-top:1px solid var(--sand);font-size:.85rem;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+footer .links{display:flex;gap:6px}
+footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige)}
+
+/* 四角カーソル */
+.cursor{position:fixed;top:0;left:0;width:16px;height:16px;border-radius:4px;background:var(--orange);pointer-events:none;z-index:100;mix-blend-mode:multiply;transition:width .2s,height .2s,background .2s,border-radius .2s;opacity:0}
+.cursor.big{width:44px;height:44px;border-radius:12px;background:var(--green)}
+@media(hover:none){.cursor{display:none}}
+
+/* 出現 */
+.reveal{opacity:0;transform:translateY(22px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap">
+    <a href="#top" class="logo">
+      <span class="logo-mark" aria-hidden="true"><i class="o"></i><i class="g"></i><i class="s"></i><i class="g"></i><i class="o"></i><i class="g"></i><i class="s"></i><i class="g"></i><i class="o"></i></span>
+      未来をつくる<br>ものづくりムーブメント
+    </a>
+    <nav><ul>
+      <li><a href="#about">ムーブメントとは</a></li>
+      <li><a href="#activity">活動内容</a></li>
+      <li><a href="#founders">発起人</a></li>
+      <li><a href="#events">イベント</a></li>
+      <li><a href="#media">メディア</a></li>
+      <li><a href="#news">お知らせ</a></li>
+    </ul></nav>
+    <a href="#join" class="btn btn-o"><span class="sq"></span>参加する</a>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero" id="hero">
+    <div class="tile title reveal">
+      <img src="../images/logo-moment.png" alt="もーメント" style="width:130px">
+      <div>
+        <h1>モノとコトが<br>織りなす<span class="hl">世界</span>を、<br>自分たちの手で。</h1>
+        <p>企業や個人の哲学（縦糸）と技術（横糸）を交差させ、<br>新しい社会（布地）をデザインする実践の場。</p>
+      </div>
+    </div>
+    <div class="pic c1 r2 reveal"><img src="../images/hero/tile-01.png" alt=""></div>
+    <div class="pic c1 r2 reveal"><img src="../images/hero/tile-12.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-04.png" alt=""></div>
+    <div class="pic c2 r1 reveal"><img src="../images/hero/tile-05.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-08.png" alt=""></div>
+    <div class="pic c2 r1 reveal"><img src="../images/hero/tile-03.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-06.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-10.png" alt=""></div>
+    <div class="pic c1 r2 reveal"><img src="../images/hero/tile-02.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-09.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-11.png" alt=""></div>
+    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-07.png" alt=""></div>
+  </div>
+  <p class="hint">タイルはドラッグで入れ替えられます</p>
+
+  <a href="#events" class="tile k news reveal">
+    <span class="chip o">NEW</span>
+    <time style="font-size:.85rem;opacity:.7">2026.09.15</time>
+    <span class="t">第3回ゲスト 木内文昭氏（株式会社マクアケ 代表取締役）｜2026年12月14日（月）開催</span>
+    <span class="btn btn-w"><span class="sq"></span>詳しく見る</span>
+  </a>
+
+  <!-- ===== 課題 ===== -->
+  <section id="about">
+    <div class="sec-head">
+      <div><div class="en">CHALLENGE</div><h2>いま、ものづくりが<br><span class="hl">「問い」</span>を失っている。</h2></div>
+    </div>
+    <div class="grid3">
+      <div class="tile b card-ill reveal"><div class="ill"><img src="../images/challenge-purpose.png" alt=""></div><span class="label">01</span><h3>目的の喪失</h3><p>「どう作るか」という効率化が目的化し、「何のために作るのか」という本質的な問いを見失っている。</p></div>
+      <div class="tile s card-ill reveal"><div class="ill"><img src="../images/challenge-change.png" alt=""></div><span class="label">02</span><h3>時代の転換</h3><p>AI台頭・資源の枯渇。「何が売れるか」より「私たちは何を実現したいのか」という哲学が求められる時代へ。</p></div>
+      <div class="tile o card-ill reveal"><div class="ill"><img src="../images/challenge-opportunity.png" alt=""></div><span class="label">03</span><h3>変革の機会</h3><p>ものづくりは世界を物質的に豊かにするだけでなく、一人ひとりが「新しい社会の在り方」をデザイン・実装する力を持っている。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== コト・モノ・社会 ===== -->
+  <section>
+    <div class="sec-head">
+      <div><div class="en">KOTO × MONO × SOCIETY</div>
+        <div class="equation"><span class="sq g">コト</span>が<span class="sq o">モノ</span>を生み、<span class="sq o">モノ</span>が<span class="sq k">社会</span>を変える</div></div>
+    </div>
+    <div class="kms">
+      <div class="tile g koto reveal"><div class="label">縦糸 / 知的創造</div><div class="big">コト</div><img src="../images/philo-koto-tile.png" alt=""><p>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</p></div>
+      <div class="tile o mono reveal"><div class="label">横糸 / 物的創造</div><div class="big">モノ</div><img src="../images/philo-mono-tile.png" alt=""><p>テクノロジーを用いて社会へ届けるための実装と共創の営み。</p></div>
+      <div class="tile k shakai reveal"><div class="label">布地 / 自由な未来</div><div class="big">社会</div><img src="../images/philo-shakai-tile.png" alt=""><p>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</p></div>
+      <div class="tile b cap reveal">この3つの循環を通じて、不確実な時代のものづくりのあり方を共に探求します。</div>
+    </div>
+  </section>
+
+  <!-- ===== 活動内容 ===== -->
+  <section id="activity">
+    <div class="sec-head">
+      <div><div class="en">ACTIVITY</div><h2>単なる勉強会ではない<br><span class="hl">「実践の場」</span>を創る。</h2></div>
+    </div>
+    <div class="acts">
+      <div class="tile w lift reveal"><div class="ill"><img src="../images/activity-dialogue.png" alt=""></div><h3><small class="hl">対話</small>業界・立場を超えた対話</h3><p>企業経営者、研究者、技術者、クリエーターが垣根を越えて本質的な議論を交わします。</p></div>
+      <div class="tile b lift reveal"><div class="ill"><img src="../images/activity-inquiry.png" alt=""></div><h3><small class="hl">探求</small>自分の「縦糸」を探求</h3><p>日々の業務では見出しにくい自分自身の軸・哲学を言語化し、深める場を提供します。</p></div>
+      <div class="tile g lift reveal"><div class="ill"><img src="../images/activity-practice.png" alt=""></div><h3><small>実践</small>哲学×テクノロジー</h3><p>人間が持つ哲学とテクノロジーを掛け合わせ、自らの手で社会をアップデートします。</p></div>
+      <div class="tile o lift reveal"><div class="ill"><img src="../images/activity-cocreation.png" alt=""></div><h3><small>共創</small>共創による新活動の創出</h3><p>継続的なコミュニティ運営を通じて、共創による新たなムーブメントを生み出します。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 発起人 ===== -->
+  <section id="founders">
+    <div class="sec-head"><div><div class="en">FOUNDERS</div><h2>発起人</h2></div></div>
+    <div class="founders">
+      <article class="tile founder reveal">
+        <div class="ph"><img src="../images/takebayashi.png" alt="竹林 一"></div>
+        <div><span class="chip g" style="color:#fff">FOUNDER 01</span><div class="ruby" style="margin-top:8px">たけばやし はじめ</div><h3>竹林 一</h3>
+          <div class="role">麗澤大学 特任教授／横浜市立大学大学院 客員教授／大阪大学フォーサイト（株）エバンジェリスト／元オムロン株式会社 イノベーション推進本部 シニアアドバイザー</div></div>
+        <p class="bio">「機械にできることは機械に任せ、人間はより創造的な分野での活動を楽しむべきである」というオムロン創業者・立石一真の理念に感動し入社。新規事業開発・グループ会社代表を歴任後、現在は大学での教育と「エコシステムデザイナー」として活動。著書に『たった1人からはじめるイノベーション入門』など。</p>
+        <div class="tags"><span>イノベーション</span><span>エコシステム</span><span>新規事業</span></div>
+      </article>
+      <article class="tile founder reveal">
+        <div class="ph"><img src="../images/yamamoto.png" alt="山本 光世"></div>
+        <div><span class="chip g" style="color:#fff">FOUNDER 02</span><div class="ruby" style="margin-top:8px">やまもと みつよ</div><h3>山本 光世</h3>
+          <div class="role">JOHNAN株式会社 代表取締役社長執行役員／京都大学経営管理大学院 特命教授／ミシガン大学ビジネススクール MBA / 自然資源環境大学院 MS</div></div>
+        <p class="bio">同志社大学神学部卒。ベンチャー支援会社での経営コンサルティングを経て、JOHNAN株式会社へ。国内外との資本提携・新規事業投資・組織文化改革に従事し、2010年より代表取締役社長に就任。ODM・EMS型ビジネスモデルから「ものづくりプラットフォーム」型への変革を牽引している。</p>
+        <div class="tags"><span>ものづくり変革</span><span>経営戦略</span><span>プラットフォーム</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== イベント ===== -->
+  <section id="events">
+    <div class="sec-head"><div><div class="en">WEBINAR SERIES</div><h2>イベント</h2></div><p>ゲストを迎え、発起人・パネラーとともにものづくりの「問い」を深める対話型のシリーズです。</p></div>
+
+    <div class="vol3" id="vol3">
+      <div class="tile o theme reveal">
+        <div><span class="chip k" style="color:#fff">第3回 開催予定</span></div>
+        <h3>「自らの強みとらしさ」を見つめ<br>自分たちにしか作れない・作りたいものを、<br>「顧客理解や対話」とともにつくる。</h3>
+        <div class="row" style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-w" href="https://peatix.com/group/16548303" target="_blank" rel="noopener"><span class="sq"></span>Peatixで申し込む</a>
+        </div>
+      </div>
+      <div class="tile w when reveal">
+        <span class="label">DATE</span>
+        <div style="font-weight:700;margin-top:6px">2026</div>
+        <div class="d">12.14<small style="font-size:.3em;margin-left:.2em">月</small></div>
+        <div style="font-weight:900;font-size:1.3rem">18:30 – 20:00</div>
+        <div style="font-size:.8rem;color:var(--muted)">18:00 開場</div>
+      </div>
+      <div class="tile k cnt reveal"><span style="font-size:.75rem">開催まで</span><span><b id="days">--</b> 日</span></div>
+      <div class="tile g free reveal">参加<br>無料</div>
+
+      <div class="tile guest-ph reveal">
+        <img src="../images/guest-kiuchi.jpg" alt="木内 文昭 氏">
+        <div class="nm"><span class="chip o" style="color:#fff">ゲスト</span><div style="font-size:.8rem;margin-top:6px">株式会社マクアケ 代表取締役</div><b>木内 文昭</b> 氏 <small style="color:var(--muted)">きうち ふみあき</small></div>
+      </div>
+      <div class="tile profile reveal">
+        <ul>
+          <li><span>リクルートグループ、BtoBマーケティング会社を経て、2009年にサイバーエージェントへ入社</span></li>
+          <li><span>2013年に株式会社マクアケを共同創業。新規事業開発や上場準備などを担い、2024年に代表取締役へ就任</span></li>
+          <li><span>「Makuake」を通じて、作り手の新しい<em>「モノ」</em>や<em>「体験」</em>と、それを応援したい生活者との出会いを創出</span></li>
+          <li><span>生活者の反応や声を商品開発に活かし、仮説検証から一般販売・定番化までつなげる<em>「共創型のものづくり」</em>を推進</span></li>
+        </ul>
+      </div>
+      <div class="tile b venue reveal">
+        <div><span class="label">VENUE</span><div style="font-weight:900;font-size:1.2rem;line-height:1.4;margin-top:6px">GOCONC<br>京都リサーチパーク10号館1F</div><div style="font-size:.8rem;color:var(--muted);margin-top:6px">〒600-8815 京都府京都市下京区中堂寺粟田町91</div></div>
+        <a class="btn btn-k" style="align-self:flex-start" href="https://maps.app.goo.gl/3b4Pd7STmqoHCtubA" target="_blank" rel="noopener"><span class="sq"></span>地図を見る</a>
+      </div>
+      <div class="tile w actions reveal">
+        <span style="font-weight:700">カレンダーに登録して、当日お会いしましょう。</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-g" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E7%AC%AC3%E5%9B%9E%20%E6%9C%AA%E6%9D%A5%E3%82%92%E3%81%A4%E3%81%8F%E3%82%8B%20%E3%82%82%E3%81%AE%E3%81%A5%E3%81%8F%E3%82%8A%E3%83%A0%E3%83%BC%E3%83%96%E3%83%A1%E3%83%B3%E3%83%88&amp;dates=20261214T093000Z%2F20261214T110000Z&amp;location=GOCONC%EF%BC%88%E4%BA%AC%E9%83%BD%E3%83%AA%E3%82%B5%E3%83%BC%E3%83%81%E3%83%91%E3%83%BC%E3%82%AF10%E5%8F%B7%E9%A4%A81F%EF%BC%89"><span class="sq"></span>Googleカレンダー</a>
+          <a class="btn btn-k" href="../events/vol3.ics"><span class="sq"></span>Appleカレンダー</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="archive">
+      <div class="tile w arc reveal">
+        <div class="meta"><span class="chip s">第2回 終了</span><time>2026.08.24</time></div>
+        <h3>モノからコトへ。AIと職人、個人の時代を考える</h3>
+        <p>ゲスト講演 — 成嶋 祐介 氏</p>
+        <div class="gallery">
+          <a href="../images/grareco-vol2/1.jpg" target="_blank"><img src="../images/grareco-vol2/1.jpg" alt="第2回 グラフィックまとめ 1/6" loading="lazy"></a>
+          <a href="../images/grareco-vol2/2.jpg" target="_blank"><img src="../images/grareco-vol2/2.jpg" alt="2/6" loading="lazy"></a>
+          <a href="../images/grareco-vol2/3.jpg" target="_blank"><img src="../images/grareco-vol2/3.jpg" alt="3/6" loading="lazy"></a>
+          <a href="../images/grareco-vol2/4.jpg" target="_blank"><img src="../images/grareco-vol2/4.jpg" alt="4/6" loading="lazy"></a>
+          <a href="../images/grareco-vol2/5.jpg" target="_blank"><img src="../images/grareco-vol2/5.jpg" alt="5/6" loading="lazy"></a>
+          <a href="../images/grareco-vol2/6.jpg" target="_blank"><img src="../images/grareco-vol2/6.jpg" alt="6/6" loading="lazy"></a>
+        </div>
+        <div class="row"><a class="btn btn-g" href="https://peatix.com/event/5110524" target="_blank" rel="noopener"><span class="sq"></span>イベントページ</a><a class="btn btn-yt" href="https://www.youtube.com/live/F23JTbdQ6E0" target="_blank" rel="noopener"><span class="sq"></span>YouTube</a></div>
+      </div>
+      <div class="tile w arc reveal">
+        <div class="meta"><span class="chip s">第1回 終了</span><time>2026.04.20</time></div>
+        <h3>なぜいま「ものづくりムーブメント」なのか</h3>
+        <p>発起人対談 — 竹林 一 × 山本 光世</p>
+        <div class="gallery">
+          <a href="../images/grareco-vol1/1.jpg" target="_blank"><img src="../images/grareco-vol1/1.jpg" alt="第1回 グラフィックまとめ 1/6" loading="lazy"></a>
+          <a href="../images/grareco-vol1/2.jpg" target="_blank"><img src="../images/grareco-vol1/2.jpg" alt="2/6" loading="lazy"></a>
+          <a href="../images/grareco-vol1/3.jpg" target="_blank"><img src="../images/grareco-vol1/3.jpg" alt="3/6" loading="lazy"></a>
+          <a href="../images/grareco-vol1/4.jpg" target="_blank"><img src="../images/grareco-vol1/4.jpg" alt="4/6" loading="lazy"></a>
+          <a href="../images/grareco-vol1/5.jpg" target="_blank"><img src="../images/grareco-vol1/5.jpg" alt="5/6" loading="lazy"></a>
+          <a href="../images/grareco-vol1/6.jpg" target="_blank"><img src="../images/grareco-vol1/6.jpg" alt="6/6" loading="lazy"></a>
+        </div>
+        <div class="row"><a class="btn btn-g" href="https://mirainomonodukuri.peatix.com/view" target="_blank" rel="noopener"><span class="sq"></span>イベントページ</a><a class="btn btn-yt" href="https://youtu.be/67_R4V85rPo" target="_blank" rel="noopener"><span class="sq"></span>YouTube</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== メディア ===== -->
+  <section id="media">
+    <div class="sec-head"><div><div class="en">MEDIA & CONTENTS</div><h2>メディア・コンテンツ</h2></div></div>
+    <div class="media">
+      <a class="tile k reveal" href="https://youtube.com/channel/UCZe8J4bywyi7ZlOTJf_iEHg" target="_blank" rel="noopener">
+        <div class="thumb"><img src="../images/youtube-thumbnail.jpg" alt="YouTubeチャンネル"></div>
+        <span class="label">YOUTUBE</span><h3>ものづくりムーブメント チャンネル</h3>
+        <p>過去のウェビナー全編アーカイブ、ゲスト対談、ものづくりの現場を訪ねる動画コンテンツを公開しています。</p>
+        <span class="btn btn-yt" style="align-self:flex-start"><span class="sq"></span>YouTubeで見る</span>
+      </a>
+      <a class="tile g reveal" href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener">
+        <div class="thumb"><img src="../images/podcast-cover.png" alt="Talk Beans Talk"></div>
+        <span class="label">PODCAST</span><h3>Talk Beans Talk</h3>
+        <p>「つくることは生きること？」そんな問いを育てるラジオ。ものづくりの哲学・現場の声・未来への問いを対話形式で届けます。</p>
+        <span class="btn btn-w" style="align-self:flex-start"><span class="sq"></span>Spotifyで聴く</span>
+      </a>
+      <div class="tile b reveal">
+        <div class="thumb" style="display:grid;place-items:center"><img src="../images/note-icon.png" alt="" style="width:40%;height:auto;object-fit:contain"></div>
+        <span class="label">NOTE</span><h3>活動レポート・コラム</h3>
+        <p>ウェビナーのレポート、メンバーの気づき、思想的コラムをNoteで発信します。</p>
+        <span class="btn btn-w" style="align-self:flex-start;opacity:.6;cursor:default"><span class="sq"></span>準備中</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== お知らせ ===== -->
+  <section id="news">
+    <div class="sec-head"><div><div class="en">NEWS</div><h2>お知らせ・メディア掲載</h2></div></div>
+    <div class="news-list">
+      <a class="reveal" href="https://www.krp.co.jp/goconc-event/detail/5626.html" target="_blank" rel="noopener"><time>2026.08.24</time><span class="chip g" style="color:#fff">掲載</span><span class="t">京都リサーチパーク「GOCONC」に第2回イベント情報が掲載されました</span><span class="arr">→</span></a>
+      <a class="reveal" href="https://news.livedoor.com/pr_topics/detail/32032096/" target="_blank" rel="noopener"><time>2026.08.10</time><span class="chip g" style="color:#fff">掲載</span><span class="t">ライブドアニュースに第2回開催のリリースが掲載されました</span><span class="arr">→</span></a>
+      <a class="reveal" href="https://prtimes.jp/main/html/rd/p/000000037.000036632.html" target="_blank" rel="noopener"><time>2026.08.10</time><span class="chip o" style="color:#fff">お知らせ</span><span class="t">【PR TIMES】第2回「未来をつくる ものづくりムーブメント」を開催！</span><span class="arr">→</span></a>
+      <a class="reveal" href="https://prtimes.jp/main/html/rd/p/000000036.000036632.html" target="_blank" rel="noopener"><time>2026.04.03</time><span class="chip o" style="color:#fff">お知らせ</span><span class="t">【PR TIMES】ものづくりの未来を考えるコミュニティが発足しました</span><span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section id="join">
+    <div class="cta">
+      <div class="tile o main reveal">
+        <span class="label">JOIN US</span>
+        <h2>次世代のものづくりを牽引する<br>コミュニティメンバー求む。</h2>
+        <p>企業や個人の哲学（縦糸）と技術（横糸）を交差させ、新しい社会（布地）を自らの手でデザインする実践の場です。ぜひ一緒に「モノ・コト・社会」が循環するエコシステムを創りませんか。</p>
+        <a class="btn btn-w" style="align-self:flex-start" href="https://www.facebook.com/groups/1723416302397626/" target="_blank" rel="noopener"><span class="sq"></span>Facebookグループに参加する</a>
+      </div>
+      <div class="side">
+        <a class="tile g reveal" href="https://peatix.com/group/16548303" target="_blank" rel="noopener">Peatix<span>→</span></a>
+        <a class="tile k reveal" href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener">Spotify<span>→</span></a>
+        <a class="tile s reveal" href="https://youtube.com/channel/UCZe8J4bywyi7ZlOTJf_iEHg" target="_blank" rel="noopener">YouTube<span>→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b style="color:var(--ink)">未来をつくる ものづくりムーブメント</b><br>Powered by もーメント推進委員会　© 2026 ものづくり ムーブメント.</div>
+    <div class="links">
+      <a href="https://www.facebook.com/groups/1723416302397626/" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://peatix.com/group/16548303" target="_blank" rel="noopener">Peatix</a>
+      <a href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener">Spotify</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// 開催までの日数
+(()=>{const d=Math.ceil((new Date('2026-12-14T18:30:00+09:00')-new Date())/864e5);document.getElementById('days').textContent=Math.max(d,0)})();
+
+// ヒーローのタイル：ドラッグして別のタイルに重ねると入れ替わる
+(()=>{const hero=document.getElementById('hero');let drag=null,sx=0,sy=0;
+hero.querySelectorAll('.pic').forEach(p=>{
+  p.addEventListener('pointerdown',e=>{drag=p;sx=e.clientX;sy=e.clientY;p.setPointerCapture(e.pointerId);p.classList.add('dragging')});
+  p.addEventListener('pointermove',e=>{if(drag!==p)return;p.style.transform=`translate(${e.clientX-sx}px,${e.clientY-sy}px) rotate(3deg)`});
+  const end=e=>{if(drag!==p)return;drag=null;p.classList.remove('dragging');p.style.transform='';
+    p.style.visibility='hidden';const t=document.elementFromPoint(e.clientX,e.clientY)?.closest('.pic');p.style.visibility='';
+    if(t&&t!==p){const a=p.querySelector('img'),b=t.querySelector('img'),s=a.src;a.src=b.src;b.src=s;
+      [p,t].forEach(x=>x.animate([{transform:'scale(.9)'},{transform:'scale(1)'}],{duration:350,easing:'cubic-bezier(.2,.8,.2,1)'}))}};
+  p.addEventListener('pointerup',end);p.addEventListener('pointercancel',end);
+})})();
+
+// 四角カーソル
+(()=>{const c=document.getElementById('cursor');
+addEventListener('pointermove',e=>{c.style.opacity=1;c.style.transform=`translate(${e.clientX-c.offsetWidth/2}px,${e.clientY-c.offsetHeight/2}px)`});
+document.querySelectorAll('a,.btn,.pic').forEach(el=>{el.addEventListener('mouseenter',()=>c.classList.add('big'));el.addEventListener('mouseleave',()=>c.classList.remove('big'))})})();
+
+// スクロールでタイルが出現
+(()=>{if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(e=>e.classList.add('in'));return}
+const io=new IntersectionObserver(es=>{let i=0;es.forEach(e=>{if(e.isIntersecting){e.target.style.transitionDelay=(i++%8)*50+'ms';e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el))})();
+</script>
+</body>
+</html>
