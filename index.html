@@ -171,6 +171,22 @@
     border-radius: 2px; background: rgba(215,193,164,.35); overflow: hidden;
   }
   .weave-progress span { display: block; height: 100%; background: #E78014; transform-origin: left; transform: scaleX(0); }
+  /* 見出し：単語ごとに、右から少しずれた位置からぼかしを解きながら現れる */
+  html.js h2.split .w {
+    display: inline-block; opacity: 0; transform: translateX(.5em); filter: blur(6px);
+    transition: opacity .6s ease-out, transform .8s cubic-bezier(.22,.61,.36,1), filter .6s ease-out;
+    transition-delay: calc(var(--i) * 55ms);
+  }
+  html.js h2.split.is-in .w { opacity: 1; transform: none; filter: none; }
+  /* 課題・活動内容：画面に留め、スクロールに合わせてカードを出す／照らす */
+  .scene-pin { position: relative; }
+  .scene-pin.is-pinned > section {
+    position: sticky; top: var(--header-h);
+    height: calc(100vh - var(--header-h)); padding-top: 2rem; padding-bottom: 2rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .scene-pin.is-pinned .scene-item { will-change: opacity, transform; transition: background-color .3s, box-shadow .3s; }
+  .scene-pin.is-pinned .scene-item.is-active { background-color: rgba(255,255,255,.22); box-shadow: 0 0 0 2px rgba(231,128,20,.9); }
   /* トップの絵：タイルが1枚ずつ集まってくる */
   /* iPhone/iPadのSafariでも、集まる途中のタイルが枠の外（ヘッダーの裏など）に出ないよう確実に切り抜く */
   .hero-art { position: relative; background: #fff; isolation: isolate; clip-path: inset(0 round 1rem); }
@@ -198,6 +214,7 @@
   .weave.is-pinned .weave-wave { will-change: clip-path; }
   .weave.is-pinned .weave-seq { will-change: opacity, transform; }
   @media (prefers-reduced-motion: reduce) {
+    html.js h2.split .w { opacity: 1; transform: none; filter: none; transition: none; }
     html.js .hero-art:not(.is-in) .hero-tile { opacity: 1; transform: none; }
     html.js .reveal { opacity: 1; transform: none; transition: none; }
   }
@@ -335,7 +352,9 @@
   </div>
 </section>
 
-<!-- 3. 課題（ここから発起人までが「ムーブメントとは」） -->
+<!-- 3. 課題（ここから発起人までが「ムーブメントとは」）
+     画面に留めて、課題カードを1枚ずつ出す（.scene-pin） -->
+<div class="scene-pin" data-scene="pop">
 <section id="about" class="bg-brand-green py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-white text-balance leading-loose">
@@ -390,6 +409,7 @@
     </div>
   </div>
 </section>
+</div>
 
 <!-- 4. 哲学（PCでは .weave-pin が縦に長くなり、その間セクションが画面に留まって帯が横に流れる） -->
 <div class="weave-pin">
@@ -456,7 +476,8 @@
 </section>
 </div>
 
-<!-- 5. 活動内容 -->
+<!-- 5. 活動内容（画面に留めて、4つの活動を順に照らす） -->
+<div class="scene-pin" data-scene="steps">
 <section id="activities" class="bg-brand-green text-white py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-balance leading-loose">
@@ -523,6 +544,7 @@
     </div>
   </div>
 </section>
+</div>
 
 <!-- 6. 発起人 -->
 <section id="founders" class="bg-white py-20 sm:py-24">
@@ -1074,7 +1096,7 @@
 
     // ② ふわっと表示：対象は各セクションの見出しと、並んでいるカード類
     var targets = document.querySelectorAll(
-      'section:not(#top) h2, #about .grid > div, #activities .grid > div, #founders article, ' +
+      '#founders article, ' +
       '#events .grid > *, #media .grid > *, #news .grid > *, #news ul > li, #join h2 ~ *'
     );
     targets.forEach(function (el) {
@@ -1180,6 +1202,113 @@
     window.addEventListener('load', layoutPin);
     layoutPin();
 
+    // ⑥ 見出し：単語ごとに分けて、画面に入ったら順に出す（Sadewa の見出し演出を参考）
+    var seg = window.Intl && Intl.Segmenter ? new Intl.Segmenter('ja', { granularity: 'word' }) : null;
+    function words(text) {
+      // BudouX が文節の切れ目にゼロ幅スペースを入れているので、あればそれで分ける（自然な区切り・改行位置になる）
+      if (text.indexOf('\u200b') !== -1) return text.split('\u200b').map(function (t) { return t.trim(); }).filter(Boolean);
+      text = text.trim();
+      if (!seg) return text ? text.split('') : [];
+      var out = [];
+      Array.from(seg.segment(text)).forEach(function (x) {
+        // 句読点・記号は前の単語にくっつけて、行頭に来ないようにする
+        if (!x.isWordLike && out.length && /^[、。，．・！？」』）\)!?,.]+$/.test(x.segment)) out[out.length - 1] += x.segment;
+        else if (x.segment.trim()) out.push(x.segment);
+      });
+      return out;
+    }
+    var heads = reduce ? [] : document.querySelectorAll('section:not(#top) h2');
+    heads.forEach(function (h) {
+      var n = 0;
+      Array.prototype.slice.call(h.childNodes).forEach(function (node) {
+        var isText = node.nodeType === 3 || (node.nodeType === 1 && node.tagName === 'BUDOUX-JA');
+        if (isText) {
+          var frag = document.createDocumentFragment();
+          words(node.textContent).forEach(function (w) {
+            var sp = document.createElement('span');
+            sp.className = 'w'; sp.textContent = w; sp.style.setProperty('--i', n++);
+            frag.appendChild(sp);
+          });
+          node.parentNode.replaceChild(frag, node);
+        } else if (node.nodeType === 1 && node.tagName !== 'BR') {
+          node.classList.add('w'); node.style.setProperty('--i', n++);
+        }
+      });
+      h.classList.add('split');
+    });
+    if (heads.length && 'IntersectionObserver' in window) {
+      var hio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); hio.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -10% 0px' });
+      heads.forEach(function (h) { hio.observe(h); });
+    }
+
+    // ⑦ 課題・活動内容：画面に留め、スクロールに合わせて
+    //    課題 → カードが1枚ずつ飛び出す（pop） / 活動内容 → 4つの活動を 01→04 の順に照らす（steps）
+    var scenes = Array.prototype.map.call(document.querySelectorAll('.scene-pin'), function (wrap) {
+      return { wrap: wrap, section: wrap.querySelector('section'), type: wrap.dataset.scene,
+               items: Array.prototype.slice.call(wrap.querySelectorAll('.grid > div')), pinned: false };
+    });
+    function layoutScene(sc) {
+      sc.wrap.classList.remove('is-pinned'); sc.wrap.style.height = '';
+      sc.items.forEach(function (el) { el.style.opacity = ''; el.style.transform = ''; el.classList.remove('scene-item', 'is-active'); });
+      sc.pinned = false;
+      if (reduce) return;
+      sc.wrap.classList.add('is-pinned');
+      if (sc.section.scrollHeight > sc.section.clientHeight + 1) {
+        // 画面に収まらないとき（主にスマホ）は留めずに、カードを画面に入った順にふわっと出す
+        sc.wrap.classList.remove('is-pinned');
+        if (!sc.fallback && 'IntersectionObserver' in window) {
+          sc.fallback = true;
+          var fio = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); fio.unobserve(e.target); } });
+          }, { rootMargin: '0px 0px -12% 0px' });
+          sc.items.forEach(function (el) {
+            // 既に表示済みのカードが一度フェードアウトしないよう、隠す瞬間だけ動きを止める
+            el.style.transition = 'none';
+            el.classList.add('reveal');
+            void el.offsetWidth;
+            el.style.transition = '';
+            fio.observe(el);
+          });
+        }
+        return;
+      }
+      sc.pinned = true;
+      sc.items.forEach(function (el) { el.classList.add('scene-item'); });
+      sc.wrap.style.height = (sc.section.offsetHeight + sc.items.length * 220 + 160) + 'px';
+      updateScene(sc);
+    }
+    function updateScene(sc) {
+      if (!sc.pinned) return;
+      var r = sc.wrap.getBoundingClientRect();
+      var range = sc.wrap.offsetHeight - sc.section.offsetHeight;
+      var p = Math.min(1, Math.max(0, (headerH() - r.top) / range));
+      var q = Math.min(1, Math.max(0, (p - 0.05) / 0.85)) * sc.items.length;
+      sc.items.forEach(function (el, i) {
+        var v = ease(Math.min(1, Math.max(0, q - i)));
+        if (sc.type === 'pop') {
+          el.style.opacity = v;
+          el.style.transform = 'translate3d(0,' + ((1 - v) * 48) + 'px,0) scale(' + (0.88 + 0.12 * v) + ') rotate(' + ((1 - v) * (i % 2 ? 3 : -3)) + 'deg)';
+        } else {
+          el.style.opacity = 0.35 + 0.65 * v;
+          el.style.transform = 'scale(' + (0.97 + 0.03 * v) + ')';
+          el.classList.toggle('is-active', q > i && q < i + 1 + (i === sc.items.length - 1 ? 1 : 0));
+        }
+      });
+    }
+    function updateScenes() { scenes.forEach(updateScene); }
+    function layoutScenes() { scenes.forEach(layoutScene); }
+    if (lenis) lenis.on('scroll', updateScenes);
+    window.addEventListener('scroll', updateScenes, { passive: true });
+    window.addEventListener('resize', layoutScenes);
+    window.addEventListener('load', layoutScenes);
+    layoutScenes();
+    // 上の場面の高さが変わると哲学の帯の位置もずれるので、測り直す
+    window.addEventListener('load', function () { layoutPin(); });
+
     // ⑤ トップの絵：タイルが散らばった位置から、1枚ずつ元の場所に集まってくる。
     //    画面に見えたときに始め、いったん画面外へ出てから戻ってくると、もう一度集まり直す
     var art = document.querySelector('.hero-art');
@@ -1226,7 +1355,7 @@
 
     // ④ カードの傾き（PCのみ・控えめに）
     if (!reduce && finePointer && window.VanillaTilt) {
-      VanillaTilt.init(document.querySelectorAll('#activities .grid > div, #founders article'), {
+      VanillaTilt.init(document.querySelectorAll('#founders article'), {
         max: 5, speed: 600, scale: 1.02, perspective: 1200, gyroscope: false
       });
     }
