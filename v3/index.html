@@ -25,13 +25,13 @@ img{display:block;max-width:100%}
 .tile{border-radius:var(--r);position:relative;overflow:hidden;padding:24px;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
 a.tile:hover,.tile.lift:hover{transform:translateY(-4px) rotate(-.4deg)}
 .o{background:var(--orange);color:#fff}.g{background:var(--green);color:#fff}.s{background:var(--sand)}
-.b{background:var(--beige)}.w{background:#fff}.k{background:var(--ink);color:#fff}
+.b{background:var(--beige)}.w{background:#fff}.k{background:var(--sand);color:var(--ink)}
 .btn{display:inline-flex;align-items:center;gap:10px;border-radius:var(--r-s);padding:12px 20px;font:inherit;font-weight:700;font-size:.95rem;border:0;cursor:pointer;transition:transform .2s;white-space:nowrap}
 .btn:hover{transform:translateY(-2px)}
 .btn .sq{width:9px;height:9px;border-radius:2px;background:currentColor;transition:transform .3s}
 .btn:hover .sq{transform:rotate(45deg) scale(1.2)}
 .btn-o{background:var(--orange);color:#fff}.btn-g{background:var(--green);color:#fff}
-.btn-w{background:#fff;color:var(--ink)}.btn-k{background:var(--ink);color:#fff}.btn-yt{background:#C0392B;color:#fff}
+.btn-w{background:#fff;color:var(--ink)}.btn-k{background:var(--green);color:#fff}.btn-yt{background:#C0392B;color:#fff}
 .chip{display:inline-block;border-radius:7px;padding:2px 10px;font-size:.75rem;font-weight:700;letter-spacing:.05em}
 .label{font-size:.75rem;font-weight:700;letter-spacing:.2em;opacity:.7}
 
@@ -46,7 +46,18 @@ nav a{display:block;padding:7px 14px;border-radius:var(--r-s);background:var(--b
 nav a:hover{background:var(--sand)}
 @media(max-width:1000px){nav{display:none}}
 
-/* ===== ヒーロー：タイルのモザイク ===== */
+/* ===== 表紙：手書きタイトル＋12枚のタイル（v2の表紙と同じ配置） ===== */
+.cover{position:relative;margin-top:12px;border-radius:var(--r);overflow:hidden;background:#fff}
+.cover .base{width:100%;height:auto}
+.ht{position:absolute;display:block;border-radius:.5vw;overflow:hidden;animation:gather .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*70ms)}
+.ht img{width:100%;height:100%;object-fit:fill;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.ht .cap{position:absolute;inset:auto 6% 6% 6%;background:#fff;color:var(--ink);border-radius:8px;padding:6px 10px;font-size:clamp(.6rem,.9vw,.85rem);line-height:1.35;opacity:0;transform:translateY(8px);transition:.3s}
+.ht .cap b{display:block;color:var(--orange);font-size:1.25em}
+.ht:hover img,.ht:focus-visible img{transform:scale(1.06)}
+.ht:hover .cap,.ht:focus-visible .cap{opacity:1;transform:none}
+@keyframes gather{from{opacity:0;transform:translate(30px,-20px) rotate(6deg) scale(.9)}}
+@media(hover:none){.ht .cap{opacity:1;transform:none;font-size:.55rem;padding:3px 5px}.ht .cap span{display:none}}
+/* (旧ヒーロー) */
 .hero{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:clamp(90px,11vw,150px);gap:var(--gap);grid-auto-flow:dense;margin-top:16px}
 .hero .title{grid-column:span 3;grid-row:span 3;display:flex;flex-direction:column;justify-content:space-between;background:#fff}
 .hero .title h1{font-size:clamp(1.8rem,4.2vw,3.6rem);font-weight:900;line-height:1.2;letter-spacing:-.01em}
@@ -76,6 +87,25 @@ section{padding-top:110px}
 .sec-head p{max-width:440px;color:var(--muted);font-size:.95rem}
 .hl{color:var(--orange)}
 
+/* 登壇者一覧 */
+.speakers{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--gap)}
+.sp{padding:10px;display:flex;flex-direction:column;gap:8px}
+.sp .ph{aspect-ratio:1;border-radius:var(--r-s);overflow:hidden;background:#fff}
+.sp .ph img{width:100%;height:100%;object-fit:cover}
+.sp .ph.ill img{object-fit:cover}
+.sp .role{font-size:.7rem;font-weight:700;opacity:.8}
+.sp b{font-size:1.1rem;font-weight:900;line-height:1.2}
+.sp small{font-size:.72rem;line-height:1.4;opacity:.85}
+@media(max-width:1000px){.speakers{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.speakers{grid-template-columns:repeat(2,1fr)}}
+/* タイムライン：各回に意味（キーワード）をもたせる */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);margin-bottom:var(--gap);position:relative}
+.tl .step{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;padding:16px}
+.tl .step img{width:72px;height:72px;border-radius:10px;object-fit:cover}
+.tl .kw{font-size:1.6rem;font-weight:900;line-height:1.1}
+.tl .d{font-size:.75rem;font-weight:700;opacity:.8}
+.tl .m{font-size:.8rem;grid-column:span 2}
+@media(max-width:900px){.tl{grid-template-columns:1fr}}
 /* 課題 */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
 .card-ill{display:flex;flex-direction:column;gap:14px}
@@ -202,14 +232,12 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
 
 <header>
   <div class="wrap">
-    <a href="#top" class="logo">
-      <span class="logo-mark" aria-hidden="true"><i class="o"></i><i class="g"></i><i class="s"></i><i class="g"></i><i class="o"></i><i class="g"></i><i class="s"></i><i class="g"></i><i class="o"></i></span>
-      未来をつくる<br>ものづくりムーブメント
-    </a>
+    <a href="#top" class="logo" aria-label="ものづくりムーブメント トップへ"><img src="../images/logo-moment.png" alt="もーメント" style="height:38px;width:auto"></a>
     <nav><ul>
       <li><a href="#about">ムーブメントとは</a></li>
       <li><a href="#activity">活動内容</a></li>
       <li><a href="#founders">発起人</a></li>
+      <li><a href="#speakers">登壇者</a></li>
       <li><a href="#events">イベント</a></li>
       <li><a href="#media">メディア</a></li>
       <li><a href="#news">お知らせ</a></li>
@@ -221,30 +249,24 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
 <main class="wrap" id="top">
 
   <!-- ===== HERO ===== -->
-  <div class="hero" id="hero">
-    <div class="tile title reveal">
-      <img src="../images/logo-moment.png" alt="もーメント" style="width:130px">
-      <div>
-        <h1>モノとコトが<br>織りなす<span class="hl">世界</span>を、<br>自分たちの手で。</h1>
-        <p>企業や個人の哲学（縦糸）と技術（横糸）を交差させ、<br>新しい社会（布地）をデザインする実践の場。</p>
-      </div>
-    </div>
-    <div class="pic c1 r2 reveal"><img src="../images/hero/tile-01.png" alt=""></div>
-    <div class="pic c1 r2 reveal"><img src="../images/hero/tile-12.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-04.png" alt=""></div>
-    <div class="pic c2 r1 reveal"><img src="../images/hero/tile-05.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-08.png" alt=""></div>
-    <div class="pic c2 r1 reveal"><img src="../images/hero/tile-03.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-06.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-10.png" alt=""></div>
-    <div class="pic c1 r2 reveal"><img src="../images/hero/tile-02.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-09.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-11.png" alt=""></div>
-    <div class="pic c1 r1 reveal"><img src="../images/hero/tile-07.png" alt=""></div>
-  </div>
-  <p class="hint">タイルはドラッグで入れ替えられます</p>
+  <div class="cover reveal" id="hero">
+    <img class="base" src="../images/hero/hero-base.png" alt="未来をつくる ものづくり ムーブメント 〜モノとコトが織りなす世界〜">
+    <a class="ht" href="#about" style="left:44.974%;top:2.037%;width:12.526%;height:39.63%;--i:1"><img src="../images/hero/tile-01.png" alt=""><span class="cap"><b>問い</b>何のためにつくるのか</span></a>
+<a class="ht" href="#kms" style="left:44.974%;top:42.593%;width:12.526%;height:31.991%;--i:2"><img src="../images/hero/tile-02.png" alt=""><span class="cap"><b>かたち</b>想いをモノにする</span></a>
+<a class="ht" href="#join" style="left:44.974%;top:75.463%;width:22.005%;height:22.037%;--i:3"><img src="../images/hero/tile-03.png" alt=""><span class="cap"><b>うねり</b>ムーブメントを起こす</span></a>
+<a class="ht" href="#activity" style="left:57.865%;top:2.037%;width:13.411%;height:23.472%;--i:4"><img src="../images/hero/tile-04.png" alt=""><span class="cap"><b>芽吹き</b>技術が社会に根づく</span></a>
+<a class="ht" href="#kms" style="left:57.865%;top:26.111%;width:26.823%;height:23.889%;--i:5"><img src="../images/hero/tile-05.png" alt=""><span class="cap"><b>循環</b>コト・モノ・社会がめぐる</span></a>
+<a class="ht" href="#activity" style="left:58.151%;top:50.88%;width:15.391%;height:23.657%;--i:6"><img src="../images/hero/tile-06.png" alt=""><span class="cap"><b>対話</b>立場を超えて語り合う</span></a>
+<a class="ht" href="#activity" style="left:67.526%;top:75.417%;width:17.188%;height:22.037%;--i:7"><img src="../images/hero/tile-07.png" alt=""><span class="cap"><b>つながり</b>テクノロジーでつなぐ</span></a>
+<a class="ht" href="#kms" style="left:71.641%;top:2.037%;width:13.047%;height:23.472%;--i:8"><img src="../images/hero/tile-08.png" alt=""><span class="cap"><b>縦糸</b>自分の軸・哲学</span></a>
+<a class="ht" href="#kms" style="left:73.984%;top:50.88%;width:10.703%;height:23.657%;--i:9"><img src="../images/hero/tile-09.png" alt=""><span class="cap"><b>織る</b>縦糸と横糸を交差させる</span></a>
+<a class="ht" href="#events" style="left:85.156%;top:2.037%;width:13.385%;height:23.472%;--i:10"><img src="../images/hero/tile-10.png" alt=""><span class="cap"><b>ひらめき</b>ゲストとの出会い</span></a>
+<a class="ht" href="#kms" style="left:85.156%;top:26.111%;width:13.359%;height:21.944%;--i:11"><img src="../images/hero/tile-11.png" alt=""><span class="cap"><b>モノ</b>実装と共創</span></a>
+<a class="ht" href="#kms" style="left:85.156%;top:49.074%;width:13.385%;height:48.38%;--i:12"><img src="../images/hero/tile-12.png" alt=""><span class="cap"><b>社会</b>自由な未来という布地</span></a>
+</div>
+  <p class="hint">タイルにふれると、それぞれの意味が見えます</p>
 
-  <a href="#events" class="tile k news reveal">
+  <a href="#events" class="tile g news reveal">
     <span class="chip o">NEW</span>
     <time style="font-size:.85rem;opacity:.7">2026.09.15</time>
     <span class="t">第3回ゲスト 木内文昭氏（株式会社マクアケ 代表取締役）｜2026年12月14日（月）開催</span>
@@ -264,15 +286,15 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
   </section>
 
   <!-- ===== コト・モノ・社会 ===== -->
-  <section>
+  <section id="kms">
     <div class="sec-head">
       <div><div class="en">KOTO × MONO × SOCIETY</div>
-        <div class="equation"><span class="sq g">コト</span>が<span class="sq o">モノ</span>を生み、<span class="sq o">モノ</span>が<span class="sq k">社会</span>を変える</div></div>
+        <div class="equation"><span class="sq g">コト</span>が<span class="sq o">モノ</span>を生み、<span class="sq o">モノ</span>が<span class="sq s">社会</span>を変える</div></div>
     </div>
     <div class="kms">
       <div class="tile g koto reveal"><div class="label">縦糸 / 知的創造</div><div class="big">コト</div><img src="../images/philo-koto-tile.png" alt=""><p>「こうしたい」という人間の根源的な欲求・哲学・意志から生まれるビジョン。</p></div>
       <div class="tile o mono reveal"><div class="label">横糸 / 物的創造</div><div class="big">モノ</div><img src="../images/philo-mono-tile.png" alt=""><p>テクノロジーを用いて社会へ届けるための実装と共創の営み。</p></div>
-      <div class="tile k shakai reveal"><div class="label">布地 / 自由な未来</div><div class="big">社会</div><img src="../images/philo-shakai-tile.png" alt=""><p>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</p></div>
+      <div class="tile s shakai reveal"><div class="label">布地 / 自由な未来</div><div class="big">社会</div><img src="../images/philo-shakai-tile.png" alt=""><p>つくる（Doing）が新しい生き方（Being）として織りなされた世界。</p></div>
       <div class="tile b cap reveal">この3つの循環を通じて、不確実な時代のものづくりのあり方を共に探求します。</div>
     </div>
   </section>
@@ -311,13 +333,32 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
     </div>
   </section>
 
+  <!-- ===== 登壇者一覧 ===== -->
+  <section id="speakers">
+    <div class="sec-head"><div><div class="en">SPEAKERS</div><h2>これまでの登壇者</h2></div><p>発起人とゲスト、パネラー。ムーブメントを一緒に織りなしてきた人たちです。</p></div>
+    <div class="speakers">
+      <a href="#founders" class="tile g sp reveal"><div class="ph"><img src="../images/takebayashi.png" alt=""></div><span class="role">発起人</span><b>竹林 一</b><small>麗澤大学 特任教授</small></a>
+      <a href="#founders" class="tile g sp reveal"><div class="ph"><img src="../images/yamamoto.png" alt=""></div><span class="role">発起人</span><b>山本 光世</b><small>JOHNAN株式会社 代表取締役社長執行役員</small></a>
+      <a href="#vol3" class="tile o sp reveal"><div class="ph"><img src="../images/guest-kiuchi.jpg" alt=""></div><span class="role">第3回 ゲスト</span><b>木内 文昭</b><small>株式会社マクアケ 代表取締役</small></a>
+      <a href="#vol2" class="tile s sp reveal"><div class="ph ill"><img src="../images/hero/tile-06.png" alt=""></div><span class="role">第2回 ゲスト</span><b>成嶋 祐介</b><small>「モノからコトへ。AIと職人、個人の時代を考える」</small></a>
+      <a href="#vol3" class="tile b sp reveal"><div class="ph ill"><img src="../images/hero/tile-04.png" alt=""></div><span class="role">第3回 パネラー</span><b>吉田 満梨</b><small>神戸大学 大学院経営学研究科 教授</small></a>
+      <a href="#vol3" class="tile b sp reveal"><div class="ph ill"><img src="../images/hero/tile-10.png" alt=""></div><span class="role">第3回 パネラー</span><b>積 高之</b><small>京都積事務所 代表／エボラニ株式会社 CMO ほか</small></a>
+    </div>
+  </section>
+
   <!-- ===== イベント ===== -->
   <section id="events">
     <div class="sec-head"><div><div class="en">WEBINAR SERIES</div><h2>イベント</h2></div><p>ゲストを迎え、発起人・パネラーとともにものづくりの「問い」を深める対話型のシリーズです。</p></div>
 
+    <div class="tl">
+      <a href="#vol1" class="tile s step reveal"><img src="../images/hero/tile-01.png" alt=""><div><div class="d">第1回 ・ 2026.04.20</div><div class="kw">問いを立てる</div></div><p class="m">なぜいま「ものづくりムーブメント」なのか。発起人の2人が、原点の問いを語った回。</p></a>
+      <a href="#vol2" class="tile g step reveal"><img src="../images/hero/tile-08.png" alt=""><div><div class="d">第2回 ・ 2026.08.24</div><div class="kw">コトを見つめる</div></div><p class="m">モノからコトへ。AIと職人、個人の時代に、自分の「縦糸」を見つめ直した回。</p></a>
+      <a href="#vol3" class="tile o step reveal"><img src="../images/hero/tile-11.png" alt=""><div><div class="d">第3回 ・ 2026.12.14 開催予定</div><div class="kw">対話でつくる</div></div><p class="m">自らの強みとらしさを見つめ、顧客との対話とともに「モノ」をつくる回。</p></a>
+    </div>
+
     <div class="vol3" id="vol3">
       <div class="tile o theme reveal">
-        <div><span class="chip k" style="color:#fff">第3回 開催予定</span></div>
+        <div><span class="chip o" style="color:#fff">第3回 開催予定</span></div>
         <h3>「自らの強みとらしさ」を見つめ<br>自分たちにしか作れない・作りたいものを、<br>「顧客理解や対話」とともにつくる。</h3>
         <div class="row" style="display:flex;gap:8px;flex-wrap:wrap">
           <a class="btn btn-w" href="https://peatix.com/group/16548303" target="_blank" rel="noopener"><span class="sq"></span>Peatixで申し込む</a>
@@ -330,7 +371,7 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
         <div style="font-weight:900;font-size:1.3rem">18:30 – 20:00</div>
         <div style="font-size:.8rem;color:var(--muted)">18:00 開場</div>
       </div>
-      <div class="tile k cnt reveal"><span style="font-size:.75rem">開催まで</span><span><b id="days">--</b> 日</span></div>
+      <div class="tile s cnt reveal"><span style="font-size:.75rem">開催まで</span><span><b id="days">--</b> 日</span></div>
       <div class="tile g free reveal">参加<br>無料</div>
 
       <div class="tile guest-ph reveal">
@@ -359,7 +400,7 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
     </div>
 
     <div class="archive">
-      <div class="tile w arc reveal">
+      <div class="tile w arc reveal" id="vol2">
         <div class="meta"><span class="chip s">第2回 終了</span><time>2026.08.24</time></div>
         <h3>モノからコトへ。AIと職人、個人の時代を考える</h3>
         <p>ゲスト講演 — 成嶋 祐介 氏</p>
@@ -373,7 +414,7 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
         </div>
         <div class="row"><a class="btn btn-g" href="https://peatix.com/event/5110524" target="_blank" rel="noopener"><span class="sq"></span>イベントページ</a><a class="btn btn-yt" href="https://www.youtube.com/live/F23JTbdQ6E0" target="_blank" rel="noopener"><span class="sq"></span>YouTube</a></div>
       </div>
-      <div class="tile w arc reveal">
+      <div class="tile w arc reveal" id="vol1">
         <div class="meta"><span class="chip s">第1回 終了</span><time>2026.04.20</time></div>
         <h3>なぜいま「ものづくりムーブメント」なのか</h3>
         <p>発起人対談 — 竹林 一 × 山本 光世</p>
@@ -394,7 +435,7 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
   <section id="media">
     <div class="sec-head"><div><div class="en">MEDIA & CONTENTS</div><h2>メディア・コンテンツ</h2></div></div>
     <div class="media">
-      <a class="tile k reveal" href="https://youtube.com/channel/UCZe8J4bywyi7ZlOTJf_iEHg" target="_blank" rel="noopener">
+      <a class="tile s reveal" href="https://youtube.com/channel/UCZe8J4bywyi7ZlOTJf_iEHg" target="_blank" rel="noopener">
         <div class="thumb"><img src="../images/youtube-thumbnail.jpg" alt="YouTubeチャンネル"></div>
         <span class="label">YOUTUBE</span><h3>ものづくりムーブメント チャンネル</h3>
         <p>過去のウェビナー全編アーカイブ、ゲスト対談、ものづくりの現場を訪ねる動画コンテンツを公開しています。</p>
@@ -437,7 +478,7 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
       </div>
       <div class="side">
         <a class="tile g reveal" href="https://peatix.com/group/16548303" target="_blank" rel="noopener">Peatix<span>→</span></a>
-        <a class="tile k reveal" href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener">Spotify<span>→</span></a>
+        <a class="tile b reveal" href="https://open.spotify.com/show/1re6aO0JaW1Oq8TbquW0Wh" target="_blank" rel="noopener">Spotify<span>→</span></a>
         <a class="tile s reveal" href="https://youtube.com/channel/UCZe8J4bywyi7ZlOTJf_iEHg" target="_blank" rel="noopener">YouTube<span>→</span></a>
       </div>
     </div>
@@ -459,22 +500,11 @@ footer .links a{padding:6px 12px;border-radius:var(--r-s);background:var(--beige
 // 開催までの日数
 (()=>{const d=Math.ceil((new Date('2026-12-14T18:30:00+09:00')-new Date())/864e5);document.getElementById('days').textContent=Math.max(d,0)})();
 
-// ヒーローのタイル：ドラッグして別のタイルに重ねると入れ替わる
-(()=>{const hero=document.getElementById('hero');let drag=null,sx=0,sy=0;
-hero.querySelectorAll('.pic').forEach(p=>{
-  p.addEventListener('pointerdown',e=>{drag=p;sx=e.clientX;sy=e.clientY;p.setPointerCapture(e.pointerId);p.classList.add('dragging')});
-  p.addEventListener('pointermove',e=>{if(drag!==p)return;p.style.transform=`translate(${e.clientX-sx}px,${e.clientY-sy}px) rotate(3deg)`});
-  const end=e=>{if(drag!==p)return;drag=null;p.classList.remove('dragging');p.style.transform='';
-    p.style.visibility='hidden';const t=document.elementFromPoint(e.clientX,e.clientY)?.closest('.pic');p.style.visibility='';
-    if(t&&t!==p){const a=p.querySelector('img'),b=t.querySelector('img'),s=a.src;a.src=b.src;b.src=s;
-      [p,t].forEach(x=>x.animate([{transform:'scale(.9)'},{transform:'scale(1)'}],{duration:350,easing:'cubic-bezier(.2,.8,.2,1)'}))}};
-  p.addEventListener('pointerup',end);p.addEventListener('pointercancel',end);
-})})();
 
 // 四角カーソル
 (()=>{const c=document.getElementById('cursor');
 addEventListener('pointermove',e=>{c.style.opacity=1;c.style.transform=`translate(${e.clientX-c.offsetWidth/2}px,${e.clientY-c.offsetHeight/2}px)`});
-document.querySelectorAll('a,.btn,.pic').forEach(el=>{el.addEventListener('mouseenter',()=>c.classList.add('big'));el.addEventListener('mouseleave',()=>c.classList.remove('big'))})})();
+document.querySelectorAll('a,.btn').forEach(el=>{el.addEventListener('mouseenter',()=>c.classList.add('big'));el.addEventListener('mouseleave',()=>c.classList.remove('big'))})})();
 
 // スクロールでタイルが出現
 (()=>{if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(e=>e.classList.add('in'));return}
