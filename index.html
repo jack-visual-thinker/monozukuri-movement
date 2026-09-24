@@ -178,6 +178,20 @@
     transition-delay: calc(var(--i) * 55ms);
   }
   html.js h2.split.is-in .w { opacity: 1; transform: none; filter: none; }
+  /* 見出しの手書き文字：白い枠がパッと出てから、オレンジの文字が書かれていくように現れる */
+  html.js h2.split .w.hand { opacity: 1; transform: none; filter: none; }
+  html.js h2.split .hand-bg {
+    /* 位置合わせに transform（-translate-y-1/2）を使っているので、拡大縮小は scale で別に指定する */
+    opacity: 0; scale: .35 .2;
+    transition: opacity .25s ease-out, scale .55s cubic-bezier(.3,1.6,.5,1);
+    transition-delay: calc(var(--i) * 55ms + 150ms);
+  }
+  html.js h2.split.is-in .hand-bg { opacity: 1; scale: 1; }
+  .hand-ink path { fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  h2.split.is-in .hand-ink path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--d) cubic-bezier(.45,.05,.55,.95) calc(var(--i) * 55ms + 550ms + var(--s));
+  }
   /* 課題・活動内容：画面に留め、スクロールに合わせてカードを出す／照らす */
   .scene-pin { position: relative; }
   .scene-pin.is-pinned > section {
@@ -215,6 +229,7 @@
   .weave.is-pinned .weave-seq { will-change: opacity, transform; }
   @media (prefers-reduced-motion: reduce) {
     html.js h2.split .w { opacity: 1; transform: none; filter: none; transition: none; }
+    html.js h2.split .hand-bg { opacity: 1; scale: 1; transition: none; }
     html.js .hero-art:not(.is-in) .hero-tile { opacity: 1; transform: none; }
     html.js .reveal { opacity: 1; transform: none; transition: none; }
   }
@@ -358,10 +373,11 @@
 <section id="about" class="bg-brand-green py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-white text-balance leading-loose">
-      <budoux-ja>いま、ものづくりが</budoux-ja><span class="relative inline-block align-middle mx-2 top-[-0.182em]">
-        <span class="absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[0.037em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
+      <budoux-ja>いま、ものづくりが</budoux-ja><span class="hand relative inline-block align-middle mx-2 top-[-0.182em]">
+        <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[0.037em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/honrai-no-toi.png"
-             alt="本来の問い"
+             alt="本来の問い" width="477" height="160"
+             data-hand="9,18,108,135 108,16,216,151 220,76,260,133 290,8,388,143 404,80,469,113"
              class="relative block h-[3.35em] w-auto" />
       </span><budoux-ja>を失っている。</budoux-ja>
     </h2>
@@ -481,10 +497,11 @@
 <section id="activities" class="bg-brand-green text-white py-20 sm:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-balance leading-loose">
-      <budoux-ja>単なる勉強会ではない</budoux-ja><span class="relative inline-block align-middle mx-2 top-[0.065em]">
-        <span class="absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[-0.211em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
+      <budoux-ja>単なる勉強会ではない</budoux-ja><span class="hand relative inline-block align-middle mx-2 top-[0.065em]">
+        <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[-0.211em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/jissen-no-ba.png"
-             alt="実践の場"
+             alt="実践の場" width="443" height="184"
+             data-hand="8,12,106,138 106,12,216,149 240,84,289,126 319,9,435,179"
              class="relative block h-[3.88em] w-auto" />
       </span><budoux-ja>を創る。</budoux-ja>
     </h2>
@@ -1217,6 +1234,53 @@
       });
       return out;
     }
+    // 手書き文字：1文字ずつ、上から下へ・左から右へ太い筆でなぞるマスクで画像を少しずつ見せる
+    //   data-hand="x0,y0,x1,y1 …"（画像の元のピクセル座標で、1文字ごとの範囲）
+    var handId = 0;
+    function handwrite(img) {
+      var NS = 'http://www.w3.org/2000/svg';
+      var W = +img.getAttribute('width') || img.naturalWidth, H = +img.getAttribute('height') || img.naturalHeight;
+      if (!W || !H) { img.addEventListener('load', function () { handwrite(img); }, { once: true }); return; }
+      var id = 'hand-mask-' + (++handId);
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.setAttribute('class', img.getAttribute('class') + ' hand-ink');
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', img.alt);
+      svg.style.aspectRatio = W + ' / ' + H;
+      svg.style.overflow = 'visible';
+      var mask = document.createElementNS(NS, 'mask');
+      mask.setAttribute('id', id);
+      mask.setAttribute('maskUnits', 'userSpaceOnUse');
+      mask.setAttribute('x', 0); mask.setAttribute('y', 0);
+      mask.setAttribute('width', W); mask.setAttribute('height', H);
+      var t = 0;
+      img.dataset.hand.trim().split(/\s+/).forEach(function (box) {
+        var b = box.split(',').map(Number), x0 = b[0], y0 = b[1], x1 = b[2], y1 = b[3];
+        var pen = Math.max(22, (y1 - y0) / 2.6), step = pen * 0.75;
+        for (var y = y0 + pen * 0.35; y < y1 + pen * 0.3; y += step) {
+          var path = document.createElementNS(NS, 'path');
+          // 筆の線は少しだけ右下がりに揺らして、機械的に見えないようにする
+          path.setAttribute('d', 'M' + (x0 - 4) + ' ' + y.toFixed(1) + 'L' + (x1 + 4) + ' ' + (y + pen * 0.18).toFixed(1));
+          path.setAttribute('pathLength', 1);
+          path.setAttribute('stroke-width', pen.toFixed(1));
+          var d = 40 + (x1 - x0) * 0.55;
+          path.style.setProperty('--s', t + 'ms');
+          path.style.setProperty('--d', d + 'ms');
+          mask.appendChild(path);
+          t += d + 15;
+        }
+        t += 70; // 次の文字へ移るまでのひと呼吸
+      });
+      var defs = document.createElementNS(NS, 'defs');
+      defs.appendChild(mask);
+      var image = document.createElementNS(NS, 'image');
+      image.setAttribute('href', img.getAttribute('src'));
+      image.setAttribute('width', W); image.setAttribute('height', H);
+      image.setAttribute('mask', 'url(#' + id + ')');
+      svg.appendChild(defs); svg.appendChild(image);
+      img.replaceWith(svg);
+    }
     var heads = reduce ? [] : document.querySelectorAll('section:not(#top) h2');
     heads.forEach(function (h) {
       var n = 0;
@@ -1235,6 +1299,8 @@
         }
       });
       h.classList.add('split');
+      // 手書き文字の画像は、筆で書くようになぞって出すSVGに置き換える
+      Array.prototype.forEach.call(h.querySelectorAll('img[data-hand]'), handwrite);
     });
     if (heads.length && 'IntersectionObserver' in window) {
       var hio = new IntersectionObserver(function (entries) {
