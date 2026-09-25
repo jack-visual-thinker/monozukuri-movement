@@ -225,7 +225,7 @@
       box-shadow: 0 10px 24px rgba(0,0,0,.18); z-index: 2;
     }
   }
-  /* トップの絵のうち4枚は、中のイラストが動く（匠・人づくり・固有技術は Lottie、縦糸と横糸は SVG）。
+  /* トップの絵の12枚は、中のイラストが動く（縦糸と横糸は SVG、円柱の中の世界は元の絵を部品に分けて CSS、ほかは Lottie）。
      準備が整うまでは元の静止画を見せ、整ったら「イラストを消した無地のタイル＋動く絵」に切り替える */
   .hero-tile-anim { overflow: hidden; }
   .hero-tile-anim > img { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -244,6 +244,17 @@
   #hw-m-green  .warp-reveal { --delay: .18s; }
   #hw-m-beige  .warp-reveal { --delay: .36s; }
   .hero-weave .weft { --dur: 2.4s; --ease: cubic-bezier(.45, 0, .25, 1); --delay: .85s; }
+  /* 円柱の中の世界：下の世界が浮かび上がり → 側面の点線が上から伸び → ふたが降りてきて、そのあとふわふわ浮く */
+  .hero-layers { inset: 0; }
+  .hero-layers .part { position: absolute; max-width: none; }
+  html.js .hero-layers:not(.is-drawn) .part { opacity: 0; }
+  .hero-layers.is-drawn .part-world { animation: layer-rise .9s cubic-bezier(.2, .8, .3, 1) both; }
+  .hero-layers.is-drawn .part-walls { animation: layer-wipe .8s .45s cubic-bezier(.4, 0, .2, 1) both; }
+  .hero-layers.is-drawn .part-lid { animation: layer-drop 1s .85s cubic-bezier(.3, 1.3, .4, 1) both, layer-float 3.2s 1.85s ease-in-out infinite; }
+  @keyframes layer-rise { from { opacity: 0; transform: translateY(8%) scale(.9); } to { opacity: 1; transform: none; } }
+  @keyframes layer-wipe { from { opacity: 1; clip-path: inset(0 0 100% 0); } to { opacity: 1; clip-path: inset(0); } }
+  @keyframes layer-drop { from { opacity: 0; translate: 0 -45%; } 40% { opacity: 1; } to { opacity: 1; translate: 0 0; } }
+  @keyframes layer-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4%); } }
   /* 哲学の帯：糸が左から伸び、コト→モノ→社会→色面の順に1つずつつながっていく */
   .weave.is-pinned .weave-wave { will-change: clip-path; }
   .weave.is-pinned .weave-seq { will-change: opacity, transform; }
@@ -271,6 +282,7 @@
   @media (prefers-reduced-motion: reduce) {
     html.js .logo-mark .warp-reveal, html.js .logo-mark .weft,
     html.js .hero-weave .warp-reveal, html.js .hero-weave .weft { stroke-dashoffset: 0; animation: none; }
+    .hero-layers .part { animation: none !important; opacity: 1 !important; }
   }
   .text-balance { text-wrap: balance; }
   .bean {
@@ -384,17 +396,41 @@
           <img src="./images/hero/tile-01-blank.png" alt="" class="hero-blank" />
           <div class="hero-motion" data-lottie-src="./animations/craftsmanship.json" style="left:17.672%;top:30.607%;width:64.449%;height:45.561%"></div>
         </div>
-        <img src="./images/hero/tile-02.png" alt="" class="hero-tile" style="left:44.974%;top:42.593%;width:12.526%;height:31.991%" />
-        <img src="./images/hero/tile-03.png" alt="" class="hero-tile" style="left:44.974%;top:75.463%;width:22.005%;height:22.037%" />
-        <img src="./images/hero/tile-04.png" alt="" class="hero-tile" style="left:57.865%;top:2.037%;width:13.411%;height:23.472%" />
-        <img src="./images/hero/tile-05.png" alt="" class="hero-tile" style="left:57.865%;top:26.111%;width:26.823%;height:23.889%" />
+        <div class="hero-tile hero-tile-anim" style="left:44.974%;top:42.593%;width:12.526%;height:31.991%">
+          <img src="./images/hero/tile-02.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-02-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/shapes.json" style="left:10.395%;top:20.984%;width:75.884%;height:59.334%"></div>
+        </div>
+        <div class="hero-tile hero-tile-anim" style="left:44.974%;top:75.463%;width:22.005%;height:22.037%">
+          <img src="./images/hero/tile-03.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-03-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/tornado.json" style="left:28.994%;top:10.504%;width:40.828%;height:85.084%"></div>
+        </div>
+        <div class="hero-tile hero-tile-anim" style="left:57.865%;top:2.037%;width:13.411%;height:23.472%">
+          <img src="./images/hero/tile-04.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-04-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/sun-sprouts.json" style="left:11.650%;top:3.945%;width:83.495%;height:86.785%"></div>
+        </div>
+        <div class="hero-tile hero-tile-anim" style="left:57.865%;top:26.111%;width:26.823%;height:23.889%">
+          <img src="./images/hero/tile-05.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-05-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/cycle.json" style="left:23.301%;top:3.876%;width:58.252%;height:93.023%"></div>
+        </div>
         <div class="hero-tile hero-tile-anim" style="left:58.151%;top:50.88%;width:15.391%;height:23.657%">
           <img src="./images/hero/tile-06.png" alt="" class="hero-still" />
           <img src="./images/hero/tile-06-blank.png" alt="" class="hero-blank" />
           <div class="hero-motion" data-lottie-src="./animations/skill-transfer.json" style="left:2.538%;top:19.569%;width:82.064%;height:68.493%"></div>
         </div>
-        <img src="./images/hero/tile-07.png" alt="" class="hero-tile" style="left:67.526%;top:75.417%;width:17.188%;height:22.037%" />
-        <img src="./images/hero/tile-08.png" alt="" class="hero-tile" style="left:71.641%;top:2.037%;width:13.047%;height:23.472%" />
+        <div class="hero-tile hero-tile-anim" style="left:67.526%;top:75.417%;width:17.188%;height:22.037%">
+          <img src="./images/hero/tile-07.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-07-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/signal.json" style="left:0.000%;top:18.908%;width:76.515%;height:61.975%"></div>
+        </div>
+        <div class="hero-tile hero-tile-anim" style="left:71.641%;top:2.037%;width:13.047%;height:23.472%">
+          <img src="./images/hero/tile-08.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-08-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/spool.json" style="left:26.946%;top:0.000%;width:51.896%;height:100.000%"></div>
+        </div>
         <div class="hero-tile hero-tile-anim" style="left:73.984%;top:50.88%;width:10.703%;height:23.657%">
           <img src="./images/hero/tile-09.png" alt="" class="hero-still" />
           <img src="./images/hero/tile-09-blank.png" alt="" class="hero-blank" />
@@ -416,13 +452,25 @@
           <g clip-path="url(#hw-c-beige)"><g mask="url(#hw-m-beige)"><path d="M1374,378 C1369.2,378 1362.7,384.2 1358,395 C1353.3,405.8 1348.8,427 1346,443 C1343.2,459 1342.5,475 1341,491 C1339.5,507 1338.3,523 1337,539 C1335.7,555 1334.3,571 1333,587 C1331.7,603 1330.3,619 1329,635 C1327.7,651 1326.3,667 1325,683 C1323.7,699 1322,715 1321,731 C1320,747 1319.7,763 1319,779 C1318.3,795 1317.8,811 1317,827 C1316.2,843 1314.7,859 1314,875 C1313.3,891 1313.7,907 1313,923 C1312.3,939 1310.4,955 1310.1,971 C1309.8,987 1311.2,1003 1311,1019 C1310.8,1035 1309.7,1051 1309,1067 C1308.3,1083 1307.2,1099 1307,1115 C1306.8,1131 1307.8,1147 1308,1163 C1308.2,1179 1308.3,1195 1308,1211 C1307.7,1227 1306.5,1243 1306,1259 C1305.5,1275 1305.3,1291 1305,1307 C1304.7,1323 1303.3,1339 1304,1355 C1304.7,1371 1308.9,1387 1309.1,1403 C1309.3,1419 1305.3,1435 1305,1451 C1304.7,1467 1306.2,1483 1307,1499 C1307.8,1515 1308.5,1531 1310,1547 C1311.5,1563 1314.2,1579 1316,1595 C1317.8,1611 1318.2,1627.8 1321,1643 C1323.8,1658.2 1328.2,1676.5 1333,1686 C1337.8,1695.5 1341.3,1700 1350,1700 C1358.7,1700 1377.7,1695.5 1385,1686 C1392.3,1676.5 1391.7,1658.2 1394,1643 C1396.3,1627.8 1397.8,1611 1399,1595 C1400.2,1579 1401,1563 1401,1547 C1401,1531 1399.7,1515 1399,1499 C1398.3,1483 1397.5,1467 1397,1451 C1396.5,1435 1396,1419 1395.8,1403 C1395.6,1387 1396.3,1371 1396,1355 C1395.7,1339 1394.5,1323 1394,1307 C1393.5,1291 1393.7,1275 1393,1259 C1392.3,1243 1390,1227 1390,1211 C1390,1195 1392.7,1179 1393,1163 C1393.3,1147 1391.8,1131 1392,1115 C1392.2,1099 1393.7,1083 1394,1067 C1394.3,1051 1393.8,1035 1394,1019 C1394.2,1003 1394.8,987 1395,971 C1395.2,955 1394.8,939 1395,923 C1395.2,907 1395.8,891 1396,875 C1396.2,859 1396.7,843 1396,827 C1395.3,811 1391.7,795 1392,779 C1392.3,763 1397,747 1398,731 C1399,715 1398.2,699 1398,683 C1397.8,667 1396.8,651 1397,635 C1397.2,619 1398.8,603 1399,587 C1399.2,571 1398.5,555 1398,539 C1397.5,523 1397,507 1396,491 C1395,475 1393.5,459 1392,443 C1390.5,427 1390,405.8 1387,395 C1384,384.2 1378.8,378 1374,378 Z" transform="translate(1365 0) scale(1.3 1) translate(-1365 0)" fill="#FFFFFF"/></g></g>
           </svg>
         </div>
-        <img src="./images/hero/tile-10.png" alt="" class="hero-tile" style="left:85.156%;top:2.037%;width:13.385%;height:23.472%" />
+        <div class="hero-tile hero-tile-anim" style="left:85.156%;top:2.037%;width:13.385%;height:23.472%">
+          <img src="./images/hero/tile-10.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-10-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/idea-gear.json" style="left:17.121%;top:21.696%;width:71.012%;height:62.130%"></div>
+        </div>
         <div class="hero-tile hero-tile-anim" style="left:85.156%;top:26.111%;width:13.359%;height:21.944%">
           <img src="./images/hero/tile-11.png" alt="" class="hero-still" />
           <img src="./images/hero/tile-11-blank.png" alt="" class="hero-blank" />
           <div class="hero-motion" data-lottie-src="./animations/core-technology.json" style="left:18.519%;top:18.987%;width:60.429%;height:67.511%"></div>
         </div>
-        <img src="./images/hero/tile-12.png" alt="" class="hero-tile" style="left:85.156%;top:49.074%;width:13.385%;height:48.38%" />
+        <div class="hero-tile hero-tile-anim" style="left:85.156%;top:49.074%;width:13.385%;height:48.38%">
+          <img src="./images/hero/tile-12.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-12-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion hero-layers">
+            <img src="./images/hero/parts/tile-12-world.png" alt="" class="part part-world" style="left:16.732%;top:52.440%;width:64.591%;height:19.234%" />
+            <img src="./images/hero/parts/tile-12-walls.png" alt="" class="part part-walls" style="left:17.121%;top:45.933%;width:64.008%;height:19.809%" />
+            <img src="./images/hero/parts/tile-12-lid.png" alt="" class="part part-lid" style="left:14.786%;top:28.230%;width:66.148%;height:24.211%" />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1468,14 +1516,15 @@
     // 上の場面の高さが変わると哲学の帯の位置もずれるので、測り直す
     window.addEventListener('load', function () { layoutPin(); });
 
-    // ⑥ トップの絵のうち4枚は、タイルが元の場所に着いたところで中のイラストが動き出す。
+    // ⑥ トップの絵の12枚は、タイルが元の場所に着いたところで中のイラストが動き出す。
     //    Lottie は「登場」を1回だけ再生してから「ループ」をくり返す（区間は JSON の markers に記録）。
     //    ライブラリや JSON が読み込めなかったときは、元の静止画のまま
     var motionTiles = Array.prototype.slice.call(document.querySelectorAll('.hero-tile-anim')).map(function (tile) {
       var el = tile.querySelector('.hero-motion');
+      // Lottie 以外（縦糸と横糸の SVG・円柱の部品）は、is-drawn クラスを付けると CSS で動く
       var m = { tile: tile, timer: null, due: false, anim: null, intro: null, loop: null,
-                weave: el.classList.contains('hero-weave') ? el : null };
-      if (m.weave) { tile.classList.add('is-anim'); return m; }
+                css: el.dataset.lottieSrc ? null : el };
+      if (m.css) { tile.classList.add('is-anim'); return m; }
       if (!window.lottie) return m;
       m.anim = lottie.loadAnimation({ container: el, renderer: 'svg', loop: false, autoplay: false, path: el.dataset.lottieSrc });
       m.anim.addEventListener('DOMLoaded', function () {
@@ -1497,10 +1546,10 @@
     }
     function playMotion(m) {
       m.due = true;
-      if (m.weave) {
-        m.weave.classList.remove('is-drawn');
-        void m.weave.getBoundingClientRect();  // 描き直しのため
-        m.weave.classList.add('is-drawn');
+      if (m.css) {
+        m.css.classList.remove('is-drawn');
+        void m.css.getBoundingClientRect();  // 描き直しのため
+        m.css.classList.add('is-drawn');
       } else if (m.anim && m.intro) {
         if (reduce) { loopMotion(m); return; }
         m.anim.loop = false;
@@ -1520,7 +1569,7 @@
       motionTiles.forEach(function (m) {
         clearTimeout(m.timer);
         m.due = false;
-        if (m.weave) m.weave.classList.remove('is-drawn');
+        if (m.css) m.css.classList.remove('is-drawn');
         if (m.anim && m.intro) { m.anim.loop = false; m.anim.goToAndStop(0, true); }
       });
     }

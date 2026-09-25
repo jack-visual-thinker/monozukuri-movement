@@ -5,10 +5,18 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..')
 # カードの色はヒーローのタイルと同じ色にしてある
 ITEMS = [('craftsmanship', '匠の精神と品質', '#D3C2A7'),
-         ('core-technology', '固有技術', '#D98535'),
-         ('skill-transfer', '人づくり・技能伝承', '#D3C2A7')]
+         ('shapes', '図形', '#D98535'),
+         ('tornado', '竜巻', '#FFFFFF'),
+         ('sun-sprouts', '歯車の太陽と芽', '#D98535'),
+         ('cycle', '循環', '#338A75'),
+         ('skill-transfer', '人づくり・技能伝承', '#D3C2A7'),
+         ('signal', 'ロボットと目', '#D3C2A7'),
+         ('spool', '糸巻き', '#D3C2A7'),
+         ('idea-gear', '人物と歯車と光', '#338A75'),
+         ('core-technology', '固有技術', '#D98535')]
 
-for script in ('craftsmanship.py', 'core_technology.py', 'skill_transfer.py'):
+for script in ('craftsmanship.py', 'core_technology.py', 'skill_transfer.py', 'shapes.py', 'tornado.py',
+               'sun_sprouts.py', 'cycle.py', 'signal.py', 'spool.py', 'idea_gear.py'):
     runpy.run_path(os.path.join(HERE, script), run_name='__main__')
 
 tpl = open(os.path.join(HERE, 'preview_template.html'), encoding='utf-8').read()

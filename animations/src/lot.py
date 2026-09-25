@@ -107,3 +107,14 @@ def save(data, fn):
     s = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
     open(fn, 'w').write(s)
     return len(s)
+
+def split_path(pts, cuts, smooth=1.0):
+    """1本の滑らかな曲線を、途中の点（cuts の番号）で区切った複数のパスにする。
+    太さを変えたい線を、つなぎ目で折れずに描くため。"""
+    whole = path(pts, smooth=smooth)['ks']['k']
+    bounds = [0] + list(cuts) + [len(pts) - 1]
+    out = []
+    for a, b in zip(bounds, bounds[1:]):
+        k = {'i': whole['i'][a:b + 1], 'o': whole['o'][a:b + 1], 'v': whole['v'][a:b + 1], 'c': False}
+        out.append({'ty': 'sh', 'ks': st(k)})
+    return out
