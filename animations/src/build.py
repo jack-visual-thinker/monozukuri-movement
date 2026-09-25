@@ -3,9 +3,10 @@ import gzip, os, runpy
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..')
-ITEMS = [('craftsmanship', '匠の精神と品質', '--beige'),
-         ('core-technology', '固有技術', '--orange'),
-         ('skill-transfer', '人づくり・技能伝承', '--beige')]
+# カードの色はヒーローのタイルと同じ色にしてある
+ITEMS = [('craftsmanship', '匠の精神と品質', '#D3C2A7'),
+         ('core-technology', '固有技術', '#D98535'),
+         ('skill-transfer', '人づくり・技能伝承', '#D3C2A7')]
 
 for script in ('craftsmanship.py', 'core_technology.py', 'skill_transfer.py'):
     runpy.run_path(os.path.join(HERE, script), run_name='__main__')
@@ -16,7 +17,7 @@ for fn, title, bg in ITEMS:
     s = open(os.path.join(OUT, fn + '.json'), encoding='utf-8').read()
     kb, gz = len(s.encode()) / 1024, len(gzip.compress(s.encode(), 9)) / 1024
     cards.append(f'''<figure class="card">
-      <div class="stage" style="--bg: var({bg})"><div data-lottie="data-{fn}" role="img" aria-label="{title}"></div></div>
+      <div class="stage" style="--bg: {bg}"><div data-lottie="data-{fn}" role="img" aria-label="{title}"></div></div>
       <figcaption><b>{title}</b><small>{fn}.json ・ {kb:.1f}KB（gzip {gz:.1f}KB）</small></figcaption>
     </figure>''')
     data.append(f'<script type="application/json" id="data-{fn}">{s}</script>')

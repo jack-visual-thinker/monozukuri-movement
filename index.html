@@ -12,6 +12,7 @@
 <!-- スクロールの動き：慣性スクロール（Lenis）と、カードの立体的な傾き（vanilla-tilt） -->
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie_light.min.js" defer></script>
 <script>document.documentElement.classList.add('js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -224,6 +225,25 @@
       box-shadow: 0 10px 24px rgba(0,0,0,.18); z-index: 2;
     }
   }
+  /* トップの絵のうち4枚は、中のイラストが動く（匠・人づくり・固有技術は Lottie、縦糸と横糸は SVG）。
+     準備が整うまでは元の静止画を見せ、整ったら「イラストを消した無地のタイル＋動く絵」に切り替える */
+  .hero-tile-anim { overflow: hidden; }
+  .hero-tile-anim > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-motion { position: absolute; }
+  .hero-weave { inset: 0; width: 100%; height: 100%; }
+  .hero-tile-anim:not(.is-anim) .hero-blank,
+  .hero-tile-anim:not(.is-anim) .hero-motion { visibility: hidden; }
+  .hero-tile-anim.is-anim .hero-still { visibility: hidden; }
+  /* 縦糸と横糸のタイル：ヘッダーのロゴと同じく、縦糸を引いてから横糸が交互にくぐって織られる */
+  html.js .hero-weave .warp-reveal,
+  html.js .hero-weave .weft { stroke-dasharray: 1 2; stroke-dashoffset: 1.1; }
+  .hero-weave.is-drawn .warp-reveal,
+  .hero-weave.is-drawn .weft { animation: weave-draw var(--dur) var(--ease) var(--delay) forwards; }
+  .hero-weave .warp-reveal { --dur: .8s; --ease: cubic-bezier(.55, 0, .25, 1); }
+  #hw-m-orange .warp-reveal { --delay: 0s; }
+  #hw-m-green  .warp-reveal { --delay: .18s; }
+  #hw-m-beige  .warp-reveal { --delay: .36s; }
+  .hero-weave .weft { --dur: 2.4s; --ease: cubic-bezier(.45, 0, .25, 1); --delay: .85s; }
   /* 哲学の帯：糸が左から伸び、コト→モノ→社会→色面の順に1つずつつながっていく */
   .weave.is-pinned .weave-wave { will-change: clip-path; }
   .weave.is-pinned .weave-seq { will-change: opacity, transform; }
@@ -249,7 +269,8 @@
   .logo-mark .weft { --dur: 2.2s; --ease: cubic-bezier(.45, 0, .25, 1); --delay: .85s; }
   @keyframes weave-draw { to { stroke-dashoffset: 0; } }
   @media (prefers-reduced-motion: reduce) {
-    html.js .logo-mark .warp-reveal, html.js .logo-mark .weft { stroke-dashoffset: 0; animation: none; }
+    html.js .logo-mark .warp-reveal, html.js .logo-mark .weft,
+    html.js .hero-weave .warp-reveal, html.js .hero-weave .weft { stroke-dashoffset: 0; animation: none; }
   }
   .text-balance { text-wrap: balance; }
   .bean {
@@ -358,17 +379,49 @@
     <div class="hero-art rounded-2xl overflow-hidden shadow-lg mb-8">
       <img src="./images/hero/hero-base.png" alt="未来をつくる ものづくり ムーブメント　〜モノとコトが織りなす世界〜" class="block w-full h-auto" />
       <div class="hero-tiles" aria-hidden="true">
-        <img src="./images/hero/tile-01.png" alt="" class="hero-tile" style="left:44.974%;top:2.037%;width:12.526%;height:39.63%" />
+        <div class="hero-tile hero-tile-anim" style="left:44.974%;top:2.037%;width:12.526%;height:39.63%">
+          <img src="./images/hero/tile-01.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-01-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/craftsmanship.json" style="left:17.672%;top:30.607%;width:64.449%;height:45.561%"></div>
+        </div>
         <img src="./images/hero/tile-02.png" alt="" class="hero-tile" style="left:44.974%;top:42.593%;width:12.526%;height:31.991%" />
         <img src="./images/hero/tile-03.png" alt="" class="hero-tile" style="left:44.974%;top:75.463%;width:22.005%;height:22.037%" />
         <img src="./images/hero/tile-04.png" alt="" class="hero-tile" style="left:57.865%;top:2.037%;width:13.411%;height:23.472%" />
         <img src="./images/hero/tile-05.png" alt="" class="hero-tile" style="left:57.865%;top:26.111%;width:26.823%;height:23.889%" />
-        <img src="./images/hero/tile-06.png" alt="" class="hero-tile" style="left:58.151%;top:50.88%;width:15.391%;height:23.657%" />
+        <div class="hero-tile hero-tile-anim" style="left:58.151%;top:50.88%;width:15.391%;height:23.657%">
+          <img src="./images/hero/tile-06.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-06-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/skill-transfer.json" style="left:2.538%;top:19.569%;width:82.064%;height:68.493%"></div>
+        </div>
         <img src="./images/hero/tile-07.png" alt="" class="hero-tile" style="left:67.526%;top:75.417%;width:17.188%;height:22.037%" />
         <img src="./images/hero/tile-08.png" alt="" class="hero-tile" style="left:71.641%;top:2.037%;width:13.047%;height:23.472%" />
-        <img src="./images/hero/tile-09.png" alt="" class="hero-tile" style="left:73.984%;top:50.88%;width:10.703%;height:23.657%" />
+        <div class="hero-tile hero-tile-anim" style="left:73.984%;top:50.88%;width:10.703%;height:23.657%">
+          <img src="./images/hero/tile-09.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-09-blank.png" alt="" class="hero-blank" />
+          <svg class="hero-motion hero-weave" viewBox="147.6 -149.6 1855.6 2295.6" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <defs>
+          <mask id="hw-m-orange" maskUnits="userSpaceOnUse" x="0" y="0" width="2000" height="2000"><path class="warp-reveal" d="M629,369 C631.2,388.8 641.2,444.2 642.5,488 C643.8,531.8 638.9,584 637,632 C635.1,680 633.4,728 631,776 C628.6,824 625.1,872 622.5,920 C619.9,968 617.2,1016 615.5,1064 C613.8,1112 612.8,1160 612,1208 C611.2,1256 610.4,1304 611,1352 C611.6,1400 616.3,1450.8 615.5,1496 C614.7,1541.2 607.6,1601.8 606,1623 C604.4,1644.2 606,1623 606,1623" transform="translate(625 0) scale(1.3 1) translate(-625 0)" pathLength="1" fill="none" stroke="#fff" stroke-width="140" stroke-linecap="round"/></mask>
+          <clipPath id="hw-c-orange"><rect x="505" y="716" width="240" height="120"/><rect x="505" y="1108" width="240" height="120"/></clipPath>
+          <mask id="hw-m-green" maskUnits="userSpaceOnUse" x="0" y="0" width="2000" height="2000"><path class="warp-reveal" d="M1009,385 C1010.8,405.2 1019.6,461.8 1019.5,506 C1019.4,550.2 1011.6,602 1008.5,650 C1005.4,698 1002.1,746 1001,794 C999.9,842 1002,890 1002,938 C1002,986 1001.3,1034 1001,1082 C1000.7,1130 1000,1178 1000,1226 C1000,1274 1000.8,1322 1001,1370 C1001.2,1418 1003.6,1466 1001.5,1514 C999.4,1562 995.1,1629.5 988.5,1658 C981.9,1686.5 966.4,1680.5 962,1685" transform="translate(1005 0) scale(1.3 1) translate(-1005 0)" pathLength="1" fill="none" stroke="#fff" stroke-width="140" stroke-linecap="round"/></mask>
+          <clipPath id="hw-c-green"><rect x="885" y="497" width="240" height="120"/><rect x="885" y="897" width="240" height="120"/><rect x="885" y="1340" width="240" height="120"/></clipPath>
+          <mask id="hw-m-beige" maskUnits="userSpaceOnUse" x="0" y="0" width="2000" height="2000"><path class="warp-reveal" d="M1374,378 C1373.1,396.8 1370.3,448.2 1368.5,491 C1366.7,533.8 1365.2,587 1363,635 C1360.8,683 1357,731 1355.5,779 C1354,827 1354.7,875 1354,923 C1353.3,971 1352.3,1019 1351.5,1067 C1350.7,1115 1349.2,1163 1349,1211 C1348.8,1259 1349.3,1307 1350,1355 C1350.7,1403 1351.8,1451 1353,1499 C1354.2,1547 1358,1609.5 1357.5,1643 C1357,1676.5 1351.2,1690.5 1350,1700" transform="translate(1365 0) scale(1.3 1) translate(-1365 0)" pathLength="1" fill="none" stroke="#fff" stroke-width="140" stroke-linecap="round"/></mask>
+          <clipPath id="hw-c-beige"><rect x="1245" y="726" width="240" height="120"/><rect x="1245" y="1126" width="240" height="120"/></clipPath>
+          </defs>
+          <g mask="url(#hw-m-orange)"><path d="M629,369 C622.8,369 621.7,380.2 619,392 C616.3,403.8 614.3,424 613,440 C611.7,456 612.2,472 611,488 C609.8,504 607.5,520 606,536 C604.5,552 603.5,568 602,584 C600.5,600 598.5,616 597,632 C595.5,648 594.2,664 593,680 C591.8,696 590.5,712 590,728 C589.5,744 590.7,760 590,776 C589.3,792 587.2,808 586,824 C584.8,840 583.8,856 583,872 C582.2,888 580.5,904 581,920 C581.5,936 586.5,952 585.8,968 C585.1,984 579.3,1000 577,1016 C574.7,1032 572.7,1048 572,1064 C571.3,1080 573,1096 573,1112 C573,1128 572.3,1144 572,1160 C571.7,1176 571.2,1192 571,1208 C570.8,1224 571.2,1240 571,1256 C570.8,1272 570,1288 570,1304 C570,1320 570.4,1336 571,1352 C571.6,1368 572.6,1384 573.8,1400 C575,1416 576.3,1432 578,1448 C579.7,1464 582.3,1480 584,1496 C585.7,1512 586.3,1528 588,1544 C589.7,1560 591,1578.8 594,1592 C597,1605.2 598.5,1623 606,1623 C613.5,1623 632.7,1605.2 639,1592 C645.3,1578.8 642.7,1560 644,1544 C645.3,1528 646.3,1512 647,1496 C647.7,1480 647.6,1464 648,1448 C648.4,1432 648.7,1416 649.2,1400 C649.7,1384 650.5,1368 651,1352 C651.5,1336 652,1320 652,1304 C652,1288 650.8,1272 651,1256 C651.2,1240 653.2,1224 653,1208 C652.8,1192 649.5,1176 650,1160 C650.5,1144 654.5,1128 656,1112 C657.5,1096 657.8,1080 659,1064 C660.2,1048 662,1032 663,1016 C664,1000 664.6,984 664.8,968 C665,952 663.5,936 664,920 C664.5,904 667,888 668,872 C669,856 669.3,840 670,824 C670.7,808 671.5,792 672,776 C672.5,760 672.3,744 673,728 C673.7,712 675.3,696 676,680 C676.7,664 676.5,648 677,632 C677.5,616 679.2,600 679,584 C678.8,568 676.8,552 676,536 C675.2,520 675.2,504 674,488 C672.8,472 672,456 669,440 C666,424 662.7,403.8 656,392 C649.3,380.2 635.2,369 629,369 Z" transform="translate(625 0) scale(1.3 1) translate(-625 0)" fill="#FFFFFF"/></g>
+          <g mask="url(#hw-m-green)"><path d="M1009,385 C1001,385 997.8,397.8 994,410 C990.2,422.2 987.8,442 986,458 C984.2,474 983.8,490 983,506 C982.2,522 982,538 981,554 C980,570 978.3,586 977,602 C975.7,618 974.5,634 973,650 C971.5,666 969.7,682 968,698 C966.3,714 964,730 963,746 C962,762 962.5,778 962,794 C961.5,810 960.5,826 960,842 C959.5,858 959.2,874 959,890 C958.8,906 959,922 959,938 C959,954 959.3,970 959,986 C958.7,1002 957.2,1018 957,1034 C956.8,1050 958.2,1066 958,1082 C957.8,1098 955.8,1114 956,1130 C956.2,1146 959.2,1162 959.2,1178 C959.2,1194 956.2,1210 956,1226 C955.8,1242 957.5,1258 958,1274 C958.5,1290 958.5,1306 959,1322 C959.5,1338 959.7,1354 961,1370 C962.3,1386 966.2,1402 967,1418 C967.8,1434 966,1450 966,1466 C966,1482 966.3,1498 967,1514 C967.7,1530 969.8,1546 970,1562 C970.2,1578 968.5,1594 968,1610 C967.5,1626 968,1645.5 967,1658 C966,1670.5 954.8,1685 962,1685 C969.2,1685 1000.2,1670.5 1010,1658 C1019.8,1645.5 1018,1626 1021,1610 C1024,1594 1025.5,1578 1028,1562 C1030.5,1546 1034,1530 1036,1514 C1038,1498 1039,1482 1040,1466 C1041,1450 1041.8,1434 1042,1418 C1042.2,1402 1040.8,1386 1041,1370 C1041.2,1354 1042.8,1338 1043,1322 C1043.2,1306 1041.8,1290 1042,1274 C1042.2,1258 1044,1242 1044,1226 C1044,1210 1041.7,1194 1041.7,1178 C1041.7,1162 1043.6,1146 1044,1130 C1044.4,1114 1043.8,1098 1044,1082 C1044.2,1066 1045,1050 1045,1034 C1045,1018 1044,1002 1044,986 C1044,970 1045.2,954 1045,938 C1044.8,922 1043.3,906 1043,890 C1042.7,874 1043.5,858 1043,842 C1042.5,826 1040.2,810 1040,794 C1039.8,778 1041.3,762 1042,746 C1042.7,730 1043.7,714 1044,698 C1044.3,682 1043.2,666 1044,650 C1044.8,634 1047.5,618 1049,602 C1050.5,586 1051.8,570 1053,554 C1054.2,538 1055.7,522 1056,506 C1056.3,490 1057.3,474 1055,458 C1052.7,442 1049.7,422.2 1042,410 C1034.3,397.8 1017,385 1009,385 Z" transform="translate(1005 0) scale(1.3 1) translate(-1005 0)" fill="#FFFFFF"/></g>
+          <g mask="url(#hw-m-beige)"><path d="M1374,378 C1369.2,378 1362.7,384.2 1358,395 C1353.3,405.8 1348.8,427 1346,443 C1343.2,459 1342.5,475 1341,491 C1339.5,507 1338.3,523 1337,539 C1335.7,555 1334.3,571 1333,587 C1331.7,603 1330.3,619 1329,635 C1327.7,651 1326.3,667 1325,683 C1323.7,699 1322,715 1321,731 C1320,747 1319.7,763 1319,779 C1318.3,795 1317.8,811 1317,827 C1316.2,843 1314.7,859 1314,875 C1313.3,891 1313.7,907 1313,923 C1312.3,939 1310.4,955 1310.1,971 C1309.8,987 1311.2,1003 1311,1019 C1310.8,1035 1309.7,1051 1309,1067 C1308.3,1083 1307.2,1099 1307,1115 C1306.8,1131 1307.8,1147 1308,1163 C1308.2,1179 1308.3,1195 1308,1211 C1307.7,1227 1306.5,1243 1306,1259 C1305.5,1275 1305.3,1291 1305,1307 C1304.7,1323 1303.3,1339 1304,1355 C1304.7,1371 1308.9,1387 1309.1,1403 C1309.3,1419 1305.3,1435 1305,1451 C1304.7,1467 1306.2,1483 1307,1499 C1307.8,1515 1308.5,1531 1310,1547 C1311.5,1563 1314.2,1579 1316,1595 C1317.8,1611 1318.2,1627.8 1321,1643 C1323.8,1658.2 1328.2,1676.5 1333,1686 C1337.8,1695.5 1341.3,1700 1350,1700 C1358.7,1700 1377.7,1695.5 1385,1686 C1392.3,1676.5 1391.7,1658.2 1394,1643 C1396.3,1627.8 1397.8,1611 1399,1595 C1400.2,1579 1401,1563 1401,1547 C1401,1531 1399.7,1515 1399,1499 C1398.3,1483 1397.5,1467 1397,1451 C1396.5,1435 1396,1419 1395.8,1403 C1395.6,1387 1396.3,1371 1396,1355 C1395.7,1339 1394.5,1323 1394,1307 C1393.5,1291 1393.7,1275 1393,1259 C1392.3,1243 1390,1227 1390,1211 C1390,1195 1392.7,1179 1393,1163 C1393.3,1147 1391.8,1131 1392,1115 C1392.2,1099 1393.7,1083 1394,1067 C1394.3,1051 1393.8,1035 1394,1019 C1394.2,1003 1394.8,987 1395,971 C1395.2,955 1394.8,939 1395,923 C1395.2,907 1395.8,891 1396,875 C1396.2,859 1396.7,843 1396,827 C1395.3,811 1391.7,795 1392,779 C1392.3,763 1397,747 1398,731 C1399,715 1398.2,699 1398,683 C1397.8,667 1396.8,651 1397,635 C1397.2,619 1398.8,603 1399,587 C1399.2,571 1398.5,555 1398,539 C1397.5,523 1397,507 1396,491 C1395,475 1393.5,459 1392,443 C1390.5,427 1390,405.8 1387,395 C1384,384.2 1378.8,378 1374,378 Z" transform="translate(1365 0) scale(1.3 1) translate(-1365 0)" fill="#FFFFFF"/></g>
+          <path class="weft" d="M2130,604 L1995,598 C1700,585 1300,568 1000,560 C850,556 750,549 650,550 C230,555 230,790 650,776 C850,775 1100,772 1350,788 C1660,808 1660,935 1350,944 C1150,955 950,958 650,947 C252,950 252,1175 650,1168 C900,1168 1100,1175 1300,1185 C1665,1210 1665,1400 1300,1402 C900,1400 500,1385 160,1386 L20,1387" pathLength="1" fill="none" stroke="#434343" stroke-width="34" stroke-linecap="round"/>
+          <g clip-path="url(#hw-c-orange)"><g mask="url(#hw-m-orange)"><path d="M629,369 C622.8,369 621.7,380.2 619,392 C616.3,403.8 614.3,424 613,440 C611.7,456 612.2,472 611,488 C609.8,504 607.5,520 606,536 C604.5,552 603.5,568 602,584 C600.5,600 598.5,616 597,632 C595.5,648 594.2,664 593,680 C591.8,696 590.5,712 590,728 C589.5,744 590.7,760 590,776 C589.3,792 587.2,808 586,824 C584.8,840 583.8,856 583,872 C582.2,888 580.5,904 581,920 C581.5,936 586.5,952 585.8,968 C585.1,984 579.3,1000 577,1016 C574.7,1032 572.7,1048 572,1064 C571.3,1080 573,1096 573,1112 C573,1128 572.3,1144 572,1160 C571.7,1176 571.2,1192 571,1208 C570.8,1224 571.2,1240 571,1256 C570.8,1272 570,1288 570,1304 C570,1320 570.4,1336 571,1352 C571.6,1368 572.6,1384 573.8,1400 C575,1416 576.3,1432 578,1448 C579.7,1464 582.3,1480 584,1496 C585.7,1512 586.3,1528 588,1544 C589.7,1560 591,1578.8 594,1592 C597,1605.2 598.5,1623 606,1623 C613.5,1623 632.7,1605.2 639,1592 C645.3,1578.8 642.7,1560 644,1544 C645.3,1528 646.3,1512 647,1496 C647.7,1480 647.6,1464 648,1448 C648.4,1432 648.7,1416 649.2,1400 C649.7,1384 650.5,1368 651,1352 C651.5,1336 652,1320 652,1304 C652,1288 650.8,1272 651,1256 C651.2,1240 653.2,1224 653,1208 C652.8,1192 649.5,1176 650,1160 C650.5,1144 654.5,1128 656,1112 C657.5,1096 657.8,1080 659,1064 C660.2,1048 662,1032 663,1016 C664,1000 664.6,984 664.8,968 C665,952 663.5,936 664,920 C664.5,904 667,888 668,872 C669,856 669.3,840 670,824 C670.7,808 671.5,792 672,776 C672.5,760 672.3,744 673,728 C673.7,712 675.3,696 676,680 C676.7,664 676.5,648 677,632 C677.5,616 679.2,600 679,584 C678.8,568 676.8,552 676,536 C675.2,520 675.2,504 674,488 C672.8,472 672,456 669,440 C666,424 662.7,403.8 656,392 C649.3,380.2 635.2,369 629,369 Z" transform="translate(625 0) scale(1.3 1) translate(-625 0)" fill="#FFFFFF"/></g></g>
+          <g clip-path="url(#hw-c-green)"><g mask="url(#hw-m-green)"><path d="M1009,385 C1001,385 997.8,397.8 994,410 C990.2,422.2 987.8,442 986,458 C984.2,474 983.8,490 983,506 C982.2,522 982,538 981,554 C980,570 978.3,586 977,602 C975.7,618 974.5,634 973,650 C971.5,666 969.7,682 968,698 C966.3,714 964,730 963,746 C962,762 962.5,778 962,794 C961.5,810 960.5,826 960,842 C959.5,858 959.2,874 959,890 C958.8,906 959,922 959,938 C959,954 959.3,970 959,986 C958.7,1002 957.2,1018 957,1034 C956.8,1050 958.2,1066 958,1082 C957.8,1098 955.8,1114 956,1130 C956.2,1146 959.2,1162 959.2,1178 C959.2,1194 956.2,1210 956,1226 C955.8,1242 957.5,1258 958,1274 C958.5,1290 958.5,1306 959,1322 C959.5,1338 959.7,1354 961,1370 C962.3,1386 966.2,1402 967,1418 C967.8,1434 966,1450 966,1466 C966,1482 966.3,1498 967,1514 C967.7,1530 969.8,1546 970,1562 C970.2,1578 968.5,1594 968,1610 C967.5,1626 968,1645.5 967,1658 C966,1670.5 954.8,1685 962,1685 C969.2,1685 1000.2,1670.5 1010,1658 C1019.8,1645.5 1018,1626 1021,1610 C1024,1594 1025.5,1578 1028,1562 C1030.5,1546 1034,1530 1036,1514 C1038,1498 1039,1482 1040,1466 C1041,1450 1041.8,1434 1042,1418 C1042.2,1402 1040.8,1386 1041,1370 C1041.2,1354 1042.8,1338 1043,1322 C1043.2,1306 1041.8,1290 1042,1274 C1042.2,1258 1044,1242 1044,1226 C1044,1210 1041.7,1194 1041.7,1178 C1041.7,1162 1043.6,1146 1044,1130 C1044.4,1114 1043.8,1098 1044,1082 C1044.2,1066 1045,1050 1045,1034 C1045,1018 1044,1002 1044,986 C1044,970 1045.2,954 1045,938 C1044.8,922 1043.3,906 1043,890 C1042.7,874 1043.5,858 1043,842 C1042.5,826 1040.2,810 1040,794 C1039.8,778 1041.3,762 1042,746 C1042.7,730 1043.7,714 1044,698 C1044.3,682 1043.2,666 1044,650 C1044.8,634 1047.5,618 1049,602 C1050.5,586 1051.8,570 1053,554 C1054.2,538 1055.7,522 1056,506 C1056.3,490 1057.3,474 1055,458 C1052.7,442 1049.7,422.2 1042,410 C1034.3,397.8 1017,385 1009,385 Z" transform="translate(1005 0) scale(1.3 1) translate(-1005 0)" fill="#FFFFFF"/></g></g>
+          <g clip-path="url(#hw-c-beige)"><g mask="url(#hw-m-beige)"><path d="M1374,378 C1369.2,378 1362.7,384.2 1358,395 C1353.3,405.8 1348.8,427 1346,443 C1343.2,459 1342.5,475 1341,491 C1339.5,507 1338.3,523 1337,539 C1335.7,555 1334.3,571 1333,587 C1331.7,603 1330.3,619 1329,635 C1327.7,651 1326.3,667 1325,683 C1323.7,699 1322,715 1321,731 C1320,747 1319.7,763 1319,779 C1318.3,795 1317.8,811 1317,827 C1316.2,843 1314.7,859 1314,875 C1313.3,891 1313.7,907 1313,923 C1312.3,939 1310.4,955 1310.1,971 C1309.8,987 1311.2,1003 1311,1019 C1310.8,1035 1309.7,1051 1309,1067 C1308.3,1083 1307.2,1099 1307,1115 C1306.8,1131 1307.8,1147 1308,1163 C1308.2,1179 1308.3,1195 1308,1211 C1307.7,1227 1306.5,1243 1306,1259 C1305.5,1275 1305.3,1291 1305,1307 C1304.7,1323 1303.3,1339 1304,1355 C1304.7,1371 1308.9,1387 1309.1,1403 C1309.3,1419 1305.3,1435 1305,1451 C1304.7,1467 1306.2,1483 1307,1499 C1307.8,1515 1308.5,1531 1310,1547 C1311.5,1563 1314.2,1579 1316,1595 C1317.8,1611 1318.2,1627.8 1321,1643 C1323.8,1658.2 1328.2,1676.5 1333,1686 C1337.8,1695.5 1341.3,1700 1350,1700 C1358.7,1700 1377.7,1695.5 1385,1686 C1392.3,1676.5 1391.7,1658.2 1394,1643 C1396.3,1627.8 1397.8,1611 1399,1595 C1400.2,1579 1401,1563 1401,1547 C1401,1531 1399.7,1515 1399,1499 C1398.3,1483 1397.5,1467 1397,1451 C1396.5,1435 1396,1419 1395.8,1403 C1395.6,1387 1396.3,1371 1396,1355 C1395.7,1339 1394.5,1323 1394,1307 C1393.5,1291 1393.7,1275 1393,1259 C1392.3,1243 1390,1227 1390,1211 C1390,1195 1392.7,1179 1393,1163 C1393.3,1147 1391.8,1131 1392,1115 C1392.2,1099 1393.7,1083 1394,1067 C1394.3,1051 1393.8,1035 1394,1019 C1394.2,1003 1394.8,987 1395,971 C1395.2,955 1394.8,939 1395,923 C1395.2,907 1395.8,891 1396,875 C1396.2,859 1396.7,843 1396,827 C1395.3,811 1391.7,795 1392,779 C1392.3,763 1397,747 1398,731 C1399,715 1398.2,699 1398,683 C1397.8,667 1396.8,651 1397,635 C1397.2,619 1398.8,603 1399,587 C1399.2,571 1398.5,555 1398,539 C1397.5,523 1397,507 1396,491 C1395,475 1393.5,459 1392,443 C1390.5,427 1390,405.8 1387,395 C1384,384.2 1378.8,378 1374,378 Z" transform="translate(1365 0) scale(1.3 1) translate(-1365 0)" fill="#FFFFFF"/></g></g>
+          </svg>
+        </div>
         <img src="./images/hero/tile-10.png" alt="" class="hero-tile" style="left:85.156%;top:2.037%;width:13.385%;height:23.472%" />
-        <img src="./images/hero/tile-11.png" alt="" class="hero-tile" style="left:85.156%;top:26.111%;width:13.359%;height:21.944%" />
+        <div class="hero-tile hero-tile-anim" style="left:85.156%;top:26.111%;width:13.359%;height:21.944%">
+          <img src="./images/hero/tile-11.png" alt="" class="hero-still" />
+          <img src="./images/hero/tile-11-blank.png" alt="" class="hero-blank" />
+          <div class="hero-motion" data-lottie-src="./animations/core-technology.json" style="left:18.519%;top:18.987%;width:60.429%;height:67.511%"></div>
+        </div>
         <img src="./images/hero/tile-12.png" alt="" class="hero-tile" style="left:85.156%;top:49.074%;width:13.385%;height:48.38%" />
       </div>
     </div>
@@ -1415,6 +1468,63 @@
     // 上の場面の高さが変わると哲学の帯の位置もずれるので、測り直す
     window.addEventListener('load', function () { layoutPin(); });
 
+    // ⑥ トップの絵のうち4枚は、タイルが元の場所に着いたところで中のイラストが動き出す。
+    //    Lottie は「登場」を1回だけ再生してから「ループ」をくり返す（区間は JSON の markers に記録）。
+    //    ライブラリや JSON が読み込めなかったときは、元の静止画のまま
+    var motionTiles = Array.prototype.slice.call(document.querySelectorAll('.hero-tile-anim')).map(function (tile) {
+      var el = tile.querySelector('.hero-motion');
+      var m = { tile: tile, timer: null, due: false, anim: null, intro: null, loop: null,
+                weave: el.classList.contains('hero-weave') ? el : null };
+      if (m.weave) { tile.classList.add('is-anim'); return m; }
+      if (!window.lottie) return m;
+      m.anim = lottie.loadAnimation({ container: el, renderer: 'svg', loop: false, autoplay: false, path: el.dataset.lottieSrc });
+      m.anim.addEventListener('DOMLoaded', function () {
+        var marks = m.anim.animationData.markers || [];
+        m.intro = marks.filter(function (k) { return k.cm === 'intro'; })[0];
+        m.loop = marks.filter(function (k) { return k.cm === 'loop'; })[0];
+        if (!m.intro || !m.loop) { m.anim.destroy(); m.anim = null; return; }
+        tile.classList.add('is-anim');
+        // 動き出す時刻を過ぎてから読み込めたときは、描き直さず完成形からループに入る
+        if (m.due) loopMotion(m); else m.anim.goToAndStop(0, true);
+      });
+      m.anim.addEventListener('complete', function () { loopMotion(m); });
+      return m;
+    });
+    function loopMotion(m) {
+      if (reduce) { m.anim.goToAndStop(m.loop.tm, true); return; }
+      m.anim.loop = true;
+      m.anim.playSegments([m.loop.tm, m.loop.tm + m.loop.dr], true);
+    }
+    function playMotion(m) {
+      m.due = true;
+      if (m.weave) {
+        m.weave.classList.remove('is-drawn');
+        void m.weave.getBoundingClientRect();  // 描き直しのため
+        m.weave.classList.add('is-drawn');
+      } else if (m.anim && m.intro) {
+        if (reduce) { loopMotion(m); return; }
+        m.anim.loop = false;
+        m.anim.playSegments([m.intro.tm, m.intro.tm + m.intro.dr], true);
+      }
+    }
+    // タイルが集まり始めたら、それぞれ着地する頃（集まる遅れ＋0.9秒）に動き出す
+    function startMotion() {
+      motionTiles.forEach(function (m) {
+        clearTimeout(m.timer);
+        var delay = reduce ? 0 : (parseFloat(m.tile.style.getPropertyValue('--d')) || 0) + 0.9;
+        m.timer = setTimeout(function () { playMotion(m); }, delay * 1000);
+      });
+    }
+    // 散らばったら最初の状態に戻し、次に集まったときにもう一度描く
+    function resetMotion() {
+      motionTiles.forEach(function (m) {
+        clearTimeout(m.timer);
+        m.due = false;
+        if (m.weave) m.weave.classList.remove('is-drawn');
+        if (m.anim && m.intro) { m.anim.loop = false; m.anim.goToAndStop(0, true); }
+      });
+    }
+
     // ⑤ トップの絵：タイルが散らばった位置から、1枚ずつ元の場所に集まってくる。
     //    画面に見えたときに始め、いったん画面外へ出てから戻ってくると、もう一度集まり直す
     var art = document.querySelector('.hero-art');
@@ -1438,12 +1548,14 @@
       function gather() {
         if (!ready || !visible || document.visibilityState !== 'visible' || art.classList.contains('is-in')) return;
         art.classList.add('is-in');
+        startMotion();
         clearTimeout(doneTimer);
         doneTimer = setTimeout(function () { art.classList.add('is-done'); }, total);
       }
       function scatter() {
         clearTimeout(doneTimer);
         art.classList.remove('is-in', 'is-done');
+        resetMotion();
       }
       new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
@@ -1457,6 +1569,7 @@
         .then(function () { ready = true; setTimeout(gather, 50); });
     } else if (art) {
       art.classList.add('is-in', 'is-done');
+      startMotion();   // 動きを減らす設定：完成形で止める
     }
 
     // ④ カードの傾き（PCのみ・控えめに）

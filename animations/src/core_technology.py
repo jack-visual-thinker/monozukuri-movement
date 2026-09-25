@@ -4,7 +4,7 @@ from lot import *
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
-DARK, WHITE, ORANGE = '#434343', '#FFFFFF', '#E78014'
+DARK, WHITE, ORANGE = '#434343', '#FFFFFF', '#D98535'   # ヒーローのタイルと同じオレンジ
 OX, OY, W, H = 95, 90, 310, 320
 INTRO, OP = 60, 135                        # 30fps：登場 2.0秒 / ループ 2.5秒
 SW = 7
