@@ -57,6 +57,31 @@
     setTimeout(scrollToTop, 100);
   });
   window.addEventListener('beforeunload', scrollToTop);
+
+  // ページ内リンク（メニュー・告知バーなど）を押しても、URL に「#vol3」などを残さない。
+  // 残るとリロードしたときにその位置へ戻ってしまうため。スクロールは PC では Lenis、スマホではここで行う
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = decodeURIComponent(a.getAttribute('href').slice(1));
+    var target = id && document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    if (window.lenis) return;   // Lenis が自分で目的の位置へスクロールする
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // メニューが閉じてから（高さが変わってから）スクロールする
+    requestAnimationFrame(function () {
+      target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+  // 「〜/#news」のように見出し指定で来たときは、その位置を見せたあと URL から「#…」を消す（次のリロードは最上部から）
+  window.addEventListener('load', function () {
+    if (!location.hash) return;
+    setTimeout(function () {
+      history.replaceState(null, '', location.pathname + location.search);
+    }, 600);
+  });
 </script>
 <style>
   html { scroll-behavior: smooth; }
