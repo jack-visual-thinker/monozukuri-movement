@@ -1402,6 +1402,7 @@
     //   画の中はインクが流れる順に、筆がそこに来た時刻で出す）。交差部は先に書く画のもの
     function handwrite(img) {
       var W = +img.getAttribute('width'), H = +img.getAttribute('height');
+      var DUR = 1000;   // 書き始めから書き終わりまで（ms）
       var cv = document.createElement('canvas');
       cv.width = W; cv.height = H;
       cv.className = img.className + ' hand-ink';
@@ -1423,6 +1424,9 @@
           list.push([od[i * 4 + 1] * 256 + od[i * 4 + 2], i]);
         }
         list.sort(function (a, b) { return a[0] - b[0]; });
+        // 記録のリズムのまま、全体を DUR ms に縮める
+        var k = list.length ? DUR / list[list.length - 1][0] : 1;
+        for (var q = 0; q < list.length; q++) list[q][0] *= k;
         ready = { px: px, list: list };
         if (pending !== null) play(pending);
       }
@@ -1433,7 +1437,7 @@
         pending = null;
         var ctx = cv.getContext('2d'), out = ctx.createImageData(W, H), o = out.data, px = ready.px, list = ready.list, p = 0, t0 = null;
         // 筆先：出てくる画素は FADE ms かけて濃くなる（1点ずつパッと出ず、線がなめらかに伸びる）
-        var FADE = 70, live = [];
+        var FADE = 35, live = [];
         function frame(now) {
           if (t0 === null) t0 = now + delay;
           var e = now - t0;
@@ -1450,12 +1454,24 @@
         }
         requestAnimationFrame(frame);
       }
-      // 見出しが画面に入ったら（h2 に is-in が付いたら）、白い枠が出たあとに書き始める
-      var h = img.closest('h2'), wrap = img.closest('.w');
-      var i0 = wrap ? +getComputedStyle(wrap).getPropertyValue('--i') || 0 : 0;
+      // 書き始めるタイミング：見出しの白い枠が出た後（h2 に is-in）、手書き文字が丸ごと画面に入り、
+      // 画面の下から1/4より上に来た時。見出しはこの後、画面上部の定位置まで約3/4画面ぶん上がって
+      // 止まる（.scene-pin）ので、ふつうの速さでスクロールすると約1秒＝ちょうど書き終わる頃に定位置に着く。
+      var h = img.closest('h2'), inAt = 0, seen = false, started = false;
+      function tryStart() {
+        if (started || !seen || !inAt) return;
+        started = true;
+        play(Math.max(0, inAt + 200 - performance.now()));   // 白い枠がポンと出るのを待つ（最大0.2秒）
+      }
       new MutationObserver(function (_, mo) {
-        if (h.classList.contains('is-in')) { mo.disconnect(); play(i0 * 55 + 550); }
+        if (h.classList.contains('is-in')) { mo.disconnect(); inAt = performance.now(); tryStart(); }
       }).observe(h, { attributes: true, attributeFilter: ['class'] });
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) {
+          if (es[0].isIntersecting) { io.disconnect(); seen = true; tryStart(); }
+        }, { rootMargin: '0px 0px -25% 0px', threshold: 1 });
+        io.observe(cv);
+      } else { seen = true; }
       img.replaceWith(cv);
     }
     var heads = reduce ? [] : document.querySelectorAll('section:not(#top) h2');
