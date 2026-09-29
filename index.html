@@ -213,14 +213,7 @@
     transition-delay: calc(var(--i) * 55ms + 150ms);
   }
   html.js h2.split.is-in .hand-bg { opacity: 1; scale: 1; }
-  /* 手書き文字は、筆の通り道（1画ずつ・書き順どおり）を白い線で引いたマスクで見せていく。
-     各画は描き始める瞬間まで隠しておく（始点に筆先の丸い点が先に見えないように） */
-  .hand-ink path { fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
-  h2.split.is-in .hand-ink path {
-    stroke-dashoffset: 0; opacity: 1;
-    transition: stroke-dashoffset var(--d) cubic-bezier(.35,.05,.45,1) calc(var(--i) * 55ms + 550ms + var(--s)),
-                opacity 0s linear calc(var(--i) * 55ms + 550ms + var(--s));
-  }
+  /* 手書き文字は、画素ごとに「どの画のどこか」を持たせた書き順データ（*-order.png）で、1画ずつ書き順どおりに出す（JSで描画） */
   /* 課題・活動内容：画面に留め、スクロールに合わせてカードを出す／照らす */
   .scene-pin { position: relative; }
   .scene-pin.is-pinned > section {
@@ -542,8 +535,8 @@
         <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[0.037em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/honrai-no-toi.png"
              alt="本来の問い" width="477" height="160"
-             data-pen="16"
-             data-strokes="28,56 30,56 54,50 71,48 73,45 86,43 88,41 101,41 | 69,22 72,38 72,56 74,61 73,99 70,103 70,112 68,114 67,133 | 64,63 65,66 39,96 21,109 16,111 12,110 | 70,28 74,34 105,84 111,88 111,90 124,104 129,109 | 61,99 77,100 98,96 / 141,36 158,36 163,38 | 135,48 136,46 132,54 132,63 132,67 | 181,47 175,47 171,50 167,51 | 106,87 113,84 136,75 147,75 152,73 173,74 179,76 | 153,19 156,34 155,56 157,58 153,73 153,90 155,96 153,147 | 160,98 154,95 154,91 152,89 145,91 134,104 128,107 128,110 123,115 112,123 | 149,88 154,93 157,99 162,100 174,107 206,119 213,119 / 245,81 243,88 238,104 230,112 226,111 224,108 223,97 228,88 239,80 250,83 255,90 255,102 246,119 237,131 / 302,34 299,37 302,55 300,61 301,74 299,78 294,111 294,125 | 299,34 302,34 320,34 324,38 322,70 | 301,50 302,55 312,56 322,56 323,50 | 300,70 301,74 322,70 327,69 | 343,11 343,13 344,28 346,30 343,34 341,49 341,62 343,64 343,70 | 343,33 349,29 358,23 368,20 375,20 378,23 378,61 383,104 383,138 381,134 375,132 370,127 358,111 359,113 | 340,46 347,47 362,49 | 341,65 345,65 359,65 366,67 | 317,81 320,91 324,94 325,103 330,111 | 318,82 320,91 327,94 338,84 347,80 353,81 353,87 342,101 341,106 338,108 333,108 329,109 | 330,111 331,108 345,108 343,108 / 407,88 414,101 420,106 427,104 437,96 | 447,83 450,85 459,92 461,97 462,96 453,103"
+             data-order="./images/honrai-no-toi-order.png"
+             data-strokes="28,56 53,50 67,48 79,44 101,41 | 69,22 71,36 72,54 74,64 73,97 70,104 70,110 68,116 67,133 | 72,58 39,96 23,108 15,112 | 67,23 104,82 130,111 | 61,99 89,97 98,96 / 141,36 158,37 163,38 | 136,46 132,55 132,66 | 181,47 175,48 171,50 167,51 | 106,87 133,76 137,75 161,74 172,74 179,76 | 153,19 156,43 155,60 153,81 155,102 153,147 | 156,83 148,90 144,93 124,114 112,123 | 153,96 177,108 204,118 213,119 / 246,79 238,102 236,106 232,110 228,111 225,109 224,105 223,98 225,94 228,88 236,82 238,81 241,81 249,83 252,85 254,90 255,99 254,104 246,119 237,131 / 299,35 301,48 300,70 294,109 294,125 | 299,34 317,34 320,36 322,60 322,72 | 300,55 324,55 | 300,74 327,69 | 343,11 343,22 342,43 343,73 | 342,33 357,24 366,21 371,20 375,21 377,22 378,25 378,61 383,105 383,136 382,136 372,129 358,111 | 340,46 362,49 | 341,65 366,67 | 317,81 325,102 330,111 | 322,92 326,92 329,91 338,84 345,81 349,80 351,82 352,85 351,89 344,99 337,110 | 330,111 345,108 / 407,88 413,100 417,103 428,102 431,100 437,96 | 447,82 458,92 463,99"
              class="relative block h-[3.35em] w-auto" />
       </span><budoux-ja>を失っている。</budoux-ja>
     </h2>
@@ -667,8 +660,8 @@
         <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[-0.211em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/jissen-no-ba.png"
              alt="実践の場" width="443" height="184"
-             data-pen="16"
-             data-strokes="51,14 62,27 67,32 | 24,35 29,38 29,41 33,45 40,48 41,52 46,58 48,61 | 27,41 31,43 39,47 44,41 61,35 64,32 79,32 94,35 96,40 87,53 76,61 66,63 64,70 58,74 | 43,62 47,59 50,60 59,58 65,63 70,62 74,63 | 40,79 42,80 54,76 61,76 65,69 69,72 75,73 | 36,96 50,91 56,92 61,88 67,87 81,86 90,89 | 58,54 59,58 65,63 65,69 61,76 62,86 55,93 54,100 49,108 40,118 26,126 17,128 12,128 9,126 | 70,98 113,138 125,145 / 117,57 120,61 121,73 124,76 124,83 120,87 118,94 | 118,58 120,61 126,58 141,60 137,61 135,67 124,77 124,80 119,85 | 118,81 115,82 122,81 124,79 129,77 | 127,78 125,85 123,84 120,87 118,105 118,115 124,116 125,118 | 120,90 120,87 124,84 132,92 138,91 140,92 | 120,85 120,92 118,120 | 118,120 120,116 126,116 134,110 139,109 152,98 150,99 | 151,53 155,51 165,51 167,49 166,48 170,52 | 145,70 166,63 173,62 175,64 181,65 | 131,93 138,91 149,87 151,81 157,77 | 152,15 153,17 163,35 166,48 171,54 172,61 176,68 181,71 181,74 187,83 187,92 193,98 196,106 204,113 210,130 204,116 206,107 205,95 | 196,75 192,81 187,84 187,93 182,98 168,123 161,130 156,131 | 189,37 193,39 208,55 / 265,89 265,93 264,103 259,112 252,114 247,113 245,110 246,103 254,95 263,92 267,88 277,87 284,94 285,101 282,109 268,125 269,123 / 328,78 330,78 341,79 346,76 352,77 359,76 | 345,72 345,74 343,79 343,97 336,106 | 338,100 342,98 344,95 353,93 361,86 366,81 | 369,13 372,20 376,24 377,43 375,44 | 372,22 374,22 390,22 398,26 396,42 393,45 391,52 | 375,44 392,44 396,44 | 375,62 382,61 382,59 386,62 391,57 | 345,77 352,77 365,77 369,74 381,71 384,67 398,72 | 385,79 380,84 378,91 372,98 362,99 359,105 348,114 345,117 | 388,92 395,91 397,92 401,89 411,88 426,89 428,91 428,100 420,128 414,140 409,145 399,142 389,131 | 384,91 378,91 371,99 367,115 | 399,89 398,91 393,104 371,134 340,164 321,177"
+             data-order="./images/jissen-no-ba-order.png"
+             data-strokes="51,14 68,34 | 24,35 49,61 | 35,49 40,45 45,41 67,32 80,32 93,35 95,38 95,41 87,53 77,60 63,66 | 45,59 57,59 61,60 74,60 | 40,79 45,79 67,73 75,73 | 36,96 47,92 55,91 67,87 80,86 90,89 | 58,54 61,77 61,81 54,100 50,106 40,118 27,125 16,128 12,128 9,126 | 70,98 111,136 125,145 / 120,58 121,71 124,85 | 118,58 122,59 132,59 134,60 135,64 134,67 127,75 120,86 | 115,82 120,81 129,77 | 122,74 118,105 119,119 | 122,86 126,87 132,91 136,94 | 121,79 118,120 | 118,120 132,111 140,108 152,98 | 151,53 156,51 163,51 168,48 | 145,70 164,64 174,61 | 132,94 148,87 150,85 151,81 155,77 | 152,15 162,34 166,46 170,54 174,64 185,80 190,94 196,106 202,113 209,128 207,121 205,95 | 196,75 190,84 186,94 181,100 169,121 161,130 | 189,37 195,41 208,55 / 266,89 264,103 259,111 256,113 249,113 246,111 245,109 246,106 247,102 254,95 268,88 275,87 279,89 282,92 284,96 285,100 284,103 281,111 268,125 / 328,78 338,78 365,76 | 345,72 343,81 343,91 341,98 335,108 | 338,100 346,95 354,92 366,82 | 369,13 376,30 377,40 375,44 | 372,22 389,22 395,24 397,27 397,31 396,39 393,45 389,57 | 375,44 396,44 | 375,62 391,60 | 339,78 365,75 381,71 392,71 398,72 | 385,79 377,88 363,100 357,107 345,116 | 382,94 402,89 411,88 424,89 426,90 427,92 427,103 421,125 418,131 414,140 408,143 402,143 398,141 389,131 | 381,88 370,104 367,115 | 399,89 392,105 371,134 341,163 321,177"
              class="relative block h-[3.88em] w-auto" />
       </span><budoux-ja>を創る。</budoux-ja>
     </h2>
@@ -1405,53 +1398,74 @@
       });
       return out;
     }
-    // 手書き文字：書き順どおりに1画ずつ筆でなぞるマスクで、画像を少しずつ見せる
-    //   data-strokes（画像の元のピクセル座標）・data-pen（なぞる筆の太さ）
-    var handId = 0;
+    // 手書き文字：書き順どおりに1画ずつ、筆が進むように画像を出す
+    //   data-order：書き順データの画像。各画素の R＝何画目か（1〜）、G＝その画の中の位置（0〜255、書き始め→書き終わり）
+    //   data-strokes：各画の筆の通り道（画の長さ＝書く速さの計算に使う）。文字は「/」、画は「|」で区切る
+    //   画素はどれか1つの画にだけ属する（交差部は先に書く画のもの）ので、となりの画が先にのぞくことがない
     function handwrite(img) {
-      var NS = 'http://www.w3.org/2000/svg';
-      var W = +img.getAttribute('width') || img.naturalWidth, H = +img.getAttribute('height') || img.naturalHeight;
-      if (!W || !H) { img.addEventListener('load', function () { handwrite(img); }, { once: true }); return; }
-      var id = 'hand-mask-' + (++handId);
-      var svg = document.createElementNS(NS, 'svg');
-      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-      svg.setAttribute('class', img.getAttribute('class') + ' hand-ink');
-      svg.setAttribute('role', 'img');
-      svg.setAttribute('aria-label', img.alt);
-      svg.style.aspectRatio = W + ' / ' + H;
-      svg.style.overflow = 'visible';
-      var mask = document.createElementNS(NS, 'mask');
-      mask.setAttribute('id', id);
-      mask.setAttribute('maskUnits', 'userSpaceOnUse');
-      mask.setAttribute('x', 0); mask.setAttribute('y', 0);
-      mask.setAttribute('width', W); mask.setAttribute('height', H);
-      // data-strokes：文字は「/」、画は「|」で区切り、各画は筆の通り道の点（x,y）を書き順どおりに並べたもの
-      var pen = +img.dataset.pen || 18, t = 0;
+      var W = +img.getAttribute('width'), H = +img.getAttribute('height');
+      var cv = document.createElement('canvas');
+      cv.width = W; cv.height = H;
+      cv.className = img.className + ' hand-ink';
+      cv.setAttribute('role', 'img');
+      cv.setAttribute('aria-label', img.alt);
+      cv.style.aspectRatio = W + ' / ' + H;
+      // 画ごとの書き始め時刻と長さ（ms）。長い画ほどゆっくり、文字の間はひと呼吸
+      var starts = [], durs = [], t = 0;
       img.dataset.strokes.split('/').forEach(function (ch) {
         ch.split('|').forEach(function (st) {
           var pts = st.trim().split(/\s+/).map(function (p) { return p.split(',').map(Number); });
           var len = 0;
           for (var k = 1; k < pts.length; k++) len += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]);
-          var path = document.createElementNS(NS, 'path');
-          path.setAttribute('d', 'M' + pts.map(function (p) { return p.join(' '); }).join('L'));
-          path.setAttribute('pathLength', 1);
-          path.setAttribute('stroke-width', pen);
-          var d = Math.round(50 + len * 1.1);   // 長い画ほどゆっくり
-          path.style.setProperty('--s', t + 'ms');
-          path.style.setProperty('--d', d + 'ms');
-          mask.appendChild(path);
-          t += d + 20;
+          var d = Math.round(50 + len * 1.1);
+          starts.push(t); durs.push(d); t += d + 20;
         });
-        t += 90;  // 次の文字へ移るまでのひと呼吸
+        t += 90;
       });
-      var defs = document.createElementNS(NS, 'defs');
-      defs.appendChild(mask);
-      var image = document.createElementNS(NS, 'image');
-      image.setAttribute('href', img.getAttribute('src'));
-      image.setAttribute('width', W); image.setAttribute('height', H);
-      image.setAttribute('mask', 'url(#' + id + ')');
-      svg.appendChild(defs); svg.appendChild(image);
-      img.replaceWith(svg);
+      var ready = null, pending = null, loaded = 0;
+      var src = new Image(), ord = new Image();
+      function onload() {
+        if (++loaded < 2) return;
+        var c = document.createElement('canvas'); c.width = W; c.height = H;
+        var g = c.getContext('2d');
+        g.drawImage(src, 0, 0, W, H); var px = g.getImageData(0, 0, W, H).data;
+        g.clearRect(0, 0, W, H); g.drawImage(ord, 0, 0, W, H); var od = g.getImageData(0, 0, W, H).data;
+        // 画素ごとに「出る時刻」を決め、その順に並べておく
+        var list = [];
+        for (var i = 0; i < W * H; i++) {
+          var s = od[i * 4] - 1;
+          if (s < 0 || !px[i * 4 + 3]) continue;
+          list.push([starts[s] + od[i * 4 + 1] / 255 * durs[s], i]);
+        }
+        list.sort(function (a, b) { return a[0] - b[0]; });
+        ready = { px: px, list: list };
+        if (pending !== null) play(pending);
+      }
+      src.onload = ord.onload = onload;
+      src.src = img.getAttribute('src'); ord.src = img.dataset.order;
+      function play(delay) {
+        if (!ready) { pending = delay; return; }
+        pending = null;
+        var ctx = cv.getContext('2d'), out = ctx.createImageData(W, H), o = out.data, px = ready.px, list = ready.list, p = 0, t0 = null;
+        function frame(now) {
+          if (t0 === null) t0 = now + delay;
+          var e = now - t0;
+          while (p < list.length && list[p][0] <= e) {
+            var i = list[p++][1] * 4;
+            o[i] = px[i]; o[i + 1] = px[i + 1]; o[i + 2] = px[i + 2]; o[i + 3] = px[i + 3];
+          }
+          ctx.putImageData(out, 0, 0);
+          if (p < list.length) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      // 見出しが画面に入ったら（h2 に is-in が付いたら）、白い枠が出たあとに書き始める
+      var h = img.closest('h2'), wrap = img.closest('.w');
+      var i0 = wrap ? +getComputedStyle(wrap).getPropertyValue('--i') || 0 : 0;
+      new MutationObserver(function (_, mo) {
+        if (h.classList.contains('is-in')) { mo.disconnect(); play(i0 * 55 + 550); }
+      }).observe(h, { attributes: true, attributeFilter: ['class'] });
+      img.replaceWith(cv);
     }
     var heads = reduce ? [] : document.querySelectorAll('section:not(#top) h2');
     heads.forEach(function (h) {
@@ -1471,7 +1485,7 @@
         }
       });
       h.classList.add('split');
-      // 手書き文字の画像は、筆で書くようになぞって出すSVGに置き換える
+      // 手書き文字の画像は、書き順どおりに書いて出すcanvasに置き換える
       Array.prototype.forEach.call(h.querySelectorAll('img[data-strokes]'), handwrite);
     });
     if (heads.length && 'IntersectionObserver' in window) {
