@@ -213,7 +213,7 @@
     transition-delay: calc(var(--i) * 55ms + 150ms);
   }
   html.js h2.split.is-in .hand-bg { opacity: 1; scale: 1; }
-  /* 手書き文字は、画素ごとに「どの画のどこか」を持たせた書き順データ（*-order.png）で、1画ずつ書き順どおりに出す（JSで描画） */
+  /* 手書き文字は、ペンで実際に書いた動きの記録（*-rec.json）を再生して描く（JSで描画） */
   /* 課題・活動内容：画面に留め、スクロールに合わせてカードを出す／照らす */
   .scene-pin { position: relative; }
   .scene-pin.is-pinned > section {
@@ -535,8 +535,7 @@
         <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[0.037em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/honrai-no-toi.png"
              alt="本来の問い" width="477" height="160"
-             data-order="./images/honrai-no-toi-order.png"
-             data-strokes="28,56 53,50 67,48 79,44 101,41 | 69,22 71,36 72,54 74,64 73,97 70,104 70,110 68,116 67,133 | 72,58 39,96 23,108 15,112 | 67,23 104,82 130,111 | 61,99 89,97 98,96 / 141,36 158,37 163,38 | 136,46 132,55 132,66 | 181,47 175,48 171,50 167,51 | 106,87 133,76 137,75 161,74 172,74 179,76 | 153,19 156,43 155,60 153,81 155,102 153,147 | 156,83 148,90 144,93 124,114 112,123 | 153,96 177,108 204,118 213,119 / 246,79 238,102 236,106 232,110 228,111 225,109 224,105 223,98 225,94 228,88 236,82 238,81 241,81 249,83 252,85 254,90 255,99 254,104 246,119 237,131 / 299,35 301,48 300,70 294,109 294,125 | 299,34 317,34 320,36 322,60 322,72 | 300,55 324,55 | 300,74 327,69 | 343,11 343,22 342,43 343,73 | 342,33 357,24 366,21 371,20 375,21 377,22 378,25 378,61 383,105 383,136 382,136 372,129 358,111 | 340,46 362,49 | 341,65 366,67 | 317,81 325,102 330,111 | 322,92 326,92 329,91 338,84 345,81 349,80 351,82 352,85 351,89 344,99 337,110 | 330,111 345,108 / 407,88 413,100 417,103 428,102 431,100 437,96 | 447,82 458,92 463,99"
+             data-rec="./images/honrai-no-toi-rec.json"
              class="relative block h-[3.35em] w-auto" />
       </span><budoux-ja>を失っている。</budoux-ja>
     </h2>
@@ -660,8 +659,7 @@
         <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[-0.211em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/jissen-no-ba.png"
              alt="実践の場" width="443" height="184"
-             data-order="./images/jissen-no-ba-order.png"
-             data-strokes="51,14 68,34 | 24,35 49,61 | 35,49 40,45 45,41 67,32 80,32 93,35 95,38 95,41 87,53 77,60 63,66 | 45,59 57,59 61,60 74,60 | 40,79 45,79 67,73 75,73 | 36,96 47,92 55,91 67,87 80,86 90,89 | 58,54 61,77 61,81 54,100 50,106 40,118 27,125 16,128 12,128 9,126 | 70,98 111,136 125,145 / 120,58 121,71 124,85 | 118,58 122,59 132,59 134,60 135,64 134,67 127,75 120,86 | 115,82 120,81 129,77 | 122,74 118,105 119,119 | 122,86 126,87 132,91 136,94 | 121,79 118,120 | 118,120 132,111 140,108 152,98 | 151,53 156,51 163,51 168,48 | 145,70 164,64 174,61 | 132,94 148,87 150,85 151,81 155,77 | 152,15 162,34 166,46 170,54 174,64 185,80 190,94 196,106 202,113 209,128 207,121 205,95 | 196,75 190,84 186,94 181,100 169,121 161,130 | 189,37 195,41 208,55 / 266,89 264,103 259,111 256,113 249,113 246,111 245,109 246,106 247,102 254,95 268,88 275,87 279,89 282,92 284,96 285,100 284,103 281,111 268,125 / 328,78 338,78 365,76 | 345,72 343,81 343,91 341,98 335,108 | 338,100 346,95 354,92 366,82 | 369,13 376,30 377,40 375,44 | 372,22 389,22 395,24 397,27 397,31 396,39 393,45 389,57 | 375,44 396,44 | 375,62 391,60 | 339,78 365,75 381,71 392,71 398,72 | 385,79 377,88 363,100 357,107 345,116 | 382,94 402,89 411,88 424,89 426,90 427,92 427,103 421,125 418,131 414,140 408,143 402,143 398,141 389,131 | 381,88 370,104 367,115 | 399,89 392,105 371,134 341,163 321,177"
+             data-rec="./images/jissen-no-ba-rec.json"
              class="relative block h-[3.88em] w-auto" />
       </span><budoux-ja>を創る。</budoux-ja>
     </h2>
@@ -1398,64 +1396,53 @@
       });
       return out;
     }
-    // 手書き文字：書き順どおりに1画ずつ、筆が進むように画像を出す
-    //   data-order：書き順データの画像。各画素の R＝何画目か（1〜）、G＝その画の中の位置（0〜255、書き始め→書き終わり）
-    //   data-strokes：各画の筆の通り道（画の長さ＝書く速さの計算に使う）。文字は「/」、画は「|」で区切る
-    //   画素はどれか1つの画にだけ属する（交差部は先に書く画のもの）ので、となりの画が先にのぞくことがない
+    // 手書き文字：実際にペンで書いた動き（書き順・速さ・筆圧）をそのまま再生して描く
+    //   data-rec：記録データ（JSON）。{ w, h, strokes: [[[x, y, 時刻ms, 筆圧0〜1], ...], ...] }
+    //   座標は見出し画像と同じピクセル座標。線の太さは筆圧で変わる
+    var HAND_COLOR = '#EC7F20';
+    function handPen(p, h) { return (h / 160) * (6.5 + 7 * p); }
+    function drawSeg(ctx, a, b, s, h) {
+      ctx.lineWidth = handPen((a[3] + b[3]) / 2, h) * s;
+      ctx.beginPath(); ctx.moveTo(a[0] * s, a[1] * s); ctx.lineTo(b[0] * s, b[1] * s); ctx.stroke();
+    }
+    function drawDot(ctx, a, s, h) {
+      ctx.beginPath(); ctx.arc(a[0] * s, a[1] * s, handPen(a[3], h) * s / 2, 0, Math.PI * 2); ctx.fill();
+    }
     function handwrite(img) {
       var W = +img.getAttribute('width'), H = +img.getAttribute('height');
+      var dpr = Math.min(window.devicePixelRatio || 1, 3), S = 2 * dpr;   // CSS上の大きさの約2倍の解像度で描く
       var cv = document.createElement('canvas');
-      cv.width = W; cv.height = H;
+      cv.width = Math.round(W * S); cv.height = Math.round(H * S);
       cv.className = img.className + ' hand-ink';
       cv.setAttribute('role', 'img');
       cv.setAttribute('aria-label', img.alt);
       cv.style.aspectRatio = W + ' / ' + H;
-      // 画ごとの書き始め時刻と長さ（ms）。長い画ほどゆっくり、文字の間はひと呼吸
-      var starts = [], durs = [], t = 0;
-      img.dataset.strokes.split('/').forEach(function (ch) {
-        ch.split('|').forEach(function (st) {
-          var pts = st.trim().split(/\s+/).map(function (p) { return p.split(',').map(Number); });
-          var len = 0;
-          for (var k = 1; k < pts.length; k++) len += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]);
-          var d = Math.round(50 + len * 1.1);
-          starts.push(t); durs.push(d); t += d + 20;
-        });
-        t += 90;
-      });
-      var ready = null, pending = null, loaded = 0;
-      var src = new Image(), ord = new Image();
-      function onload() {
-        if (++loaded < 2) return;
-        var c = document.createElement('canvas'); c.width = W; c.height = H;
-        var g = c.getContext('2d');
-        g.drawImage(src, 0, 0, W, H); var px = g.getImageData(0, 0, W, H).data;
-        g.clearRect(0, 0, W, H); g.drawImage(ord, 0, 0, W, H); var od = g.getImageData(0, 0, W, H).data;
-        // 画素ごとに「出る時刻」を決め、その順に並べておく
-        var list = [];
-        for (var i = 0; i < W * H; i++) {
-          var s = od[i * 4] - 1;
-          if (s < 0 || !px[i * 4 + 3]) continue;
-          list.push([starts[s] + od[i * 4 + 1] / 255 * durs[s], i]);
-        }
-        list.sort(function (a, b) { return a[0] - b[0]; });
-        ready = { px: px, list: list };
+      var ctx = cv.getContext('2d');
+      ctx.strokeStyle = ctx.fillStyle = HAND_COLOR; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      var rec = null, pending = null;
+      fetch(img.dataset.rec).then(function (r) { return r.json(); }).then(function (j) {
+        rec = j;
         if (pending !== null) play(pending);
-      }
-      src.onload = ord.onload = onload;
-      src.src = img.getAttribute('src'); ord.src = img.dataset.order;
+      }).catch(function () { cv.replaceWith(img); });   // 読み込めなければ元の画像のまま
       function play(delay) {
-        if (!ready) { pending = delay; return; }
+        if (!rec) { pending = delay; return; }
         pending = null;
-        var ctx = cv.getContext('2d'), out = ctx.createImageData(W, H), o = out.data, px = ready.px, list = ready.list, p = 0, t0 = null;
+        var strokes = rec.strokes, si = 0, pi = 0, t0 = null;
         function frame(now) {
           if (t0 === null) t0 = now + delay;
           var e = now - t0;
-          while (p < list.length && list[p][0] <= e) {
-            var i = list[p++][1] * 4;
-            o[i] = px[i]; o[i + 1] = px[i + 1]; o[i + 2] = px[i + 2]; o[i + 3] = px[i + 3];
+          // 前回の続きから、時刻 e までの点を描き足す
+          while (si < strokes.length) {
+            var st = strokes[si];
+            if (pi === 0) {
+              if (st[0][2] > e) break;
+              drawDot(ctx, st[0], S, H); pi = 1;
+            }
+            while (pi < st.length && st[pi][2] <= e) { drawSeg(ctx, st[pi - 1], st[pi], S, H); pi++; }
+            if (pi < st.length) break;
+            si++; pi = 0;
           }
-          ctx.putImageData(out, 0, 0);
-          if (p < list.length) requestAnimationFrame(frame);
+          if (si < strokes.length) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
       }
@@ -1485,8 +1472,8 @@
         }
       });
       h.classList.add('split');
-      // 手書き文字の画像は、書き順どおりに書いて出すcanvasに置き換える
-      Array.prototype.forEach.call(h.querySelectorAll('img[data-strokes]'), handwrite);
+      // 手書き文字の画像は、記録した書く動きを再生するcanvasに置き換える
+      Array.prototype.forEach.call(h.querySelectorAll('img[data-rec]'), handwrite);
     });
     if (heads.length && 'IntersectionObserver' in window) {
       var hio = new IntersectionObserver(function (entries) {
