@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>カーソルの手描き線 試作</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --dark: #434343; --green: #338A75; --orange: #E78014; --beige: #D7C1A4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Noto Sans JP", "Hiragino Sans", sans-serif; color: var(--dark); background: #fff; }
+  main { max-width: 1040px; margin: 0 auto; padding: 48px 16px 96px; }
+  .hero { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; }
+  .hero h1 { font-size: clamp(2.2rem, 7vw, 5.2rem); font-weight: 900; line-height: 1.15; margin: 0 0 32px; letter-spacing: .02em; }
+  .hero p { font-size: clamp(1rem, 2.2vw, 1.4rem); font-weight: 700; line-height: 1.9; margin: 0; }
+  .note { margin-top: 48px; border-top: 1px solid #e5e5e5; padding-top: 32px; font-size: .95rem; line-height: 1.9; }
+  .note h2 { font-size: 1.1rem; margin: 0 0 8px; }
+  .note ol { padding-left: 1.4em; margin: 0 0 24px; }
+  .controls { display: flex; gap: 16px 24px; flex-wrap: wrap; align-items: center; margin: 16px 0 0; font-size: .85rem; }
+  .controls label { display: flex; gap: 8px; align-items: center; }
+  .swatches { display: flex; gap: 8px; }
+  .swatches button { width: 28px; height: 28px; border-radius: 999px; border: 2px solid #fff; outline: 1px solid #ccc; cursor: pointer; padding: 0; }
+  .swatches button[aria-pressed="true"] { outline: 2px solid var(--dark); }
+  .touch-note { display: none; font-size: .85rem; color: #777; }
+  @media (hover: none) { .touch-note { display: block; } }
+
+  /* ── ここからがアニメーション本体（サイトに組み込むときはこのCSSとJSを持っていく） ── */
+  /* 画面全体に透明なキャンバスを1枚かぶせる。クリックは下の要素にそのまま通す */
+  .scribble-canvas {
+    position: fixed; inset: 0; width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 40;
+    mix-blend-mode: multiply;   /* 線が文字の上を通っても、文字が透けて読める */
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>未来をつくる<br />ものづくり<br />ムーブメント</h1>
+    <p>マウスを動かしてみてください。<br />カーソルのあとを、手で描いたような線が追いかけます。</p>
+    <p class="touch-note">※ スマホ・タブレットでは、この線は出しません（指でなぞるとスクロールとぶつかるため）。</p>
+  </section>
+
+  <section class="note">
+    <h2>しくみ</h2>
+    <ol>
+      <li>画面全体に透明なキャンバス（お絵かき用の板）を1枚重ねる。クリックの邪魔はしない。</li>
+      <li>マウスの位置を記録していく。ただしペン先はマウスにぴったり付かず、少し遅れて追いかける（これが筆の「重さ」になる）。</li>
+      <li>記録した点を、角が出ないようになめらかな曲線でつないで描く。</li>
+      <li>古い点から順に消していくので、線はしっぽが短くなりながら追いかけてくる。止まると、しっぽが縮んで消える。</li>
+      <li>線は「乗算」で重ねるので、文字の上を通っても文字は読める。</li>
+    </ol>
+
+    <h2>調整してみる</h2>
+    <div class="controls">
+      <div class="swatches" role="group" aria-label="線の色">
+        <button type="button" data-color="#E78014" style="background:#E78014" aria-label="オレンジ" aria-pressed="true"></button>
+        <button type="button" data-color="#338A75" style="background:#338A75" aria-label="緑" aria-pressed="false"></button>
+        <button type="button" data-color="#D7C1A4" style="background:#D7C1A4" aria-label="ベージュ" aria-pressed="false"></button>
+      </div>
+      <label>太さ <input type="range" id="c-width" min="4" max="28" value="12" /></label>
+      <label>しっぽの長さ <input type="range" id="c-life" min="300" max="4000" step="100" value="1600" /></label>
+      <label>筆の重さ <input type="range" id="c-follow" min="5" max="100" value="30" /></label>
+    </div>
+  </section>
+</main>
+
+<canvas class="scribble-canvas" aria-hidden="true"></canvas>
+
+<script>
+  /* カーソルの手描き線（Canvas 2D のみ。ライブラリ不要） */
+  (function () {
+    // マウスが無い端末と、「動きを減らす」設定の人には出さない
+    var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var canvas = document.querySelector('.scribble-canvas');
+    if (!canvas || !canHover || reduce) { if (canvas) canvas.remove(); return; }
+
+    var ctx = canvas.getContext('2d');
+    var opt = window.scribbleOptions = {
+      color: '#E78014',
+      width: 12,     // 線の太さ(px)
+      life: 1600,    // 1つの点が消えるまでの時間(ms)＝しっぽの長さ
+      follow: 0.30,  // 1コマでマウスに近づく割合。小さいほど筆が重く、線がなめらかになる
+    };
+
+    var dpr = 1, w = 0, h = 0;
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    var mouse = null;  // マウスの位置
+    var pen = null;    // ペン先の位置（マウスを少し遅れて追う）
+    var pts = [];      // 描いた点 {x, y, t}
+    window.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      mouse = { x: e.clientX, y: e.clientY };
+    }, { passive: true });
+
+    function tick(now) {
+      if (mouse) {
+        if (!pen) pen = { x: mouse.x, y: mouse.y };
+        pen.x += (mouse.x - pen.x) * opt.follow;
+        pen.y += (mouse.y - pen.y) * opt.follow;
+        var last = pts[pts.length - 1];
+        if (!last || Math.hypot(pen.x - last.x, pen.y - last.y) > 1) {
+          pts.push({ x: pen.x, y: pen.y, t: now });
+        }
+      }
+      // 古い点から消す
+      while (pts.length && now - pts[0].t > opt.life) pts.shift();
+      draw(now);
+      requestAnimationFrame(tick);
+    }
+
+    function draw(now) {
+      ctx.clearRect(0, 0, w, h);
+      if (pts.length < 3) return;
+      ctx.strokeStyle = opt.color;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      // 隣り合う点の中点どうしを、点を制御点にした曲線でつなぐ → 角が出ない
+      for (var i = 1; i < pts.length - 1; i++) {
+        var a = pts[i - 1], b = pts[i], c = pts[i + 1];
+        // しっぽ側（古い点）ほど細くして、線の終わりをすっと抜く
+        var rest = 1 - (now - b.t) / opt.life;
+        ctx.lineWidth = opt.width * Math.min(1, rest / 0.35);
+        ctx.beginPath();
+        ctx.moveTo((a.x + b.x) / 2, (a.y + b.y) / 2);
+        ctx.quadraticCurveTo(b.x, b.y, (b.x + c.x) / 2, (b.y + c.y) / 2);
+        ctx.stroke();
+      }
+    }
+
+    requestAnimationFrame(tick);
+  })();
+</script>
+
+<script>
+  /* 試作ページ用の調整パネル（サイトには持っていかない） */
+  (function () {
+    var opt = window.scribbleOptions;
+    if (!opt) return;
+    document.querySelectorAll('.swatches button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        opt.color = btn.dataset.color;
+        document.querySelectorAll('.swatches button').forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    });
+    document.getElementById('c-width').addEventListener('input', function (e) { opt.width = +e.target.value; });
+    document.getElementById('c-life').addEventListener('input', function (e) { opt.life = +e.target.value; });
+    document.getElementById('c-follow').addEventListener('input', function (e) { opt.follow = e.target.value / 100; });
+  })();
+</script>
+</body>
+</html>
