@@ -1432,15 +1432,21 @@
         if (!ready) { pending = delay; return; }
         pending = null;
         var ctx = cv.getContext('2d'), out = ctx.createImageData(W, H), o = out.data, px = ready.px, list = ready.list, p = 0, t0 = null;
+        // 筆先：出てくる画素は FADE ms かけて濃くなる（1点ずつパッと出ず、線がなめらかに伸びる）
+        var FADE = 70, live = [];
         function frame(now) {
           if (t0 === null) t0 = now + delay;
           var e = now - t0;
-          while (p < list.length && list[p][0] <= e) {
-            var i = list[p++][1] * 4;
-            o[i] = px[i]; o[i + 1] = px[i + 1]; o[i + 2] = px[i + 2]; o[i + 3] = px[i + 3];
+          while (p < list.length && list[p][0] <= e) live.push(list[p++]);
+          var keep = [];
+          for (var k = 0; k < live.length; k++) {
+            var w = live[k][0], i = live[k][1] * 4, f = Math.min(1, (e - w) / FADE);
+            o[i] = px[i]; o[i + 1] = px[i + 1]; o[i + 2] = px[i + 2]; o[i + 3] = Math.round(px[i + 3] * f);
+            if (f < 1) keep.push(live[k]);
           }
+          live = keep;
           ctx.putImageData(out, 0, 0);
-          if (p < list.length) requestAnimationFrame(frame);
+          if (p < list.length || live.length) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
       }
