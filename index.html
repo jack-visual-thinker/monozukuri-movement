@@ -213,7 +213,7 @@
     transition-delay: calc(var(--i) * 55ms + 150ms);
   }
   html.js h2.split.is-in .hand-bg { opacity: 1; scale: 1; }
-  /* 手書き文字は、ペンで実際に書いた動きの記録（*-rec.json）を再生して描く（JSで描画） */
+  /* 手書き文字は、万年筆の画像を、実際に書いた手の動きの記録から作った書き順データ（*-order.png）どおりに出す（JSで描画） */
   /* 課題・活動内容：画面に留め、スクロールに合わせてカードを出す／照らす */
   .scene-pin { position: relative; }
   .scene-pin.is-pinned > section {
@@ -535,7 +535,7 @@
         <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[0.037em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/honrai-no-toi.png"
              alt="本来の問い" width="477" height="160"
-             data-rec="./images/honrai-no-toi-rec.json"
+             data-order="./images/honrai-no-toi-order.png"
              class="relative block h-[3.35em] w-auto" />
       </span><budoux-ja>を失っている。</budoux-ja>
     </h2>
@@ -659,7 +659,7 @@
         <span class="hand-bg absolute inset-x-[0.25em] top-1/2 -translate-y-1/2 mt-[-0.211em] h-[2.35em] bg-white rounded-lg" aria-hidden="true"></span>
         <img src="./images/jissen-no-ba.png"
              alt="実践の場" width="443" height="184"
-             data-rec="./images/jissen-no-ba-rec.json"
+             data-order="./images/jissen-no-ba-order.png"
              class="relative block h-[3.88em] w-auto" />
       </span><budoux-ja>を創る。</budoux-ja>
     </h2>
@@ -1396,53 +1396,51 @@
       });
       return out;
     }
-    // 手書き文字：実際にペンで書いた動き（書き順・速さ・筆圧）をそのまま再生して描く
-    //   data-rec：記録データ（JSON）。{ w, h, strokes: [[[x, y, 時刻ms, 筆圧0〜1], ...], ...] }
-    //   座標は見出し画像と同じピクセル座標。線の太さは筆圧で変わる
-    var HAND_COLOR = '#EC7F20';
-    function handPen(p, h) { return (h / 160) * (6.5 + 7 * p); }
-    function drawSeg(ctx, a, b, s, h) {
-      ctx.lineWidth = handPen((a[3] + b[3]) / 2, h) * s;
-      ctx.beginPath(); ctx.moveTo(a[0] * s, a[1] * s); ctx.lineTo(b[0] * s, b[1] * s); ctx.stroke();
-    }
-    function drawDot(ctx, a, s, h) {
-      ctx.beginPath(); ctx.arc(a[0] * s, a[1] * s, handPen(a[3], h) * s / 2, 0, Math.PI * 2); ctx.fill();
-    }
+    // 手書き文字：万年筆の画像を、実際に書いた手の動き（書き順・向き・速さ）どおりに少しずつ出す
+    //   data-order：画素ごとの書き順データの画像。R＝何画目か（1〜）、G・B＝その画素が出る時刻（ms、16bit）
+    //   時刻は iPad ＋ペンで同じ見出しを書いた記録から作っている（各画を万年筆の線の中心に合わせ、
+    //   画の中はインクが流れる順に、筆がそこに来た時刻で出す）。交差部は先に書く画のもの
     function handwrite(img) {
       var W = +img.getAttribute('width'), H = +img.getAttribute('height');
-      var dpr = Math.min(window.devicePixelRatio || 1, 3), S = 2 * dpr;   // CSS上の大きさの約2倍の解像度で描く
       var cv = document.createElement('canvas');
-      cv.width = Math.round(W * S); cv.height = Math.round(H * S);
+      cv.width = W; cv.height = H;
       cv.className = img.className + ' hand-ink';
       cv.setAttribute('role', 'img');
       cv.setAttribute('aria-label', img.alt);
       cv.style.aspectRatio = W + ' / ' + H;
-      var ctx = cv.getContext('2d');
-      ctx.strokeStyle = ctx.fillStyle = HAND_COLOR; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      var rec = null, pending = null;
-      fetch(img.dataset.rec).then(function (r) { return r.json(); }).then(function (j) {
-        rec = j;
+      var ready = null, pending = null, loaded = 0;
+      var src = new Image(), ord = new Image();
+      function onload() {
+        if (++loaded < 2) return;
+        var c = document.createElement('canvas'); c.width = W; c.height = H;
+        var g = c.getContext('2d');
+        g.drawImage(src, 0, 0, W, H); var px = g.getImageData(0, 0, W, H).data;
+        g.clearRect(0, 0, W, H); g.drawImage(ord, 0, 0, W, H); var od = g.getImageData(0, 0, W, H).data;
+        // 画素ごとに「出る時刻」を決め、その順に並べておく
+        var list = [];
+        for (var i = 0; i < W * H; i++) {
+          if (!od[i * 4] || !px[i * 4 + 3]) continue;
+          list.push([od[i * 4 + 1] * 256 + od[i * 4 + 2], i]);
+        }
+        list.sort(function (a, b) { return a[0] - b[0]; });
+        ready = { px: px, list: list };
         if (pending !== null) play(pending);
-      }).catch(function () { cv.replaceWith(img); });   // 読み込めなければ元の画像のまま
+      }
+      src.onload = ord.onload = onload;
+      src.src = img.getAttribute('src'); ord.src = img.dataset.order;
       function play(delay) {
-        if (!rec) { pending = delay; return; }
+        if (!ready) { pending = delay; return; }
         pending = null;
-        var strokes = rec.strokes, si = 0, pi = 0, t0 = null;
+        var ctx = cv.getContext('2d'), out = ctx.createImageData(W, H), o = out.data, px = ready.px, list = ready.list, p = 0, t0 = null;
         function frame(now) {
           if (t0 === null) t0 = now + delay;
           var e = now - t0;
-          // 前回の続きから、時刻 e までの点を描き足す
-          while (si < strokes.length) {
-            var st = strokes[si];
-            if (pi === 0) {
-              if (st[0][2] > e) break;
-              drawDot(ctx, st[0], S, H); pi = 1;
-            }
-            while (pi < st.length && st[pi][2] <= e) { drawSeg(ctx, st[pi - 1], st[pi], S, H); pi++; }
-            if (pi < st.length) break;
-            si++; pi = 0;
+          while (p < list.length && list[p][0] <= e) {
+            var i = list[p++][1] * 4;
+            o[i] = px[i]; o[i + 1] = px[i + 1]; o[i + 2] = px[i + 2]; o[i + 3] = px[i + 3];
           }
-          if (si < strokes.length) requestAnimationFrame(frame);
+          ctx.putImageData(out, 0, 0);
+          if (p < list.length) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
       }
@@ -1472,8 +1470,8 @@
         }
       });
       h.classList.add('split');
-      // 手書き文字の画像は、記録した書く動きを再生するcanvasに置き換える
-      Array.prototype.forEach.call(h.querySelectorAll('img[data-rec]'), handwrite);
+      // 手書き文字の画像は、書いた手の動きどおりに出していくcanvasに置き換える
+      Array.prototype.forEach.call(h.querySelectorAll('img[data-order]'), handwrite);
     });
     if (heads.length && 'IntersectionObserver' in window) {
       var hio = new IntersectionObserver(function (entries) {
