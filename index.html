@@ -1440,7 +1440,8 @@
         var FADE = 35, live = [];
         function frame(now) {
           if (t0 === null) t0 = now + delay;
-          var e = now - t0;
+          // 進み具合＝時間（DURで書き終える）とスクロール（定位置に着いた瞬間に書き終える）の大きい方
+          var e = Math.max(now - t0, scrollFrac() * (DUR + FADE));
           while (p < list.length && list[p][0] <= e) live.push(list[p++]);
           var keep = [];
           for (var k = 0; k < live.length; k++) {
@@ -1454,24 +1455,27 @@
         }
         requestAnimationFrame(frame);
       }
-      // 書き始めるタイミング：見出しの白い枠が出た後（h2 に is-in）、手書き文字が丸ごと画面に入り、
-      // 画面の下から1/4より上に来た時。見出しはこの後、画面上部の定位置まで約3/4画面ぶん上がって
-      // 止まる（.scene-pin）ので、ふつうの速さでスクロールすると約1秒＝ちょうど書き終わる頃に定位置に着く。
-      var h = img.closest('h2'), inAt = 0, seen = false, started = false;
-      function tryStart() {
-        if (started || !seen || !inAt) return;
-        started = true;
-        play(Math.max(0, inAt + 200 - performance.now()));   // 白い枠がポンと出るのを待つ（最大0.2秒）
+      // 書き始めるタイミングと速さ：
+      //   見出しの白い枠がポンと出た時（h2 に is-in）に書き始め、約0.2秒後から筆が動く。
+      //   見出しは、この後画面上部の定位置まで上がって止まる（.scene-pin の section が sticky になる）。
+      //   書く進み具合は「経過時間（DUR で書き終える）」と「定位置までの残り距離」の大きい方なので、
+      //   どんな速さでスクロールしても、定位置に着く少し手前で書き終わっている。止まっていても DUR で書き終える。
+      var h = img.closest('h2'), pin = img.closest('.scene-pin'), sec = pin && pin.querySelector('section'), d0 = null;
+      function pinGap() {   // section が定位置（ヘッダーのすぐ下）に着くまでの残り距離（px）
+        var hh = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
+        return sec.getBoundingClientRect().top - hh;
+      }
+      function scrollFrac() {
+        if (!sec || d0 === null) return 0;
+        if (pin.classList.contains('is-pinned') && d0 > 0) return Math.min(1, Math.max(0, (1 - pinGap() / d0) / 0.85));   // 定位置の少し手前（残り15%）で書き終える
+        return 0;
       }
       new MutationObserver(function (_, mo) {
-        if (h.classList.contains('is-in')) { mo.disconnect(); inAt = performance.now(); tryStart(); }
+        if (!h.classList.contains('is-in')) return;
+        mo.disconnect();
+        if (sec) d0 = Math.max(1, pinGap());
+        play(200);   // 白い枠が出るのを少し待つ
       }).observe(h, { attributes: true, attributeFilter: ['class'] });
-      if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (es) {
-          if (es[0].isIntersecting) { io.disconnect(); seen = true; tryStart(); }
-        }, { rootMargin: '0px 0px -25% 0px', threshold: 1 });
-        io.observe(cv);
-      } else { seen = true; }
       img.replaceWith(cv);
     }
     var heads = reduce ? [] : document.querySelectorAll('section:not(#top) h2');
